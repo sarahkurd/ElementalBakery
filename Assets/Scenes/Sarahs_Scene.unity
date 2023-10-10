@@ -322,9 +322,10 @@ MonoBehaviour:
   breakableGround:
     serializedVersion: 2
     m_Bits: 128
-  breakableGroundStageTwo:
-    serializedVersion: 2
-    m_Bits: 0
+  powerLeft: {fileID: 21300000, guid: a89af4f42b3374d589aeb08d7f303cd7, type: 3}
+  powerBottom: {fileID: 21300000, guid: 3f03d4f5ccb5d4dada641fdb1f151e51, type: 3}
+  powerRight: {fileID: 21300000, guid: 179f7b48db43647e0a4cbf6855553be7, type: 3}
+  powerTop: {fileID: 21300000, guid: 77aa045eddfb9447fb028e7aaf375cd3, type: 3}
 --- !u!1 &1159228966
 GameObject:
   m_ObjectHideFlags: 0
