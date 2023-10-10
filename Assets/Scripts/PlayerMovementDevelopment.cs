@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerMovementDevelopment : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float jumpForce = 4f;
+    public float jumpForce = 10f;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
     [SerializeField] private bool isDescending;
