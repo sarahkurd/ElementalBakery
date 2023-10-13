@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovementDevelopment : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float moveSpeed = 10f;
     private bool isOnObject = false;
     private bool wasGrounded = true;
+
 
 
     private List<Sprite> spriteOrder;
@@ -142,4 +144,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Finish"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+    }
 }
