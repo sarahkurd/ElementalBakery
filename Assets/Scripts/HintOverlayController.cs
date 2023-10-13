@@ -19,8 +19,7 @@ public class HintOverlayController : MonoBehaviour
     {
         // TODO: Change this function case by case
         // Check for arrow key presses
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
-            Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.D))
         {
             // Check if the hint has not been shown yet
             if (!hintShown)
