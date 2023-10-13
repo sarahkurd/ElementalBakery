@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -25,7 +26,7 @@ public class HintOverlayController : MonoBehaviour
             if (!hintShown)
             {
                 // Show the hint and set the hint text
-                ShowHint("Move to the target.");
+                ShowHint("Stepping onto the brown platform will cause it to break.");
                 hintShown = true; // Mark the hint as shown
             }
         }
@@ -36,6 +37,17 @@ public class HintOverlayController : MonoBehaviour
         // Show the hint panel and set the hint text
         hintText.text = hintMessage;
         hintPanel.SetActive(true);
+
+        // Start a coroutine to hide the hint after 3 seconds
+        StartCoroutine(HideHintAfterDelay(3.0f));
+    }
+
+    private IEnumerator HideHintAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Hide the hint panel after the specified delay
+        hintPanel.SetActive(false);
     }
 
     public void HideHint()
