@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 616542373}
   - component: {fileID: 616542372}
   - component: {fileID: 616542376}
+  - component: {fileID: 616542377}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -203,18 +204,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.12528133}
+  m_Offset: {x: -0.011208057, y: 0.0222435}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 1.28, y: 1.28}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.92941475, y: 1.5672102}
+  m_Size: {x: 0.48107433, y: 0.9349613}
   m_EdgeRadius: 0
 --- !u!50 &616542373
 Rigidbody2D:
@@ -278,7 +279,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 179f7b48db43647e0a4cbf6855553be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 781985aedadb047c9b36186e89390b47, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -297,8 +298,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616542371}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.21, y: 4.94, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -10.09, y: 4.67, z: 0}
+  m_LocalScale: {x: 2.186992, y: 2.3262622, z: 1.2121}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -316,7 +317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00035aba18a994ffaa98eb5be2183209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 4
   isDescending: 0
   jumpableGround:
     serializedVersion: 2
@@ -324,12 +324,38 @@ MonoBehaviour:
   breakableGround:
     serializedVersion: 2
     m_Bits: 128
-  powerLeft: {fileID: 21300000, guid: a89af4f42b3374d589aeb08d7f303cd7, type: 3}
-  powerBottom: {fileID: 21300000, guid: 3f03d4f5ccb5d4dada641fdb1f151e51, type: 3}
-  powerRight: {fileID: 21300000, guid: 179f7b48db43647e0a4cbf6855553be7, type: 3}
-  powerTop: {fileID: 21300000, guid: 77aa045eddfb9447fb028e7aaf375cd3, type: 3}
+  powerLeft: {fileID: 21300000, guid: 4820c825f6eb94d5f981f1a0ee42f392, type: 3}
+  powerBottom: {fileID: 21300000, guid: e1a1bd65b01954a299bdd67f577973cf, type: 3}
+  powerRight: {fileID: 21300000, guid: 781985aedadb047c9b36186e89390b47, type: 3}
+  powerTop: {fileID: 21300000, guid: bba15c189508c40e780d45d3161b0b02, type: 3}
+  powerLeftDirLeft: {fileID: 21300000, guid: f40257a3b98bb430a8ca247ff991eb34, type: 3}
+  powerBottomDirLeft: {fileID: 21300000, guid: 18f59ca5878fb461dafc61577af58b30, type: 3}
+  powerRightDirLeft: {fileID: 21300000, guid: 4491ee43d363f407b9888a035c801c7c, type: 3}
+  powerTopDirLeft: {fileID: 21300000, guid: 7286e95c1b78f40bf96b15d5332a60b5, type: 3}
+  jumpForce: 4
   moveSpeed: 10
   destroyTime: 5
+--- !u!95 &616542377
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616542371}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3acb917ba2fdf41d8b14d52ab4c29d95, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1159228966
 GameObject:
   m_ObjectHideFlags: 0

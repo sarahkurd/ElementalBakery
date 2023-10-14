@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class PlayerMovementDevelopment : MonoBehaviour
 {
+    // ----- Components ----
     private Rigidbody2D rb;
-    public float jumpForce = 4f;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    
     [SerializeField] private bool isDescending;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
@@ -17,10 +19,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private Sprite powerBottom;
     [SerializeField] private Sprite powerRight;
     [SerializeField] private Sprite powerTop;
+    [SerializeField] private Sprite powerLeftDirLeft;
+    [SerializeField] private Sprite powerBottomDirLeft;
+    [SerializeField] private Sprite powerRightDirLeft;
+    [SerializeField] private Sprite powerTopDirLeft;
+    
     private Sprite currentSprite;
     private enum MovementState { idle, running, jumping, falling };
     
-    
+    public float jumpForce = 6f;
     public float moveSpeed = 10f;
     private bool isOnObject = false;
     private bool wasGrounded = true;
@@ -36,6 +43,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -53,6 +61,22 @@ public class PlayerMovementDevelopment : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
 
+        if (horizontalInput > 0f)
+        {
+            animator.SetBool("isIdle", false);
+            animator.SetBool("isMovingRight", true);
+        } else if (horizontalInput < 0f)
+        {
+            animator.SetBool("isIdle", false);
+            animator.SetBool("isMovingLeft", true);
+        }
+        else
+        {
+            animator.SetBool("isMovingRight", false);
+            animator.SetBool("isMovingLeft", false);
+            animator.SetBool("isIdle", true);
+        }
+
         // vertical jump mechanics
         if ((Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Space)) && IsGrounded())
         {
@@ -61,7 +85,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         // rotate player mechanics
         setCurrentSprite();
-        spriteRenderer.sprite = currentSprite; // update the sprite in SpriteRenderer component
 
         //timer if player lands on ingredient
         wasGrounded = currentlyGrounded;
@@ -70,11 +93,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     void Jump()
     {
+        animator.SetBool("isIdle", true);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         if (isOnBreakableGround)
         {
             breakableGroundJumpCount++;
-            Debug.Log(breakableGroundJumpCount);
         }
     }
 
@@ -82,28 +105,40 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {   if (!IsGrounded()){
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                int index = spriteOrder.IndexOf(currentSprite);
-                if (index == 0)
-                {
-                    currentSprite = spriteOrder[spriteOrder.Count - 1];
-                }
-                else
-                {
-                    currentSprite = spriteOrder[index - 1];
-                }
+                animator.SetBool("isLeftArrow", true);
+                // int index = spriteOrder.IndexOf(currentSprite);
+                // if (index == 0)
+                // {
+                //     currentSprite = spriteOrder[spriteOrder.Count - 1];
+                // }
+                // else
+                // {
+                //     currentSprite = spriteOrder[index - 1];
+                // }
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                int index = spriteOrder.IndexOf(currentSprite);
-                if (index == spriteOrder.Count - 1)
-                {
-                    currentSprite = spriteOrder[0];
-                }
-                else
-                {
-                    currentSprite = spriteOrder[index + 1];
-                }
+                animator.SetBool("isRightArrow", true);
+                // int index = spriteOrder.IndexOf(currentSprite);
+                // if (index == spriteOrder.Count - 1)
+                // {
+                //     currentSprite = spriteOrder[0];
+                // }
+                // else
+                // {
+                //     currentSprite = spriteOrder[index + 1];
+                // }
             }
+
+            if (Input.GetKeyUp(KeyCode.RightArrow))
+            {
+                animator.SetBool("isRightArrow", false);
+            } else if (Input.GetKeyUp(KeyCode.LeftArrow))
+            {
+                animator.SetBool("isLeftArrow", false);
+            }
+            
+            //spriteRenderer.sprite = currentSprite; // update the sprite in SpriteRenderer component
         }
     }
 
