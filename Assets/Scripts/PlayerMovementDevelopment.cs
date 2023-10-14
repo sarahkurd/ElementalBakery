@@ -19,9 +19,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private Sprite powerTop;
     private Sprite currentSprite;
     private enum MovementState { idle, running, jumping, falling };
+    
+    
     public float moveSpeed = 10f;
     private bool isOnObject = false;
     private bool wasGrounded = true;
+    private int breakableGroundJumpCount = 0;
+    private bool isOnBreakableGround = false;
+    private GameObject halfBrokenGround;
 
 
     private List<Sprite> spriteOrder;
@@ -36,6 +41,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         currentSprite = spriteRenderer.sprite;
         spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
+        halfBrokenGround = GameObject.Find("Half-Broken");
+        halfBrokenGround.SetActive(false);
     }
 
     // Update is called once per frame
@@ -47,7 +54,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
 
         // vertical jump mechanics
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && IsGrounded())
+        if ((Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Space)) && IsGrounded())
         {
             Jump();
         }
@@ -64,6 +71,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
     void Jump()
     {
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        if (isOnBreakableGround)
+        {
+            breakableGroundJumpCount++;
+            Debug.Log(breakableGroundJumpCount);
+        }
     }
 
     private void setCurrentSprite()
@@ -116,12 +128,33 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        // Logic to break the breakable ground with fire side 
         bool isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
         if (isBreakableLayer)
         {
-            Destroy(other.gameObject);
+            isOnBreakableGround = true;
+            if (breakableGroundJumpCount == 1)
+            {
+                if (halfBrokenGround.activeSelf)
+                {
+                    Destroy(halfBrokenGround);
+                }
+                else
+                {
+                    // update the layer to show a half broken ground
+                    Destroy(other.gameObject);
+                    halfBrokenGround.SetActive(true);
+                    breakableGroundJumpCount = 0; 
+                }
+            }
+        }
+        else
+        {
+            isOnBreakableGround = false;
+            breakableGroundJumpCount = 0;
         }
 
+        // destroying the ingredient 
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnObject = true;
