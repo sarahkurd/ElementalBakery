@@ -22,7 +22,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float moveSpeed = 10f;
     private bool isOnObject = false;
     private bool wasGrounded = true;
-
+    public GameObject uiObjectToShow;
 
     private List<Sprite> spriteOrder;
     private float timer = 0f;
@@ -125,8 +125,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnObject = true;
+            
             if (currentSprite == powerBottom)
-            {
+            {   uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2);
             }
            
@@ -136,7 +137,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ingredient")) 
-        {
+        {   
             isOnObject = false;
             timer = 0f; 
         }
