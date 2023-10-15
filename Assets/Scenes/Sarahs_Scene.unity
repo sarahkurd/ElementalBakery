@@ -324,14 +324,6 @@ MonoBehaviour:
   breakableGround:
     serializedVersion: 2
     m_Bits: 128
-  powerLeft: {fileID: 21300000, guid: 4820c825f6eb94d5f981f1a0ee42f392, type: 3}
-  powerBottom: {fileID: 21300000, guid: e1a1bd65b01954a299bdd67f577973cf, type: 3}
-  powerRight: {fileID: 21300000, guid: 781985aedadb047c9b36186e89390b47, type: 3}
-  powerTop: {fileID: 21300000, guid: bba15c189508c40e780d45d3161b0b02, type: 3}
-  powerLeftDirLeft: {fileID: 21300000, guid: f40257a3b98bb430a8ca247ff991eb34, type: 3}
-  powerBottomDirLeft: {fileID: 21300000, guid: 18f59ca5878fb461dafc61577af58b30, type: 3}
-  powerRightDirLeft: {fileID: 21300000, guid: 4491ee43d363f407b9888a035c801c7c, type: 3}
-  powerTopDirLeft: {fileID: 21300000, guid: 7286e95c1b78f40bf96b15d5332a60b5, type: 3}
   jumpForce: 4
   moveSpeed: 10
   destroyTime: 5
