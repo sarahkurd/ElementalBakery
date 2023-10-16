@@ -4,54 +4,65 @@ using TMPro;
 
 public class HintOverlayController : MonoBehaviour
 {
-    public GameObject hintPanel; // Reference to the hint panel in the Unity Inspector
-    public TMP_Text hintText; // Reference to the TextMeshPro Text component of the hint panel
-
-    private bool hintShown = false; // Track whether the hint has been shown
-
+    public GameObject[] hintPanels; // References to the hint panels in the Unity Inspector
+    public TMP_Text[] hintTexts; // References to the TextMeshPro Text components of the hint panels
+    public GameObject halfBroken, progressBar; // Reference to the halfBroken + progressBar
+    private bool[] hintsShown; // Track whether the hints have been shown
+    
     private void Start()
     {
-        // Hide the hint panel at the start of the level
-        hintPanel.SetActive(false);
+        hintsShown = new bool[hintPanels.Length];
+        for (int i = 0; i < hintPanels.Length; i++)
+        {
+            // Hide all the hint panels at the start of the level
+            hintPanels[i].SetActive(false);
+            hintsShown[i] = false;
+        }
     }
 
     private void Update()
     {
-        // TODO: Change this function case by case
-        // Check for arrow key presses
-        if (Input.GetKeyDown(KeyCode.D))
+        if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) && !hintsShown[0])
         {
-            // Check if the hint has not been shown yet
-            if (!hintShown)
-            {
-                // Show the hint and set the hint text
-                ShowHint("Stepping onto the brown platform will cause it to break.");
-                hintShown = true; // Mark the hint as shown
-            }
+            ShowHint(0, "Stepping onto the brown platform will cause it to break.");
+            hintsShown[0] = true;
+        }
+
+        if (!hintsShown[1] && hintsShown[0] && halfBroken == null)
+        {
+            ShowHint(1, "Now use your power to cook the ingredient.");
+            hintsShown[1] = true;
+        }
+
+        if (hintsShown[0] && hintsShown[1] && progressBar == null && !hintsShown[2])
+        {
+            ShowHint(2, "Now deliver this order to the customer.");
+            hintsShown[2] = true;
         }
     }
 
-    public void ShowHint(string hintMessage)
+
+    public void ShowHint(int hintIndex, string hintMessage)
     {
-        // Show the hint panel and set the hint text
-        hintText.text = hintMessage;
-        hintPanel.SetActive(true);
+        // Show the hint panel and set the hint text for the specified index
+        hintTexts[hintIndex].text = hintMessage;
+        hintPanels[hintIndex].SetActive(true);
 
         // Start a coroutine to hide the hint after 3 seconds
-        StartCoroutine(HideHintAfterDelay(3.0f));
+        StartCoroutine(HideHintAfterDelay(hintIndex, 3.0f));
     }
 
-    private IEnumerator HideHintAfterDelay(float delay)
+    private IEnumerator HideHintAfterDelay(int hintIndex, float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        // Hide the hint panel after the specified delay
-        hintPanel.SetActive(false);
+        // Hide the hint panel for the specified index after the specified delay
+        hintPanels[hintIndex].SetActive(false);
     }
 
-    public void HideHint()
+    public void HideHint(int hintIndex)
     {
-        // Hide the hint panel
-        hintPanel.SetActive(false);
+        // Hide the hint panel for the specified index
+        hintPanels[hintIndex].SetActive(false);
     }
 }
