@@ -28,6 +28,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float moveSpeed = 10f;
     private bool isOnObject = false;
     private bool wasGrounded = true;
+    public GameObject uiObjectToShow;
     private int breakableGroundJumpCount = 0;
     private bool isOnBreakableGround = false;
     private GameObject halfBrokenGround;
@@ -234,9 +235,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
             isOnObject = true;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {
+                uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2);
             }
-           
         }
         isJumping = false;
     }
@@ -244,7 +245,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ingredient")) 
-        {
+        {   
             isOnObject = false;
             timer = 0f; 
         }
