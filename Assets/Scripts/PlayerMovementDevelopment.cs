@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,9 +17,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    public float jumpForce = 6f;
+    public float jumpForce = 8f;
     public float moveSpeed = 10f;
-    private bool isOnObject = false;
+    private bool isOnIngredient = false;
     private bool wasGrounded = true;
     public GameObject uiObjectToShow;
     private int breakableGroundJumpCount = 0;
@@ -32,6 +33,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isJumping = false;
     
     private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
+    private List<string> collected = new List<string>();
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +55,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
         
         // vertical jump mechanics
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if (Input.GetKeyDown(KeyCode.Space) && (IsGrounded() || isOnIngredient))
         {
             Jump();
         }
@@ -217,13 +219,24 @@ public class PlayerMovementDevelopment : MonoBehaviour
         //destroying the ingredient 
         if (other.gameObject.CompareTag("Ingredient"))
         {
-            isOnObject = true;
+            isOnIngredient = true;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {
                 uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2);
+                // add this ingredient with its name to the list of collected items
+                collected.Add(other.gameObject.name);
             }
         }
+
+        if (other.gameObject.CompareTag("Customer"))
+        {
+            if (collected.Contains("Chicken"))
+            {
+                Debug.Log("Finished");
+            }
+        }
+        
         isJumping = false;
     }
 
@@ -231,7 +244,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ingredient")) 
         {   
-            isOnObject = false;
+            isOnIngredient = false;
             timer = 0f; 
         }
     }
