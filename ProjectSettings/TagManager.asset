@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ingredient
   - ProgressBar
+  - Customer
   layers:
   - Default
   - TransparentFX
