@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 enum PlayerPowerState
@@ -14,15 +11,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
     // ----- Components ----
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
-    private SpriteRenderer spriteRenderer;
     private Animator animator;
     
-    [SerializeField] private bool isDescending;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
-    
-    private Sprite currentSprite;
-    private enum MovementState { idle, running, jumping, falling };
     
     public float jumpForce = 6f;
     public float moveSpeed = 10f;
@@ -39,11 +31,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float destroyTime = 5f;
     private bool isJumping = false;
     
-    private List<PlayerPowerState> playerStateOrder = new List<PlayerPowerState>
-    {
-        PlayerPowerState.FIRE_RIGHT, PlayerPowerState.FIRE_ACTIVE, PlayerPowerState.FIRE_LEFT, PlayerPowerState.FIRE_TOP
-    };
-
     private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
 
     // Start is called before the first frame update
@@ -52,8 +39,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        currentSprite = spriteRenderer.sprite;
         //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
         halfBrokenGround = GameObject.Find("Half-Broken");
         halfBrokenGround.SetActive(false);
