@@ -223,6 +223,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {
                 uiObjectToShow.SetActive(true);
+                
                 Destroy(other.gameObject, 2);
                 // add this ingredient with its name to the list of collected items
                 collected.Add(other.gameObject.name);
