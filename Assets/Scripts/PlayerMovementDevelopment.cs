@@ -1,41 +1,47 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
+
+enum PlayerPowerState
+{
+        FIRE_RIGHT, FIRE_ACTIVE, FIRE_LEFT, FIRE_TOP
+}
 
 public class PlayerMovementDevelopment : MonoBehaviour
 {
+    // ----- Components ----
     private Rigidbody2D rb;
-    public float jumpForce = 4f;
     private BoxCollider2D boxCollider;
-    private SpriteRenderer spriteRenderer;
-    [SerializeField] private bool isDescending;
+    private Animator animator;
+    
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
-    [SerializeField] private Sprite powerLeft;
-    [SerializeField] private Sprite powerBottom;
-    [SerializeField] private Sprite powerRight;
-    [SerializeField] private Sprite powerTop;
-    private Sprite currentSprite;
-    private enum MovementState { idle, running, jumping, falling };
+    
+    public float jumpForce = 6f;
     public float moveSpeed = 10f;
     private bool isOnObject = false;
     private bool wasGrounded = true;
     public GameObject uiObjectToShow;
+    private int breakableGroundJumpCount = 0;
+    private bool isOnBreakableGround = false;
+    private GameObject halfBrokenGround;
+
 
     private List<Sprite> spriteOrder;
     private float timer = 0f;
     public float destroyTime = 5f;
+    private bool isJumping = false;
+    
+    private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        currentSprite = spriteRenderer.sprite;
-        spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
+        //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
+        halfBrokenGround = GameObject.Find("Half-Broken");
+        halfBrokenGround.SetActive(false);
     }
 
     // Update is called once per frame
@@ -45,16 +51,34 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
-
+        
         // vertical jump mechanics
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && IsGrounded())
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             Jump();
         }
 
+        // animations for moving left/right and jumping
+        if (horizontalInput > 0f && !isJumping)
+        {
+            animator.SetBool("isIdle", false);
+            animator.SetBool("isMovingLeft", false);
+            animator.SetBool("isMovingRight", true);
+        } else if (horizontalInput < 0f && !isJumping)
+        {
+            animator.SetBool("isIdle", false);
+            animator.SetBool("isMovingLeft", true);
+            animator.SetBool("isMovingRight", false);
+        }
+        else
+        {
+            animator.SetBool("isMovingRight", false);
+            animator.SetBool("isMovingLeft", false);
+            animator.SetBool("isIdle", true);
+        }
+
         // rotate player mechanics
-        setCurrentSprite();
-        spriteRenderer.sprite = currentSprite; // update the sprite in SpriteRenderer component
+        SetCurrentSpriteOnRotation();
 
         //timer if player lands on ingredient
         wasGrounded = currentlyGrounded;
@@ -63,33 +87,80 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     void Jump()
     {
+        isJumping = true;
+        animator.SetBool("isIdle", true);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
     }
 
-    private void setCurrentSprite()
+    private void SetCurrentSpriteOnRotation()
     {   if (!IsGrounded()){
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                int index = spriteOrder.IndexOf(currentSprite);
-                if (index == 0)
+                switch (currentPlayerState)
                 {
-                    currentSprite = spriteOrder[spriteOrder.Count - 1];
-                }
-                else
-                {
-                    currentSprite = spriteOrder[index - 1];
+                    case PlayerPowerState.FIRE_RIGHT:
+                        animator.SetBool("isFireTop", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_TOP;
+                        break;
+                    case PlayerPowerState.FIRE_ACTIVE:
+                        animator.SetBool("isFireRight", true);
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_RIGHT;
+                        break;
+                    case PlayerPowerState.FIRE_LEFT:
+                        animator.SetBool("isFireActive", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                        break;
+                    case PlayerPowerState.FIRE_TOP:
+                        animator.SetBool("isFireLeft", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.FIRE_LEFT;
+                        break;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            
+            if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                int index = spriteOrder.IndexOf(currentSprite);
-                if (index == spriteOrder.Count - 1)
+                switch (currentPlayerState)
                 {
-                    currentSprite = spriteOrder[0];
-                }
-                else
-                {
-                    currentSprite = spriteOrder[index + 1];
+                    case PlayerPowerState.FIRE_RIGHT:
+                        animator.SetBool("isFireActive", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                        break;
+                    case PlayerPowerState.FIRE_ACTIVE:
+                        animator.SetBool("isFireLeft", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.FIRE_LEFT;
+                        break;
+                    case PlayerPowerState.FIRE_LEFT:
+                        animator.SetBool("isFireTop", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_TOP;
+                        break;
+                    case PlayerPowerState.FIRE_TOP:
+                        animator.SetBool("isFireRight", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.FIRE_RIGHT;
+                        break;
                 }
             }
         }
@@ -116,22 +187,44 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        // Logic to break the breakable ground with fire side 
         bool isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        if (isBreakableLayer)
+        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
         {
-            Destroy(other.gameObject);
+            breakableGroundJumpCount++;
+            isOnBreakableGround = true;
+            if (breakableGroundJumpCount == 1)
+            {
+                if (halfBrokenGround.activeSelf)
+                {
+                    Destroy(halfBrokenGround);
+                }
+                else
+                {
+                    // update the layer to show a half broken ground
+                    Destroy(other.gameObject);
+                    halfBrokenGround.SetActive(true);
+                    breakableGroundJumpCount = 0; 
+                }
+            }
+        }
+        else
+        {
+            isOnBreakableGround = false;
+            breakableGroundJumpCount = 0;
         }
 
+        //destroying the ingredient 
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnObject = true;
-            
-            if (currentSprite == powerBottom)
-            {   uiObjectToShow.SetActive(true);
+            if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
+            {
+                uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2);
             }
-           
         }
+        isJumping = false;
     }
 
     private void OnCollisionExit2D(Collision2D other)
