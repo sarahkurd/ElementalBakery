@@ -3502,11 +3502,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5.3532643
+      value: 1.957482
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 5.3532643
+      value: 2.5430145
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalScale.z
@@ -3542,11 +3542,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -565
+      value: -184
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -37.39
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3559,6 +3559,14 @@ PrefabInstance:
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088744748164104742, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
+      propertyPath: colorTransitionSpeed
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088744748164104742, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
+      propertyPath: delayBetweenElements
+      value: 0.27
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
