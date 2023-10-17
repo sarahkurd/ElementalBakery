@@ -384,6 +384,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6867408002736625527, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: uiObjectToShow
       value: 
@@ -1369,8 +1373,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248826821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.82, y: -2.21, z: 0}
-  m_LocalScale: {x: 4.3588, y: 4.3588, z: 4.3588}
+  m_LocalPosition: {x: 11.0105, y: -2.2259, z: 0}
+  m_LocalScale: {x: 3.9778407, y: 4.3906193, z: 4.3588}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1386,10 +1390,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005369425, y: 0.009396672}
+  m_Offset: {x: -0.007498026, y: 0.009396672}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1400,7 +1404,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.31270456, y: 0.777166}
+  m_Size: {x: 0.33843946, y: 0.777166}
   m_EdgeRadius: 0
 --- !u!1 &1258640190
 GameObject:
@@ -4843,7 +4847,7 @@ GameObject:
   - component: {fileID: 7835174527326488009}
   - component: {fileID: 7835174527326488010}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: HintsProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
