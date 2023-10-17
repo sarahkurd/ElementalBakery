@@ -36,6 +36,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
     private List<string> collected = new List<string>();
 
+    // Parameters for tracking the time for level 0 
+
+    private float levelZeroStartTime; 
+    private bool timing = false; 
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +49,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
         halfBrokenGround = GameObject.Find("Half-Broken");
         halfBrokenGround.SetActive(false);
+
+        //starting the timer for the level 
+        levelZeroStartTime = Time.time; 
+        timing = true; 
+        
     }
 
     // Update is called once per frame
@@ -85,6 +94,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         //timer if player lands on ingredient
         wasGrounded = currentlyGrounded;
+
+        if (timing){
+            float elapsedTime = Time.time - levelZeroStartTime; 
+        }
 
     }
 
@@ -222,11 +235,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isOnIngredient = true;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
-            {
+            {   
+
+                float timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+
                 uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2.5f);
                 // add this ingredient with its name to the list of collected items
-                collected.Add(other.gameObject.name);
+                collected.Add(other.gameObject.name); 
             }
         }
         
@@ -245,9 +262,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Customer"))
-        {   Debug.Log("Completed Level"); 
+        {  
             if (collected.Contains("Chicken"))
-            {   Debug.Log("Completed Level"); 
+            {   float timeToFinish =  Time.time - levelZeroStartTime;  
+
+                Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
