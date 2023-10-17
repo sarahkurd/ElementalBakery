@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 enum PlayerPowerState
 {
@@ -228,14 +229,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 collected.Add(other.gameObject.name);
             }
         }
-
-        if (other.gameObject.CompareTag("Customer"))
-        {
-            if (collected.Contains("Chicken"))
-            {
-                Debug.Log("Finished");
-            }
-        }
         
         isJumping = false;
     }
@@ -246,6 +239,17 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {   
             isOnIngredient = false;
             timer = 0f; 
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Customer"))
+        {
+            if (collected.Contains("Chicken"))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
         }
     }
 
