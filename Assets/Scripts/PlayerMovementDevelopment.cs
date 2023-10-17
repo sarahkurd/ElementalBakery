@@ -18,7 +18,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    public float jumpForce = 8f;
+    public float jumpForce = 10f;
     public float moveSpeed = 10f;
     private bool isOnIngredient = false;
     private bool wasGrounded = true;
@@ -36,6 +36,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
     private List<string> collected = new List<string>();
 
+    // Parameters for tracking the time for level 0 
+
+    private float levelZeroStartTime; 
+    private bool timing = false; 
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +49,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
         halfBrokenGround = GameObject.Find("Half-Broken");
         halfBrokenGround.SetActive(false);
+
+        //starting the timer for the level 
+        levelZeroStartTime = Time.time; 
+        timing = true; 
+        
     }
 
     // Update is called once per frame
@@ -54,9 +63,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
-        
         // vertical jump mechanics
-        if (Input.GetKeyDown(KeyCode.Space) && (IsGrounded() || isOnIngredient))
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && (IsGrounded() || isOnIngredient))
         {
             Jump();
         }
@@ -85,6 +93,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         //timer if player lands on ingredient
         wasGrounded = currentlyGrounded;
+
+        if (timing){
+            float elapsedTime = Time.time - levelZeroStartTime; 
+        }
 
     }
 
@@ -222,11 +234,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isOnIngredient = true;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
-            {
+            {   
+
+                float timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+
                 uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2.5f);
                 // add this ingredient with its name to the list of collected items
-                collected.Add(other.gameObject.name);
+                collected.Add(other.gameObject.name); 
             }
         }
         
@@ -243,14 +259,28 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other)
-    {
+    {   
         if (other.gameObject.CompareTag("Customer"))
         {
-            if (collected.Contains("Chicken"))
+            //foreach (var x in collected)
+            //{
+            //    Debug.Log(x.ToString());
+            //}
+            if (collected.Contains("lowerBread") && collected.Contains("upperBread") && collected.Contains("meat"))
             {
+                // exit scene to be added
+                Debug.Log("Exit Game");
+            }
+            if (collected.Contains("Chicken"))
+            {   float timeToFinish =  Time.time - levelZeroStartTime;  
+
+                Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
+
+        
     }
 
 }
