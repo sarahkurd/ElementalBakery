@@ -18,8 +18,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    public float jumpForce = 10f;
-    public float moveSpeed = 10f;
+    private float jumpForce = 6f;
+    private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     private bool wasGrounded = true;
     public GameObject uiObjectToShow;
@@ -32,6 +32,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private float timer = 0f;
     public float destroyTime = 5f;
     private bool isJumping = false;
+    private const int MAX_JUMPS = 2;
+    private int jumpsLeft = MAX_JUMPS;
     
     private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
     private List<string> collected = new List<string>();
@@ -62,9 +64,18 @@ public class PlayerMovementDevelopment : MonoBehaviour
         bool currentlyGrounded = IsGrounded();
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
-        transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+        if (isJumping) // slow down horizontal movement whe player is in the air
+        {
+            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
+
+        }
+        else
+        {
+            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+        }
+        
         // vertical jump mechanics
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && (IsGrounded() || isOnIngredient))
+        if (CanJump())
         {
             Jump();
         }
@@ -100,11 +111,17 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     }
 
+    private bool CanJump()
+    {
+        return (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && jumpsLeft > 0;
+    }
+
     void Jump()
     {
         isJumping = true;
         animator.SetBool("isIdle", true);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        jumpsLeft--;
     }
 
     private void SetCurrentSpriteOnRotation()
@@ -247,6 +264,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         isJumping = false;
+        jumpsLeft = MAX_JUMPS;
     }
 
     private void OnCollisionExit2D(Collision2D other)
