@@ -768,11 +768,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: e87fd65f-0a1d-403c-93bd-f940fcc2c48e
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: ElementalBakery
+  organizationId: vprasann
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

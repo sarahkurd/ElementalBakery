@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Analytics; 
 
 enum PlayerPowerState
 {
@@ -301,20 +302,32 @@ public class PlayerMovementDevelopment : MonoBehaviour
             {
                 // exit scene to be added
                 //Debug.Log("Exit Game");
+                OnLevelCompletion(); 
                 PlayManagerGame.isGameOver = true;
 
 
             }
             if (collected.Contains("Chicken"))
-            {   float timeToFinish =  Time.time - levelZeroStartTime;  
-
-                Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
+                OnLevelCompletion(); 
+                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
 
         
+    }
+
+    private void OnLevelCompletion(){
+        float timeToFinish =  Time.time - levelZeroStartTime;  
+
+        int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
+         Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+        Analytics.CustomEvent("Level "+activeSceneBuildIndex.ToString(), new Dictionary<string, object>
+        {
+            { "CompletionTime", timeToFinish }
+        });
     }
 
 }
