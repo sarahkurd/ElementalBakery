@@ -238,8 +238,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
                 float timeToGetIngredient =  Time.time - levelZeroStartTime; 
                 Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
-
-                uiObjectToShow.SetActive(true);
+                EnableProgressBar(other); 
+                // uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2.5f);
                 // add this ingredient with its name to the list of collected items
                 collected.Add(other.gameObject.name); 
@@ -249,6 +249,19 @@ public class PlayerMovementDevelopment : MonoBehaviour
         isJumping = false;
     }
 
+    private void EnableProgressBar(Collision2D other){ 
+         uiObjectToShow.SetActive(true); 
+         RectTransform uiRectTransform = uiObjectToShow.GetComponent<RectTransform>();
+
+         Vector3 referencePosition = other.gameObject.transform.position; 
+         Vector2 newAnchoredPosition = new Vector2(7f, 7f);
+
+        uiRectTransform.anchoredPosition = newAnchoredPosition; 
+
+
+       
+
+    }
     private void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ingredient")) 

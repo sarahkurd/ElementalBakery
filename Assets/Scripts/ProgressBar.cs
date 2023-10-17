@@ -16,13 +16,18 @@ public class ProgressBar : MonoBehaviour
         new Color(1.0f, 1.0f, 0.0f),
          new Color(0.0f, 1.0f, 0.0f)
     }; 
+
+    private Color defaultColor = new Color(0f, 0f, 0f); 
     // Start is called before the first frame update
     void Start()
     {
-         StartCoroutine(TransitionColors());
+        
         
     }
 
+    void OnEnable(){
+         StartCoroutine(TransitionColors());
+    }
     // Update is called once per frame
     void Update()
     {
@@ -59,12 +64,24 @@ public class ProgressBar : MonoBehaviour
             {
                 // If this is the 10th element, start the disappearance process
                 yield return new WaitForSeconds(disappearanceDelay);
+                gameObject.SetActive(false); 
+                ChangeToDefaultColor(); 
+
                 //StartCoroutine(DisappearImages());
-                DestroyElements();
+                //DestroyElements();
             }
         }
     }
 
+    private void ChangeToDefaultColor(){
+
+        for (int i = 0; i < imageElements.Length; i++)
+        {
+            imageElements[i].color = defaultColor; 
+
+        }
+    }
+/*
     private void DestroyElements()
     {
         // Check if the last element exists
@@ -76,4 +93,5 @@ public class ProgressBar : MonoBehaviour
         }
         Destroy(healthBar); 
     }
+*/ 
 }
