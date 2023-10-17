@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Analytics; 
 
 enum PlayerPowerState
 {
@@ -298,14 +299,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
             //    Debug.Log(x.ToString());
             //}
             if (collected.Contains("lowerBread") && collected.Contains("upperBread") && collected.Contains("meat"))
-            {
+            {   
                 // exit scene to be added
+                OnLevelCompletion(); 
                 Debug.Log("Exit Game");
             }
             if (collected.Contains("Chicken"))
-            {   float timeToFinish =  Time.time - levelZeroStartTime;  
-
-                Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+            {   
+               
+                OnLevelCompletion(); 
 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
@@ -313,5 +315,18 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         
     }
+
+    private void OnLevelCompletion(){
+        float timeToFinish =  Time.time - levelZeroStartTime;  
+
+        int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
+         Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+        Analytics.CustomEvent("Level "+activeSceneBuildIndex.ToString(), new Dictionary<string, object>
+        {
+            { "CompletionTime", timeToFinish }
+        });
+    }
+
+   
 
 }
