@@ -300,7 +300,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
             if (collected.Contains("lowerBread") && collected.Contains("upperBread") && collected.Contains("meat"))
             {
                 // exit scene to be added
-                Debug.Log("Exit Game");
+                //Debug.Log("Exit Game");
+                PlayManagerGame.isGameOver = true;
+
+
             }
             if (collected.Contains("Chicken"))
             {   float timeToFinish =  Time.time - levelZeroStartTime;  
