@@ -18,7 +18,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    public float jumpForce = 8f;
+    public float jumpForce = 10f;
     public float moveSpeed = 10f;
     private bool isOnIngredient = false;
     private bool wasGrounded = true;
@@ -63,9 +63,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
-        
         // vertical jump mechanics
-        if (Input.GetKeyDown(KeyCode.Space) && (IsGrounded() || isOnIngredient))
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && (IsGrounded() || isOnIngredient))
         {
             Jump();
         }
@@ -260,9 +259,18 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other)
-    {
+    {   
         if (other.gameObject.CompareTag("Customer"))
-        {  
+        {
+            //foreach (var x in collected)
+            //{
+            //    Debug.Log(x.ToString());
+            //}
+            if (collected.Contains("lowerBread") && collected.Contains("upperBread") && collected.Contains("meat"))
+            {
+                // exit scene to be added
+                Debug.Log("Exit Game");
+            }
             if (collected.Contains("Chicken"))
             {   float timeToFinish =  Time.time - levelZeroStartTime;  
 
@@ -271,6 +279,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
+
+        
     }
 
 }
