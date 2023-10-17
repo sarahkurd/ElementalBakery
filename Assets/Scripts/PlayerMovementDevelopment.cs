@@ -245,9 +245,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Customer"))
-        {
+        {   Debug.Log("Completed Level"); 
             if (collected.Contains("Chicken"))
-            {
+            {   Debug.Log("Completed Level"); 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
