@@ -261,7 +261,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {   
         if (other.gameObject.CompareTag("Customer"))
-<<<<<<< HEAD
         {
             //foreach (var x in collected)
             //{
@@ -272,9 +271,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 // exit scene to be added
                 Debug.Log("Exit Game");
             }
-=======
-        {  
->>>>>>> origin/main
             if (collected.Contains("Chicken"))
             {   float timeToFinish =  Time.time - levelZeroStartTime;  
 

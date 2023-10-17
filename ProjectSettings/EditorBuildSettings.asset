@@ -9,17 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Final/StartGame.unity
     guid: 2c97cfb7d2cf94beeac74ce350818cbc
   - enabled: 1
-<<<<<<< HEAD
     path: Assets/Scenes/Final/Level0.unity
     guid: 832a3da7db9ec4766b400cfbd265f982
   - enabled: 1
     path: Assets/Scenes/Final/Level1.unity
     guid: dcce127e8027a41a1b511da66727d945
-=======
+  - enabled: 1
     path: Assets/Scenes/Final/MainMenu.unity
     guid: de3f3fa253dc54e439223f03950360a1
-  - enabled: 1
-    path: Assets/Scenes/Final/Level0.unity
-    guid: 832a3da7db9ec4766b400cfbd265f982
->>>>>>> origin/main
   m_configObjects: {}
