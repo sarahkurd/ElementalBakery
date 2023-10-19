@@ -6,7 +6,7 @@ using UnityEngine.Analytics;
 
 enum PlayerPowerState
 {
-        FIRE_RIGHT, FIRE_ACTIVE, FIRE_LEFT, FIRE_TOP
+    FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, NEUTRAL
 }
 
 public class PlayerMovementDevelopment : MonoBehaviour
@@ -22,7 +22,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private float jumpForce = 6f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
-    private bool wasGrounded = true;
     public GameObject uiObjectToShow;
     private int breakableGroundJumpCount = 0;
     private bool isOnBreakableGround = false;
@@ -31,12 +30,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private List<Sprite> spriteOrder;
     private float timer = 0f;
-    public float destroyTime = 5f;
     private bool isJumping = false;
     private const int MAX_JUMPS = 2;
     private int jumpsLeft = MAX_JUMPS;
     
-    private PlayerPowerState currentPlayerState = PlayerPowerState.FIRE_RIGHT;
+    private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
     private List<string> collected = new List<string>();
 
     // Parameters for tracking the time for level 0 
@@ -65,7 +63,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         bool currentlyGrounded = IsGrounded();
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (isJumping) // slow down horizontal movement whe player is in the air
+        if (isJumping) // slow down horizontal movement wheN player is in the air
         {
             transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
 
@@ -103,9 +101,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // rotate player mechanics
         SetCurrentSpriteOnRotation();
 
-        //timer if player lands on ingredient
-        wasGrounded = currentlyGrounded;
-
         if (timing){
             float elapsedTime = Time.time - levelZeroStartTime; 
         }
@@ -131,33 +126,33 @@ public class PlayerMovementDevelopment : MonoBehaviour
             {
                 switch (currentPlayerState)
                 {
-                    case PlayerPowerState.FIRE_RIGHT:
+                    case PlayerPowerState.NEUTRAL:
                         animator.SetBool("isFireTop", true);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.FIRE_TOP;
+                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
                         break;
                     case PlayerPowerState.FIRE_ACTIVE:
                         animator.SetBool("isFireRight", true);
                         animator.SetBool("isFireTop", false);
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.FIRE_RIGHT;
+                        currentPlayerState = PlayerPowerState.NEUTRAL;
                         break;
-                    case PlayerPowerState.FIRE_LEFT:
+                    case PlayerPowerState.WATER_ACTIVE:
                         animator.SetBool("isFireActive", true);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireTop", false);
                         animator.SetBool("isFireLeft", false);
                         currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
                         break;
-                    case PlayerPowerState.FIRE_TOP:
+                    case PlayerPowerState.AIR_ACTIVE:
                         animator.SetBool("isFireLeft", true);
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.FIRE_LEFT;
+                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
                         break;
                 }
             }
@@ -166,7 +161,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             {
                 switch (currentPlayerState)
                 {
-                    case PlayerPowerState.FIRE_RIGHT:
+                    case PlayerPowerState.NEUTRAL:
                         animator.SetBool("isFireActive", true);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireTop", false);
@@ -178,21 +173,21 @@ public class PlayerMovementDevelopment : MonoBehaviour
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.FIRE_LEFT;
+                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
                         break;
-                    case PlayerPowerState.FIRE_LEFT:
+                    case PlayerPowerState.WATER_ACTIVE:
                         animator.SetBool("isFireTop", true);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.FIRE_TOP;
+                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
                         break;
-                    case PlayerPowerState.FIRE_TOP:
+                    case PlayerPowerState.AIR_ACTIVE:
                         animator.SetBool("isFireRight", true);
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireLeft", false);
                         animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.FIRE_RIGHT;
+                        currentPlayerState = PlayerPowerState.NEUTRAL;
                         break;
                 }
             }
