@@ -37,6 +37,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
     private List<string> collected = new List<string>();
 
+    public GameObject collectAnalyticsObject; 
+    
+
     // Parameters for tracking the time for level 0 
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
@@ -54,6 +57,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
         timing = true; 
+
+        
         
     }
 
@@ -320,7 +325,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     public void OnLevelCompletion(){
         float timeToFinish =  Time.time - levelZeroStartTime;  
-        CollectAnalytics.putAnalytics(timeToFinish, timeToGetIngredient); 
+        CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
+        
+        analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
 
         int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
          Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
