@@ -31,14 +31,14 @@ public class CollectAnalytics : MonoBehaviour
     }
         
     
-    public static void putAnalytics(float finishTime, float timeToGetFirstIngredient ){
+    public void putAnalytics(float finishTime, float timeToGetFirstIngredient ){
 
        StartCoroutine(Post("23425sess1", finishTime.ToString(), timeToGetFirstIngredient.ToString() )); 
 
 
     }
 
-    private static IEnumerator Post(string sessionId, string finishTime, string timeToGetFirstIngredient){
+    private IEnumerator Post(string sessionId, string finishTime, string timeToGetFirstIngredient){
         WWWForm form = new WWWForm(); 
         form.AddField("entry.337704600", sessionId ); 
         form.AddField("entry.666891163", finishTime); 
