@@ -27,7 +27,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isOnBreakableGround = false;
     private GameObject halfBrokenGround;
 
-
+    private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
     private float timer = 0f;
     private bool isJumping = false;
@@ -38,7 +38,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private List<string> collected = new List<string>();
 
     // Parameters for tracking the time for level 0 
-
+    public float timeToGetIngredient; 
     private float levelZeroStartTime; 
     private bool timing = false; 
     // Start is called before the first frame update
@@ -248,9 +248,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
             isOnIngredient = true;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {   
+                if(isFirstIngredientCollected == false) {
+                     timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                     isFirstIngredientCollected = true; 
+                }
 
-                float timeToGetIngredient =  Time.time - levelZeroStartTime; 
-                Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+               
+                //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
                 EnableProgressBar(other); 
                 // uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2.5f);
@@ -314,8 +318,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
         
     }
 
-    private void OnLevelCompletion(){
+    public void OnLevelCompletion(){
         float timeToFinish =  Time.time - levelZeroStartTime;  
+        CollectAnalytics.putAnalytics(timeToFinish, timeToGetIngredient); 
 
         int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
          Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
@@ -326,3 +331,4 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
 }
+ 
