@@ -340,6 +340,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
         GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
         StartCoroutine(ScaleEffectY(effect, 5f));
+        Destroy(effect, 5f);
     }
 
     private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
@@ -361,9 +362,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedIce()
     {
-        Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.5f, 0); // Adjust based on your needs
+        Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.1f, 0); // Adjust based on your needs
         GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
         StartCoroutine(ScaleEffectX(effect, 7f));
+        Destroy(effect, 5f);
     }
 
     private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX)
