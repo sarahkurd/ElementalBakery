@@ -28,7 +28,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isOnBreakableGround = false;
     private GameObject halfBrokenGround;
 
-
+    private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
     private float timer = 0f;
     private bool isJumping = false;
@@ -38,8 +38,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
     private List<string> collected = new List<string>();
 
-    // Parameters for tracking the time for level 0 
+    public GameObject collectAnalyticsObject; 
+    
 
+    // Parameters for tracking the time for level 0 
+    public float timeToGetIngredient; 
     private float levelZeroStartTime; 
     private bool timing = false; 
     public GameObject tree, ice;
@@ -55,7 +58,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
+       
         timing = true; 
+
+        
         
     }
 
@@ -250,9 +256,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
             isOnIngredient = true;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {   
+                if(isFirstIngredientCollected == false) {
+                     timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                     isFirstIngredientCollected = true; 
+                }
 
-                float timeToGetIngredient =  Time.time - levelZeroStartTime; 
-                Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+               
+                //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
                 EnableProgressBar(other); 
                 // uiObjectToShow.SetActive(true);
                 Destroy(other.gameObject, 2.5f);
@@ -324,15 +334,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
         
     }
 
-    private void OnLevelCompletion(){
+    public void OnLevelCompletion(){
+
         float timeToFinish =  Time.time - levelZeroStartTime;  
+        CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
+        
+        analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
 
         int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-         Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-        Analytics.CustomEvent("Level "+activeSceneBuildIndex.ToString(), new Dictionary<string, object>
-        {
-            { "CompletionTime", timeToFinish }
-        });
+         
     }
 
     private void OnLandedTree()
@@ -386,3 +396,4 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
 }
+ 
