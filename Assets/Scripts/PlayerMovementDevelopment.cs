@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Analytics; 
 
@@ -19,7 +20,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    private float jumpForce = 6f;
+    private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     public GameObject uiObjectToShow;
@@ -44,6 +45,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
     private bool timing = false; 
+    public GameObject tree, ice;
     // Start is called before the first frame update
     void Start()
     {
@@ -268,6 +270,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 collected.Add(other.gameObject.name); 
             }
         }
+        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded())
+        {
+            OnLandedTree();
+        }
+        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
+        {
+            OnLandedIce();
+        }
         
         isJumping = false;
         jumpsLeft = MAX_JUMPS;
@@ -333,6 +343,56 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
          
+    }
+
+    private void OnLandedTree()
+    {
+        Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
+        GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
+        StartCoroutine(ScaleEffectY(effect, 5f));
+        Destroy(effect, 5f);
+    }
+
+    private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
+    {
+        float duration = 2.0f; // Time to scale over
+        float elapsedTime = 0f;
+        Vector3 initialScale = obj.transform.localScale;
+        Vector3 targetScale = new Vector3(initialScale.x, targetScaleY, initialScale.z);
+
+        while (elapsedTime < duration)
+        {
+            obj.transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
+    }
+
+    private void OnLandedIce()
+    {
+        Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.1f, 0); // Adjust based on your needs
+        GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
+        StartCoroutine(ScaleEffectX(effect, 7f));
+        Destroy(effect, 5f);
+    }
+
+    private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX)
+    {
+        float duration = 1.0f; // Time to scale over
+        float elapsedTime = 0f;
+        Vector3 initialScale = obj.transform.localScale;
+        Vector3 targetScale = new Vector3(targetScaleX, initialScale.y, initialScale.z);
+
+        while (elapsedTime < duration)
+        {
+            obj.transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
     }
 
 }
