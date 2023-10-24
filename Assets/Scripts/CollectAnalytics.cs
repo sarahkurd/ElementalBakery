@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI; 
 using UnityEngine.Networking; 
 using UnityEngine.SceneManagement; 
+using System; 
+
 
 public class CollectAnalytics : MonoBehaviour
 {
@@ -32,14 +34,22 @@ public class CollectAnalytics : MonoBehaviour
         
     
     public void putAnalytics(float finishTime, float timeToGetFirstIngredient ){
-
-       StartCoroutine(Post("23425sess1", finishTime.ToString(), timeToGetFirstIngredient.ToString() )); 
+       string sessionID; 
+       long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        
+        
+       int randomValue = UnityEngine.Random.Range(0, 100000);
+        
+        
+       sessionID = timestamp.ToString() + randomValue.ToString();
+       StartCoroutine(Post(sessionID, finishTime.ToString(), timeToGetFirstIngredient.ToString() )); 
 
 
     }
 
     private IEnumerator Post(string sessionId, string finishTime, string timeToGetFirstIngredient){
         WWWForm form = new WWWForm(); 
+
         form.AddField("entry.337704600", sessionId ); 
         form.AddField("entry.666891163", finishTime); 
         form.AddField("entry.1115350779", timeToGetFirstIngredient); 

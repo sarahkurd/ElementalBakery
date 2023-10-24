@@ -56,6 +56,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
+       
         timing = true; 
 
         
@@ -324,17 +325,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     public void OnLevelCompletion(){
+
         float timeToFinish =  Time.time - levelZeroStartTime;  
         CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
         analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
 
         int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-         Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-        Analytics.CustomEvent("Level "+activeSceneBuildIndex.ToString(), new Dictionary<string, object>
-        {
-            { "CompletionTime", timeToFinish }
-        });
+         
     }
 
 }
