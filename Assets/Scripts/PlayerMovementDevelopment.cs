@@ -318,7 +318,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
 
             }
-            if (PlayerItems.collected.Contains("Chicken"))
+            if (PlayerItems.collected.Contains("chicken"))
             {   //float timeToFinish =  Time.time - levelZeroStartTime;  
                 OnLevelCompletion(); 
                 //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
