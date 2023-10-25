@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using DefaultNamespace;
 using UnityEngine.SceneManagement;
 using UnityEngine.Analytics; 
 
@@ -36,7 +37,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private int jumpsLeft = MAX_JUMPS;
     
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
-    private List<string> collected = new List<string>();
 
     public GameObject collectAnalyticsObject; 
     
@@ -261,13 +261,16 @@ public class PlayerMovementDevelopment : MonoBehaviour
                      isFirstIngredientCollected = true; 
                 }
 
-               
-                //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
-                EnableProgressBar(other); 
-                // uiObjectToShow.SetActive(true);
-                Destroy(other.gameObject, 2.5f);
-                // add this ingredient with its name to the list of collected items
-                collected.Add(other.gameObject.name); 
+                IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
+                if (ic.currentIngredientState == IngredientCookingState.COMPLETE)
+                {
+                    PlayerItems.collected.Add(other.gameObject.name);
+                    ic.DestroyIngredientAndProgressBar();
+                } else if (ic.currentIngredientState == IngredientCookingState.UNCOOKED)
+                {
+                    //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+                    EnableProgressBar(other); 
+                }
             }
         }
         else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded())
@@ -283,19 +286,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
         jumpsLeft = MAX_JUMPS;
     }
 
-    private void EnableProgressBar(Collision2D other){ 
-         uiObjectToShow.SetActive(true); 
-         RectTransform uiRectTransform = uiObjectToShow.GetComponent<RectTransform>();
-
-         Vector3 referencePosition = other.gameObject.transform.position; 
-         Vector2 newAnchoredPosition = new Vector2(7f, 7f);
-
-        uiRectTransform.anchoredPosition = newAnchoredPosition; 
-
-
-       
-
+    private void EnableProgressBar(Collision2D other)
+    {
+         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
+         ic.EnableProgressBar();
     }
+    
     private void OnCollisionExit2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ingredient")) 
@@ -313,7 +309,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             //{
             //    Debug.Log(x.ToString());
             //}
-            if (collected.Contains("lowerBread") && collected.Contains("upperBread") && collected.Contains("meat"))
+            if (PlayerItems.collected.Contains("lowerBread") && PlayerItems.collected.Contains("upperBread") && PlayerItems.collected.Contains("meat"))
             {
                 // exit scene to be added
                 //Debug.Log("Exit Game");
@@ -322,7 +318,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
 
             }
-            if (collected.Contains("Chicken"))
+            if (PlayerItems.collected.Contains("Chicken"))
             {   //float timeToFinish =  Time.time - levelZeroStartTime;  
                 OnLevelCompletion(); 
                 //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
