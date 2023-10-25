@@ -9,6 +9,8 @@ public class ProgressBar : MonoBehaviour
     public float colorTransitionSpeed = 0.2f; // Speed of color transition
     public float delayBetweenElements = 0.3f; // Delay between transitioning each element
     public float disappearanceDelay = 0.75f;
+    private long cookTime;
+    private bool isComplete = false;
     private int currentIndex = 0;
     private Color[] assignedColors = {
         new Color(1.0f, 0.0f, 0.0f),
@@ -17,7 +19,7 @@ public class ProgressBar : MonoBehaviour
          new Color(0.0f, 1.0f, 0.0f)
     }; 
 
-    private Color defaultColor = new Color(0f, 0f, 0f); 
+    private Color defaultColor = new Color(250.0f, 0f, 0f); 
     // Start is called before the first frame update
     void Start()
     {
@@ -64,7 +66,7 @@ public class ProgressBar : MonoBehaviour
             {
                 // If this is the 10th element, start the disappearance process
                 yield return new WaitForSeconds(disappearanceDelay);
-                gameObject.SetActive(false); 
+                isComplete = true;
                 ChangeToDefaultColor(); 
 
                 //StartCoroutine(DisappearImages());
@@ -80,6 +82,17 @@ public class ProgressBar : MonoBehaviour
             imageElements[i].color = defaultColor; 
 
         }
+    }
+
+    public void SetTimer(long cookTime)
+    {
+        this.cookTime = cookTime;
+        //delayBetweenElements = cookTime / 4.0f;
+    }
+
+    public bool IsComplete()
+    {
+        return isComplete;
     }
 /*
     private void DestroyElements()

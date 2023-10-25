@@ -3,15 +3,12 @@ namespace models
     public struct Ingredient
     {
         public string name { get;  }
-        public long timeToFire { get;  }
-        public long timeToWater { get;  }
+        public long timeToCook { get;  }
 
-        public Ingredient(string name, long timeToFire, long timeToWater)
+        public Ingredient(string name, long timeToCook)
         {
             this.name = name;
-            this.timeToFire = timeToFire;
-            this.timeToWater = timeToWater;
+            this.timeToCook = timeToCook;
         }
-        
     }
 }
