@@ -10,7 +10,7 @@ public class ProgressBar : MonoBehaviour
     public float delayBetweenElements = 0.3f; // Delay between transitioning each element
     public float disappearanceDelay = 0.75f;
     private long cookTime;
-    private bool isComplete = false;
+    public bool isComplete = false;
     private int currentIndex = 0;
     private Color[] assignedColors = {
         new Color(1.0f, 0.0f, 0.0f),
