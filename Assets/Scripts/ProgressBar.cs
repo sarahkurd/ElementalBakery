@@ -19,7 +19,10 @@ public class ProgressBar : MonoBehaviour
          new Color(0.0f, 1.0f, 0.0f)
     }; 
 
+    
+
     private Color defaultColor = new Color(250.0f, 0f, 0f); 
+    private Color cookedColor = new Color(0.0f, 1.0f, 0.0f); 
     // Start is called before the first frame update
     void Start()
     {
@@ -67,21 +70,54 @@ public class ProgressBar : MonoBehaviour
                 // If this is the 10th element, start the disappearance process
                 yield return new WaitForSeconds(disappearanceDelay);
                 isComplete = true;
-                ChangeToDefaultColor(); 
-
+                //ChangeToDefaultColor(); 
+                StartCoroutine(ColorBlinking()); 
                 //StartCoroutine(DisappearImages());
                 //DestroyElements();
             }
         }
     }
 
+    private IEnumerator ColorBlinking(){
+        int counter = assignedColors.Length - 1; 
+        while(true){
+            for (int i = 0; i < imageElements.Length; i++)
+            {
+                imageElements[i].color = assignedColors[counter]; 
+
+            }
+            yield return new WaitForSeconds(0.5f); 
+            for (int i = 0; i < imageElements.Length; i++)
+            {
+                imageElements[i].color =  new Color(1.0f, 1.0f, 1.0f); 
+
+            }
+            yield return new WaitForSeconds(0.125f); 
+            for (int i = 0; i < imageElements.Length; i++)
+            {
+                imageElements[i].color =  new Color(0.0f, 0.0f, 0.0f); 
+
+            }
+            yield return new WaitForSeconds(0.125f); 
+        
+        counter --; 
+        if(counter <0){
+            counter = assignedColors.Length - 1;
+        }
+
+        }
+    
+        
+    }
+
     private void ChangeToDefaultColor(){
 
         for (int i = 0; i < imageElements.Length; i++)
         {
-            imageElements[i].color = defaultColor; 
+            imageElements[i].color = cookedColor; 
 
         }
+
     }
 
     public void SetTimer(long cookTime)
@@ -94,17 +130,5 @@ public class ProgressBar : MonoBehaviour
     {
         return isComplete;
     }
-/*
-    private void DestroyElements()
-    {
-        // Check if the last element exists
-        if (currentIndex == imageElements.Length - 1)
-        {    for (int i = 0; i < imageElements.Length; i++)
-             { 
-                Destroy(imageElements[i].gameObject);
-             }
-        }
-        Destroy(healthBar); 
-    }
-*/ 
+
 }

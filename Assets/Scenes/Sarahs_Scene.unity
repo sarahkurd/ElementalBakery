@@ -3011,6 +3011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SteakGO
       objectReference: {fileID: 0}
+    - target: {fileID: 3612756911765368687, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
+      propertyPath: m_TagString
+      value: meat
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
 --- !u!1001 &6306448860279065548
@@ -3023,6 +3027,10 @@ PrefabInstance:
     - target: {fileID: 6306448859142760212, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
       propertyPath: m_Name
       value: ChickenGO
+      objectReference: {fileID: 0}
+    - target: {fileID: 6306448859142760212, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
+      propertyPath: m_TagString
+      value: meat
       objectReference: {fileID: 0}
     - target: {fileID: 6306448859142760213, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
       propertyPath: m_RootOrder
