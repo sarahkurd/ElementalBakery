@@ -51,7 +51,9 @@ public class IngredientController : MonoBehaviour
             {
                 Debug.Log("Ingredient burned");
                 currentIngredientState = IngredientCookingState.BURNED;
-                DestroyIngredientAndProgressBar();
+                DisableProgressBar(); 
+
+                //DestroyIngredientAndProgressBar();
             }
             else if (currentIngredientState != IngredientCookingState.COMPLETE && progressBarScript.IsComplete())
             {
@@ -80,8 +82,8 @@ public class IngredientController : MonoBehaviour
     private IEnumerator StartIngredientCompleteTimer()
     {
         yield return new WaitForSeconds(2.0f); 
-        spriteRenderer.color = new Color(73.0f, 30.0f, 30.0f);
         yield return new WaitForSeconds(3.0f);
+        ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.41f, 0.15f, 0.15f); 
         isIngredientBurned = true;
     }
 
@@ -89,4 +91,6 @@ public class IngredientController : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
+
+   
 }
