@@ -21,7 +21,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    private float jumpForce = 15f;
+    private float jumpForce = 10f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     public GameObject uiObjectToShow;
@@ -33,8 +33,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private List<Sprite> spriteOrder;
     private float timer = 0f;
     private bool isJumping = false;
-    private const int MAX_JUMPS = 2;
-    private int jumpsLeft = MAX_JUMPS;
+    private bool isFacingRight = true;
     
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
@@ -59,10 +58,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
        
-        timing = true; 
-
-        
-        
+        timing = true;
     }
 
     // Update is called once per frame
@@ -93,11 +89,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
             animator.SetBool("isIdle", false);
             animator.SetBool("isMovingLeft", false);
             animator.SetBool("isMovingRight", true);
+            isFacingRight = true;
         } else if (horizontalInput < 0f && !isJumping)
         {
             animator.SetBool("isIdle", false);
             animator.SetBool("isMovingLeft", true);
             animator.SetBool("isMovingRight", false);
+            isFacingRight = false;
         }
         else
         {
@@ -117,51 +115,101 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private bool CanJump()
     {
-        return (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && jumpsLeft > 0;
+        return Input.GetKeyDown(KeyCode.W) && IsGrounded();
     }
 
     void Jump()
     {
         isJumping = true;
-        animator.SetBool("isIdle", true);
+        //animator.SetBool("isIdle", true);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-        jumpsLeft--;
     }
 
     private void SetCurrentSpriteOnRotation()
-    {   if (!IsGrounded()){
+    {   
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 switch (currentPlayerState)
                 {
                     case PlayerPowerState.NEUTRAL:
-                        animator.SetBool("isFireTop", true);
-                        animator.SetBool("isFireRight", false);
-                        animator.SetBool("isFireActive", false);
-                        animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireTop", true);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                            break; 
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireTop", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireActive", true);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                            break;
+                        }
                     case PlayerPowerState.FIRE_ACTIVE:
-                        animator.SetBool("isFireRight", true);
-                        animator.SetBool("isFireTop", false);
-                        animator.SetBool("isFireActive", false);
-                        animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.NEUTRAL;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireRight", true);
+                            animator.SetBool("isFireTop", false);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.NEUTRAL;
+                            break;
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireRight", true);
+                            animator.SetBool("isFireTop", false);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                            break;
+                        }
+                        
                     case PlayerPowerState.WATER_ACTIVE:
-                        animator.SetBool("isFireActive", true);
-                        animator.SetBool("isFireRight", false);
-                        animator.SetBool("isFireTop", false);
-                        animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireActive", true);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", false);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                            break;
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", true);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                            break;
+                        }
+                    
                     case PlayerPowerState.AIR_ACTIVE:
-                        animator.SetBool("isFireLeft", true);
-                        animator.SetBool("isFireActive", false);
-                        animator.SetBool("isFireRight", false);
-                        animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireLeft", true);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", false);
+                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                            break;
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireLeft", true);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", false);
+                            currentPlayerState = PlayerPowerState.NEUTRAL;
+                            break;
+                        }
+                    
                 }
             }
             
@@ -170,36 +218,83 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 switch (currentPlayerState)
                 {
                     case PlayerPowerState.NEUTRAL:
-                        animator.SetBool("isFireActive", true);
-                        animator.SetBool("isFireRight", false);
-                        animator.SetBool("isFireTop", false);
-                        animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireActive", true);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", false);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                            break;
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", true);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                            break;
+                        }
                     case PlayerPowerState.FIRE_ACTIVE:
-                        animator.SetBool("isFireLeft", true);
-                        animator.SetBool("isFireActive", false);
-                        animator.SetBool("isFireRight", false);
-                        animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireLeft", true);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", false);
+                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                            break; 
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireLeft", true);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireTop", false);
+                            currentPlayerState = PlayerPowerState.NEUTRAL;
+                            break; 
+                        }
                     case PlayerPowerState.WATER_ACTIVE:
-                        animator.SetBool("isFireTop", true);
-                        animator.SetBool("isFireRight", false);
-                        animator.SetBool("isFireActive", false);
-                        animator.SetBool("isFireLeft", false);
-                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireTop", true);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                            break;
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireTop", false);
+                            animator.SetBool("isFireRight", false);
+                            animator.SetBool("isFireActive", true);
+                            animator.SetBool("isFireLeft", false);
+                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                            break;
+                        }
                     case PlayerPowerState.AIR_ACTIVE:
-                        animator.SetBool("isFireRight", true);
-                        animator.SetBool("isFireActive", false);
-                        animator.SetBool("isFireLeft", false);
-                        animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.NEUTRAL;
-                        break;
+                        if (isFacingRight)
+                        {
+                            animator.SetBool("isFireRight", true);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireLeft", false);
+                            animator.SetBool("isFireTop", false);
+                            currentPlayerState = PlayerPowerState.NEUTRAL;
+                            break;
+                        }
+                        else
+                        {
+                            animator.SetBool("isFireRight", true);
+                            animator.SetBool("isFireActive", false);
+                            animator.SetBool("isFireLeft", false);
+                            animator.SetBool("isFireTop", false);
+                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                            break;
+                        }
                 }
             }
-        }
     }
 
     private bool IsGrounded()
@@ -283,7 +378,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         isJumping = false;
-        jumpsLeft = MAX_JUMPS;
     }
 
     private void EnableProgressBar(Collision2D other)
@@ -343,10 +437,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedTree()
     {
-        Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
-        GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
-        StartCoroutine(ScaleEffectY(effect, 5f));
-        Destroy(effect, 5f);
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
+            GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
+            StartCoroutine(ScaleEffectY(effect, 5f));
+            Destroy(effect, 5f); 
+        }
     }
 
     private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
@@ -368,10 +465,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedIce()
     {
-        Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.1f, 0); // Adjust based on your needs
-        GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
-        StartCoroutine(ScaleEffectX(effect, 7f));
-        Destroy(effect, 5f);
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.1f, 0); // Adjust based on your needs
+            GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
+            StartCoroutine(ScaleEffectX(effect, 7f));
+            Destroy(effect, 5f);
+        }
     }
 
     private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX)
