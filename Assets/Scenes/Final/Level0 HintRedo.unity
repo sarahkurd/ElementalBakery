@@ -780,6 +780,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258640190}
   m_CullTransparentMesh: 1
+--- !u!1 &1376234656 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2169196570510905347, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
+  m_PrefabInstance: {fileID: 878613860}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1411885198
 GameObject:
   m_ObjectHideFlags: 0
@@ -4152,7 +4157,7 @@ MonoBehaviour:
   - {fileID: 1714101151}
   - {fileID: 1983936809}
   halfBroken: {fileID: 587874042}
-  progressBar: {fileID: 1230577587}
+  chicken: {fileID: 1376234656}
 --- !u!1 &7835174527326488012
 GameObject:
   m_ObjectHideFlags: 0
