@@ -7,8 +7,7 @@ public class HintOverlayController : MonoBehaviour
     public GameObject[] hintPanels; // References to the hint panels in the Unity Inspector
     public GameObject riddle;
     public TMP_Text[] hintTexts; // References to the TextMeshPro Text components of the hint panels
-    public GameObject halfBroken; // Reference to the halfBroken
-    public ProgressBar progressBar;
+    public GameObject halfBroken, chicken; // Reference to the halfBroken
     private bool[] hintsShown; // Track whether the hints have been shown
 
     private void Start()
@@ -35,7 +34,7 @@ public class HintOverlayController : MonoBehaviour
             hintsShown[0] = true;
         }
 
-        if (hintsShown[0] && hintsShown[1] && progressBar.isComplete && !hintsShown[2])
+        if (hintsShown[0] && hintsShown[1] && !chicken && !hintsShown[2])
         {
             HideHint(1);
             ShowHint(2);
