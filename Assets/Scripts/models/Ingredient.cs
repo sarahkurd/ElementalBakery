@@ -3,9 +3,9 @@ namespace models
     public struct Ingredient
     {
         public string name { get;  }
-        public long timeToCook { get;  }
+        public float timeToCook { get;  }
 
-        public Ingredient(string name, long timeToCook)
+        public Ingredient(string name, float timeToCook)
         {
             this.name = name;
             this.timeToCook = timeToCook;
