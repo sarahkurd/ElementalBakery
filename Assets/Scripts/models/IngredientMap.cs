@@ -6,14 +6,14 @@ namespace models
     {
         public static Dictionary<string, Ingredient> dict = new Dictionary<string, Ingredient>()
         {
-            { "chicken", new Ingredient("chicken", 15000) },
-            { "toast", new Ingredient("toast", 5000) },
-            { "steak", new Ingredient("steak", 20000) },
-            { "bacon", new Ingredient("bacon", 10000) },
-            { "croissant", new Ingredient("croissant", 15000) },
-            { "tomato", new Ingredient("tomato",5000) },
-            { "pepper", new Ingredient("pepper", 5000) },
-            { "soup", new Ingredient("soup", 10000) },
+            { "chicken", new Ingredient("chicken", 3.0f) },
+            { "toast", new Ingredient("toast", 1.5f) },
+            { "steak", new Ingredient("steak", 5.0f) },
+            { "bacon", new Ingredient("bacon", 4.0f) },
+            { "croissant", new Ingredient("croissant", 1.5f) },
+            { "tomato", new Ingredient("tomato",1f) },
+            { "pepper", new Ingredient("pepper", 1f) },
+            { "soup", new Ingredient("soup", 2.0f) },
         };
     }
 }

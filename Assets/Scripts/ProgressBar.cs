@@ -9,7 +9,7 @@ public class ProgressBar : MonoBehaviour
     public float colorTransitionSpeed = 0.2f; // Speed of color transition
     public float delayBetweenElements = 0.3f; // Delay between transitioning each element
     public float disappearanceDelay = 0.75f;
-    private long cookTime;
+    private float cookTime;
     public bool isComplete = false;
     private int currentIndex = 0;
     private Color[] assignedColors = {
@@ -19,6 +19,16 @@ public class ProgressBar : MonoBehaviour
          new Color(0.0f, 1.0f, 0.0f)
     }; 
 
+    private Color[] transitionColors = {
+        new Color(1.0f, 0.0f, 0.0f),//red 
+        new Color(1.0f, 0.0f, 0.0f),//red 
+        new Color(1.0f, 0.0f, 0.0f), //red 
+        new Color(1.0f, 0.0f, 0.0f),//red 
+        new Color(1.0f, 0.5f, 0.0f), //orange
+        new Color(1.0f, 0.5f, 0.0f), //orange
+        new Color(1.0f, 1.0f, 0.0f), //yellow
+        new Color(1.0f, 1.0f, 0.0f) //yellow
+    }; 
     
 
     private Color defaultColor = new Color(250.0f, 0f, 0f); 
@@ -40,7 +50,9 @@ public class ProgressBar : MonoBehaviour
     }
 
     private IEnumerator TransitionColors()
-    {
+    {   
+        Debug.Log("Ingredient Cooktime: " + this.cookTime); 
+
         for (int i = 0; i < imageElements.Length; i++)
         {
             if (i > 0)
@@ -48,9 +60,6 @@ public class ProgressBar : MonoBehaviour
 
             Image image = imageElements[i];
             Color targetColor = assignedColors[i];
-
-            //StartCoroutine(FadeInImage(image));
-            //yield return new WaitForSeconds(fadeInSpeed);
             
             float startTime = Time.time;
             float journeyLength = Vector4.Distance(image.color, targetColor);
@@ -67,42 +76,53 @@ public class ProgressBar : MonoBehaviour
 
             if (i == imageElements.Length - 1)
             {
-                // If this is the 10th element, start the disappearance process
+               
                 yield return new WaitForSeconds(disappearanceDelay);
                 isComplete = true;
-                //ChangeToDefaultColor(); 
+                
                 StartCoroutine(ColorBlinking()); 
-                //StartCoroutine(DisappearImages());
-                //DestroyElements();
+              
             }
         }
     }
 
     private IEnumerator ColorBlinking(){
-        int counter = assignedColors.Length - 1; 
+        int counter = transitionColors.Length - 1;
+        
+       
         while(true){
+            // turn all points to green 
             for (int i = 0; i < imageElements.Length; i++)
             {
-                imageElements[i].color = assignedColors[counter]; 
-
+                imageElements[i].color =  transitionColors[counter]; 
             }
             yield return new WaitForSeconds(0.5f); 
-            for (int i = 0; i < imageElements.Length; i++)
-            {
-                imageElements[i].color =  new Color(1.0f, 1.0f, 1.0f); 
 
-            }
-            yield return new WaitForSeconds(0.125f); 
-            for (int i = 0; i < imageElements.Length; i++)
-            {
-                imageElements[i].color =  new Color(0.0f, 0.0f, 0.0f); 
+            
+            //blink transition from white to black 
+            
+                
+                for (int i = 0; i < imageElements.Length; i++)
+                {
+                    imageElements[i].color =  new Color(1.0f, 1.0f, 1.0f); 
 
-            }
-            yield return new WaitForSeconds(0.125f); 
+                }
+                yield return new WaitForSeconds(0.125f); 
+
+                  for (int i = 0; i < imageElements.Length; i++)
+                {
+                    imageElements[i].color =  new Color(0.0f, 0.0f, 0.0f); 
+
+                }
+                yield return new WaitForSeconds(0.125f); 
+          
+
+            
+          
         
         counter --; 
         if(counter <0){
-            counter = assignedColors.Length - 1;
+            counter = transitionColors.Length - 1;
         }
 
         }
@@ -120,10 +140,11 @@ public class ProgressBar : MonoBehaviour
 
     }
 
-    public void SetTimer(long cookTime)
+    public void SetTimer(float cookTime)
     {
         this.cookTime = cookTime;
-        //delayBetweenElements = cookTime / 4.0f;
+        this.delayBetweenElements = cookTime / 4.0f;
+       
     }
 
     public bool IsComplete()
