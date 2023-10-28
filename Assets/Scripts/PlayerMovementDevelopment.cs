@@ -433,7 +433,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     public void OnLevelCompletion(){
-        levelCompletion.OnLevelComplete();
+        if (levelCompletion != null) {
+            levelCompletion.OnLevelComplete();
+        } else {
+            Debug.LogError("LevelCompletion component not found!");
+        }
+
         float timeToFinish =  Time.time - levelZeroStartTime;  
         CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
