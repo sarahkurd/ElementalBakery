@@ -17,7 +17,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     private Animator animator;
-    private LevelCompletion levelCompletion;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
@@ -48,6 +47,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool timing = false; 
     private bool activate;
     public GameObject tree, ice;
+    private PlayerRanking playerRanking;
+    private LevelCompletion levelCompletion;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +59,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
         //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
         halfBrokenGround = GameObject.Find("Half-Broken");
         halfBrokenGround.SetActive(false);
+
+        playerRanking = GetComponent<PlayerRanking>();
+        levelCompletion = GetComponent<LevelCompletion>();
 
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
