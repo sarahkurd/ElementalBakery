@@ -23,10 +23,10 @@ public class HintOverlayController : MonoBehaviour
 
     private void Update()
     {
-        if (riddle.activeSelf)
-        {
-            StartCoroutine(HideRiddleAfterDelay(8.0f));
-        }
+        //if (riddle.activeSelf)
+        //{
+        //    StartCoroutine(HideRiddleAfterDelay(8.0f));
+        //}
 
         if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) && !hintsShown[0])
         {

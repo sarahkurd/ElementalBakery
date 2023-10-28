@@ -17,7 +17,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     private Animator animator;
-    
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
@@ -51,13 +50,18 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool timing = false; 
     private bool activate;
     public GameObject tree, ice;
-    
+    private PlayerRanking playerRanking;
+    private LevelCompletion levelCompletion;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+
+        playerRanking = GetComponent<PlayerRanking>();
+        levelCompletion = GetComponent<LevelCompletion>();
 
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
@@ -418,6 +422,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     public void OnLevelCompletion(){
+        if (levelCompletion != null) {
+            levelCompletion.OnLevelComplete();
+        } else {
+            Debug.LogError("LevelCompletion component not found!");
+        }
 
         float timeToFinish =  Time.time - levelZeroStartTime;  
         CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
