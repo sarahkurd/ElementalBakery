@@ -8,55 +8,29 @@ using UnityEngine.SceneManagement;
 public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] GameObject timeUpScreen;
-    [SerializeField] bool countdownTimer = true; // Determine if timer is countdown or stopwatch
-
-    float elapsedTime;
-    float initialTime = 90f; // Set this to the starting time of your timer
-    bool timerActive = true;
-
+    float elapsedTime = 90f;
+    public GameObject timeUpScreen;
+    // Start is called before the first frame update
     void Start()
     {
-        if (countdownTimer)
-            elapsedTime = initialTime;
-        else
-            elapsedTime = 0f;
+        
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (!timerActive) return;
-
-        if (countdownTimer)
+        if(elapsedTime <= 0)
         {
-            if (elapsedTime <= 0)
-            {
-                timerText.text = "Time Up!";
-                timeUpScreen.SetActive(true);
-                timerActive = false;
-            }
-            else
-            {
-                elapsedTime -= Time.deltaTime;
-            }
+            timerText.text = "Time Up!";
+            timeUpScreen.SetActive(true);
         }
         else
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime -= Time.deltaTime;
+            int minutes = Mathf.FloorToInt(elapsedTime / 60);
+            int seconds = Mathf.FloorToInt(elapsedTime % 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
 
-        int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-    }
-
-    public void StopTimer()
-    {
-        timerActive = false;
-    }
-
-    public float ElapsedTime
-    {
-        get { return elapsedTime; }
     }
 }
