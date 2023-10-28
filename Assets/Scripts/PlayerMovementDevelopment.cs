@@ -21,7 +21,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    private float jumpForce = 10f;
+    private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     public GameObject uiObjectToShow;
@@ -33,8 +33,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private List<Sprite> spriteOrder;
     private float timer = 0f;
     private bool isJumping = false;
+    private const int MAX_JUMPS = 1;
+    private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    
+    private float airForce = 20f;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject; 
@@ -44,6 +46,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
     private bool timing = false; 
+    private bool activate;
     public GameObject tree, ice;
     // Start is called before the first frame update
     void Start()
@@ -320,7 +323,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         // Logic to break the breakable ground with fire side 
         bool isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
+        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
         {
             breakableGroundJumpCount++;
             isOnBreakableGround = true;
@@ -437,18 +440,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedTree()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKey(KeyCode.S))
         {
-            Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
-            GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectY(effect, 5f));
-            Destroy(effect, 5f); 
+            rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
         }
     }
 
     private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
     {
-        float duration = 2.0f; // Time to scale over
+        float duration = 0.4f; // Time to scale over
         float elapsedTime = 0f;
         Vector3 initialScale = obj.transform.localScale;
         Vector3 targetScale = new Vector3(initialScale.x, targetScaleY, initialScale.z);
@@ -465,21 +465,25 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedIce()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKey(KeyCode.S))
         {
-            Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.1f, 0); // Adjust based on your needs
+            float scaleDirection = isFacingRight ? 1f : -1f;
+            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.1f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectX(effect, 7f));
+            StartCoroutine(ScaleEffectX(effect, 7f, scaleDirection));
             Destroy(effect, 5f);
         }
     }
 
-    private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX)
+    private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX, float scaleDirection)
     {
-        float duration = 1.0f; // Time to scale over
+        float duration = 0.4f; // Time to scale over
         float elapsedTime = 0f;
+
+        // Set the object's rotation to match the player's forward direction
+
         Vector3 initialScale = obj.transform.localScale;
-        Vector3 targetScale = new Vector3(targetScaleX, initialScale.y, initialScale.z);
+        Vector3 targetScale = new Vector3(targetScaleX * scaleDirection, initialScale.y, initialScale.z);
 
         while (elapsedTime < duration)
         {
@@ -488,7 +492,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             yield return null;
         }
 
-        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
+        obj.transform.localScale = targetScale;
     }
 
 }
