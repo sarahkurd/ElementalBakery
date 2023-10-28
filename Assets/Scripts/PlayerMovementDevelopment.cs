@@ -36,7 +36,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private const int MAX_JUMPS = 1;
     private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    
+    private float airForce = 20f;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject; 
@@ -442,10 +442,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.S))
         {
-            Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
-            GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectY(effect, 5f));
-            Destroy(effect, 5f); 
+            rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
         }
     }
 
