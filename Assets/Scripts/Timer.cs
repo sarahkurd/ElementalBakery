@@ -11,7 +11,7 @@ public class Timer : MonoBehaviour
     [SerializeField] GameObject timeUpScreen;
     [SerializeField] bool countdownTimer = true; // Determine if timer is countdown or stopwatch
 
-    float elapsedTime;
+    float elapsedTime, timeUsed;
     float initialTime = 90f; // Set this to the starting time of your timer
     bool timerActive = true;
 
@@ -34,15 +34,18 @@ public class Timer : MonoBehaviour
                 timerText.text = "Time Up!";
                 timeUpScreen.SetActive(true);
                 timerActive = false;
+                timeUsed = initialTime;
             }
             else
             {
                 elapsedTime -= Time.deltaTime;
+                timeUsed = initialTime - elapsedTime;
             }
         }
         else
         {
             elapsedTime += Time.deltaTime;
+            timeUsed = elapsedTime;
         }
 
         int minutes = Mathf.FloorToInt(elapsedTime / 60);
@@ -58,5 +61,10 @@ public class Timer : MonoBehaviour
     public float ElapsedTime
     {
         get { return elapsedTime; }
+    }
+
+    public float TimeUsed
+    {
+        get { return timeUsed; }
     }
 }

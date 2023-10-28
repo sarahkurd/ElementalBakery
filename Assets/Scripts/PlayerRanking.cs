@@ -9,13 +9,11 @@ public class PlayerRanking : MonoBehaviour
     [SerializeField] TextMeshProUGUI rankText;
 
     // Define rank thresholds (in seconds)
-    private float rankSThreshold = 60f;
-    private float rankAThreshold = 100f;
-    private float rankBThreshold = 120f;
+    [SerializeField] private float rankSThreshold = 30f, rankAThreshold = 50f, rankBThreshold = 80f;
 
     public void CalculateRank()
     {
-        float completionTime = gameTimer.ElapsedTime;
+        float completionTime = gameTimer.TimeUsed;
         Debug.Log("Completion Time: " + completionTime);
 
         string rank = "You meow out of time";
