@@ -1155,7 +1155,7 @@ GameObject:
   - component: {fileID: 1493699963}
   - component: {fileID: 1493699962}
   m_Layer: 5
-  m_Name: Riddle
+  m_Name: ChefLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
