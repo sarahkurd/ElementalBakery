@@ -33,7 +33,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private List<Sprite> spriteOrder;
     private float timer = 0f;
     private bool isJumping = false;
-    private const int MAX_JUMPS = 2;
+    private const int MAX_JUMPS = 1;
     private int jumpsLeft = MAX_JUMPS;
     
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
@@ -45,6 +45,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
     private bool timing = false; 
+    private bool activate;
     public GameObject tree, ice;
     // Start is called before the first frame update
     void Start()
@@ -225,7 +226,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         // Logic to break the breakable ground with fire side 
         bool isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
+        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
         {
             breakableGroundJumpCount++;
             isOnBreakableGround = true;
@@ -273,11 +274,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 }
             }
         }
-        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded())
+        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded() && Input.GetKey(KeyCode.S))
         {
             OnLandedTree();
         }
-        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
+        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && Input.GetKey(KeyCode.S))
         {
             OnLandedIce();
         }
