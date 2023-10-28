@@ -17,7 +17,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     private Animator animator;
-    
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
