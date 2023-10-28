@@ -17,7 +17,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     private Animator animator;
-    
+    private LevelCompletion levelCompletion;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
@@ -428,7 +428,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     public void OnLevelCompletion(){
-
+        levelCompletion.OnLevelComplete();
         float timeToFinish =  Time.time - levelZeroStartTime;  
         CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
