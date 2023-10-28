@@ -21,7 +21,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
     
-    private float jumpForce = 10f;
+    private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     public GameObject uiObjectToShow;
@@ -371,11 +371,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 }
             }
         }
-        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded() && Input.GetKey(KeyCode.S))
+        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded())
         {
             OnLandedTree();
         }
-        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && Input.GetKey(KeyCode.S))
+        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
         {
             OnLandedIce();
         }
@@ -440,7 +440,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedTree()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKey(KeyCode.S))
         {
             Vector3 effectPosition = transform.position - new Vector3(0, 1f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(tree, effectPosition, Quaternion.identity);
@@ -451,7 +451,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
     {
-        float duration = 2.0f; // Time to scale over
+        float duration = 0.4f; // Time to scale over
         float elapsedTime = 0f;
         Vector3 initialScale = obj.transform.localScale;
         Vector3 targetScale = new Vector3(initialScale.x, targetScaleY, initialScale.z);
@@ -468,21 +468,25 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedIce()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKey(KeyCode.S))
         {
-            Vector3 effectPosition = transform.position + new Vector3(1.5f, -1.1f, 0); // Adjust based on your needs
+            float scaleDirection = isFacingRight ? 1f : -1f;
+            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.1f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectX(effect, 7f));
+            StartCoroutine(ScaleEffectX(effect, 7f, scaleDirection));
             Destroy(effect, 5f);
         }
     }
 
-    private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX)
+    private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX, float scaleDirection)
     {
-        float duration = 1.0f; // Time to scale over
+        float duration = 0.4f; // Time to scale over
         float elapsedTime = 0f;
+
+        // Set the object's rotation to match the player's forward direction
+
         Vector3 initialScale = obj.transform.localScale;
-        Vector3 targetScale = new Vector3(targetScaleX, initialScale.y, initialScale.z);
+        Vector3 targetScale = new Vector3(targetScaleX * scaleDirection, initialScale.y, initialScale.z);
 
         while (elapsedTime < duration)
         {
@@ -491,7 +495,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             yield return null;
         }
 
-        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
+        obj.transform.localScale = targetScale;
     }
 
 }
