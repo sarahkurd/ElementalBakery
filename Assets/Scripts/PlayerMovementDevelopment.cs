@@ -23,10 +23,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
-    public GameObject uiObjectToShow;
+    
     private int breakableGroundJumpCount = 0;
-    private bool isOnBreakableGround = false;
     private GameObject halfBrokenGround;
+    private GameObject breakableLayer;
+    private bool isBreakableLayer;
 
     private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
@@ -35,7 +36,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private const int MAX_JUMPS = 1;
     private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    private float airForce = 20f;
+    private float airForce = 12f;
+    private int airJumpCount = 0;
+    private int MAX_AIR_JUMP = 3;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject; 
@@ -56,9 +59,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-        //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
-        halfBrokenGround = GameObject.Find("Half-Broken");
-        halfBrokenGround.SetActive(false);
 
         playerRanking = GetComponent<PlayerRanking>();
         levelCompletion = GetComponent<LevelCompletion>();
@@ -114,6 +114,22 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         // rotate player mechanics
         SetCurrentSpriteOnRotation();
+        
+        // logic for breakable grounds
+        if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
+        {
+            Destroy(breakableLayer);
+        }
+        
+        // logic for air and water power activation
+        if(PlayerPowerState.AIR_ACTIVE == currentPlayerState)
+        {
+            OnLandedAir();
+        }
+        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
+        {
+            OnLandedIce();
+        }
 
         if (timing){
             float elapsedTime = Time.time - levelZeroStartTime; 
@@ -327,30 +343,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         // Logic to break the breakable ground with fire side 
-        bool isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
+        isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
+        if (isBreakableLayer)
         {
-            breakableGroundJumpCount++;
-            isOnBreakableGround = true;
-            if (breakableGroundJumpCount == 1)
-            {
-                if (halfBrokenGround.activeSelf)
-                {
-                    Destroy(halfBrokenGround);
-                }
-                else
-                {
-                    // update the layer to show a half broken ground
-                    Destroy(other.gameObject);
-                    halfBrokenGround.SetActive(true);
-                    breakableGroundJumpCount = 0; 
-                }
-            }
-        }
-        else
-        {
-            isOnBreakableGround = false;
-            breakableGroundJumpCount = 0;
+            breakableLayer = other.gameObject;
         }
 
         //destroying the ingredient 
@@ -376,16 +372,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 }
             }
         }
-        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded())
-        {
-            OnLandedTree();
-        }
-        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
-        {
-            OnLandedIce();
-        }
         
         isJumping = false;
+        airJumpCount = 0; //reset possible air jump count
     }
 
     private void EnableProgressBar(Collision2D other)
@@ -448,11 +437,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
          
     }
 
-    private void OnLandedTree()
+    private void OnLandedAir()
     {
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S) && airJumpCount < MAX_AIR_JUMP)
         {
             rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
+            airJumpCount++;
         }
     }
 
@@ -475,7 +465,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedIce()
     {
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
         {
             float scaleDirection = isFacingRight ? 1f : -1f;
             Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.1f, 0); // Adjust based on your needs
