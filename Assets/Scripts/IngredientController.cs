@@ -94,5 +94,8 @@ public class IngredientController : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-   
+    public void SetIngredientSprite(Sprite ingredientSprite)
+    {
+        spriteRenderer.sprite = ingredientSprite;
+    }
 }
