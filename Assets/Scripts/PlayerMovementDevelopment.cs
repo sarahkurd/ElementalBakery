@@ -19,12 +19,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private Animator animator;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
+    public Sprite plateSprite;
     
     private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     private GameObject currentCollidedIngredient;
     private bool isHoldingIngredient = false;
+    private GameObject currentlyHoldingIngredient;
     
     private int breakableGroundJumpCount = 0;
     private GameObject halfBrokenGround;
@@ -38,14 +40,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private const int MAX_JUMPS = 1;
     private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    private float airForce = 12f;
+    private float airForce = 10f;
     private int airJumpCount = 0;
     private int MAX_AIR_JUMP = 3;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject;
     public GameObject SpriteManager;
-    
 
     // Parameters for tracking the time for level 0 
     public float timeToGetIngredient; 
@@ -55,6 +56,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public GameObject tree, ice;
     private PlayerRanking playerRanking;
     private LevelCompletion levelCompletion;
+    private bool isAtPlateStation = false;
+    private bool hasPlate = false;
     
     // Start is called before the first frame update
     void Start()
@@ -136,7 +139,19 @@ public class PlayerMovementDevelopment : MonoBehaviour
         } 
         else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient) // logic for drop ingredient
         {
-            PlayerDropIngredient();
+            PlayerDropIngredientOrPlate();
+        }
+
+        // logic for grabbing plate from plate station and placing plate on floor
+        if (Input.GetKeyDown(KeyCode.Return) && isAtPlateStation)
+        {
+            if (!isHoldingIngredient)
+            {
+                GrabPlateFromPlateStation();
+            }
+        } else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
+        {
+            PlayerDropIngredientOrPlate();
         }
 
         if (timing){
@@ -381,6 +396,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 }
             }
         }
+
+        if (other.gameObject.CompareTag("Plates"))
+        {
+            isAtPlateStation = true;
+        }
         
         isJumping = false;
         airJumpCount = 0; //reset possible air jump count
@@ -398,6 +418,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {   
             isOnIngredient = false;
             timer = 0f; 
+        }
+        
+        if (other.gameObject.CompareTag("Plates"))
+        {
+            isAtPlateStation = false;
         }
     }
 
@@ -507,16 +532,56 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void PlayerPickUpIngredient(GameObject ingredientGameObject)
     {
         // get parent game object of the ingredient
+        Rigidbody2D rb = ingredientGameObject.GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.simulated = false;
         GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
         wholeGameObject.transform.SetParent(this.gameObject.transform);
         isHoldingIngredient = true;
+        currentlyHoldingIngredient = ingredientGameObject;
     }
 
-    private void PlayerDropIngredient()
+    private void PlayerDropIngredientOrPlate()
     {
         // the player no longer has a nested ingredient game object. Move the game object back to the 
         // root of the scene.
+        if (hasPlate)
+        {
+            GameObject plate = this.gameObject.transform.GetChild(0).gameObject;
+            Rigidbody2D rb = plate.GetComponent<Rigidbody2D>();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.simulated = true;
+            hasPlate = false;
+        } else if (isHoldingIngredient)
+        {
+            Rigidbody2D rb = currentlyHoldingIngredient.GetComponent<Rigidbody2D>();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.simulated = true;
+            isHoldingIngredient = false;
+        }
         this.gameObject.transform.DetachChildren();
+    }
+
+    private void GrabPlateFromPlateStation()
+    {
+        GameObject plateGameObject = new GameObject();
+        plateGameObject.tag = "plate";
+        plateGameObject.AddComponent<SpriteRenderer>();
+        SpriteRenderer sr = plateGameObject.GetComponent<SpriteRenderer>();
+        plateGameObject.AddComponent<BoxCollider2D>();
+        plateGameObject.AddComponent<Rigidbody2D>();
+        Rigidbody2D rb = plateGameObject.GetComponent<Rigidbody2D>();
+        BoxCollider2D bc = plateGameObject.GetComponent<BoxCollider2D>();
+        bc.size = new Vector2(2.5f, 1.0f);
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.simulated = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        sr.sprite = plateSprite;
+        
+        plateGameObject.transform.SetParent(this.gameObject.transform);
+        Vector3 playerPostion = gameObject.transform.position;
+        //plateGameObject.transform.position = new Vector3(playerPostion.x + 3.0f, playerPostion.y, playerPostion.z);
+        hasPlate = true;
     }
 
 }
