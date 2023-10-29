@@ -153,6 +153,7 @@ MonoBehaviour:
   breakableGround:
     serializedVersion: 2
     m_Bits: 128
+  plateSprite: {fileID: 21300000, guid: 080ebb42dd6044dd482c014384a10b70, type: 3}
   collectAnalyticsObject: {fileID: 0}
   SpriteManager: {fileID: 0}
   timeToGetIngredient: 0
