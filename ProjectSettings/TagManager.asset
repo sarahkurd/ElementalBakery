@@ -8,6 +8,8 @@ TagManager:
   - ProgressBar
   - Customer
   - meat
+  - Plates
+  - plate
   layers:
   - Default
   - TransparentFX
