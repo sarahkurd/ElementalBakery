@@ -75,7 +75,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool currentlyGrounded = IsGrounded();
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         if (isJumping) // slow down horizontal movement wheN player is in the air
@@ -89,10 +88,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         // vertical jump mechanics
-        if (CanJump())
-        {
-            Jump();
-        }
 
         // animations for moving left/right and jumping
         if (horizontalInput > 0f && !isJumping)
