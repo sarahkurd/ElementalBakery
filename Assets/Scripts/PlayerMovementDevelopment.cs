@@ -23,6 +23,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
+    private GameObject currentCollidedIngredient;
+    private bool isHoldingIngredient = false;
     
     private int breakableGroundJumpCount = 0;
     private GameObject halfBrokenGround;
@@ -41,7 +43,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private int MAX_AIR_JUMP = 3;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
-    public GameObject collectAnalyticsObject; 
+    public GameObject collectAnalyticsObject;
+    public GameObject SpriteManager;
     
 
     // Parameters for tracking the time for level 0 
@@ -52,7 +55,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public GameObject tree, ice;
     private PlayerRanking playerRanking;
     private LevelCompletion levelCompletion;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +65,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         playerRanking = GetComponent<PlayerRanking>();
         levelCompletion = GetComponent<LevelCompletion>();
-
+        
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
        
@@ -129,6 +132,16 @@ public class PlayerMovementDevelopment : MonoBehaviour
         else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
         {
             OnLandedIce();
+        }
+        
+        // logic for pick up an ingredient
+        if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient)
+        {
+            PlayerPickUpIngredient(currentCollidedIngredient);
+        } 
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient) // logic for drop ingredient
+        {
+            PlayerDropIngredient();
         }
 
         if (timing){
@@ -353,6 +366,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnIngredient = true;
+            currentCollidedIngredient = other.gameObject;
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {   
                 if(isFirstIngredientCollected == false) {
@@ -493,6 +507,21 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
 
         obj.transform.localScale = targetScale;
+    }
+
+    private void PlayerPickUpIngredient(GameObject ingredientGameObject)
+    {
+        // get parent game object of the ingredient
+        GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
+        wholeGameObject.transform.SetParent(this.gameObject.transform);
+        isHoldingIngredient = true;
+    }
+
+    private void PlayerDropIngredient()
+    {
+        // the player no longer has a nested ingredient game object. Move the game object back to the 
+        // root of the scene.
+        this.gameObject.transform.DetachChildren();
     }
 
 }
