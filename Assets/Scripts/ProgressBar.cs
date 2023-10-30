@@ -13,6 +13,8 @@ public class ProgressBar : MonoBehaviour
     private float cookTime;
     public bool isComplete = false;
     private int currentIndex = 0;
+    public Transform targetSprite; 
+    private RectTransform rectTransform; 
     private bool disabled = true;
     private Color[] assignedColors = {
         new Color(1.0f, 0.0f, 0.0f),
@@ -35,9 +37,10 @@ public class ProgressBar : MonoBehaviour
 
     private Color defaultColor = new Color(250.0f, 0f, 0f); 
     private Color cookedColor = new Color(0.0f, 1.0f, 0.0f); 
+    public Vector3 offset = new Vector3(0, 50, 0);
     // Start is called before the first frame update
     void Start()
-    {
+    {   rectTransform = GetComponent<RectTransform>(); 
         
         
     }
@@ -55,7 +58,13 @@ public class ProgressBar : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   if(targetSprite!=null){
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(targetSprite.position);
+            screenPos += offset;
+
+            // Set the UI element's position to the screen position
+            rectTransform.position = screenPos;
+        }
         
     }
 
