@@ -58,6 +58,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private LevelCompletion levelCompletion;
     private bool isAtPlateStation = false;
     private bool hasPlate = false;
+    private LevelManager levelManager;
     
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         playerRanking = GetComponent<PlayerRanking>();
         levelCompletion = GetComponent<LevelCompletion>();
+        levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
         
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
@@ -430,29 +432,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {   
         if (other.gameObject.CompareTag("Customer"))
         {
-            //foreach (var x in collected)
-            //{
-            //    Debug.Log(x.ToString());
-            //}
-            if (PlayerItems.collected.Contains("lowerBread") && PlayerItems.collected.Contains("upperBread") && PlayerItems.collected.Contains("meat"))
-            {
-                // exit scene to be added
-                //Debug.Log("Exit Game");
-                OnLevelCompletion(); 
-                PlayManagerGame.isGameOver = true;
-
-
-            }
-            if (PlayerItems.collected.Contains("chicken"))
+            if (levelManager.CheckIfLevelComplete())
             {   //float timeToFinish =  Time.time - levelZeroStartTime;  
                 OnLevelCompletion(); 
                 //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                //PlayManagerGame.isGameOver = true;
             }
         }
-
-        
     }
 
     public void OnLevelCompletion(){
@@ -466,9 +454,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
         analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
-
-        int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-         
     }
 
     private void OnLandedAir()
@@ -478,23 +463,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
             rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
             airJumpCount++;
         }
-    }
-
-    private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
-    {
-        float duration = 0.4f; // Time to scale over
-        float elapsedTime = 0f;
-        Vector3 initialScale = obj.transform.localScale;
-        Vector3 targetScale = new Vector3(initialScale.x, targetScaleY, initialScale.z);
-
-        while (elapsedTime < duration)
-        {
-            obj.transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
     }
 
     private void OnLandedIce()

@@ -34,14 +34,11 @@ public class IngredientController : MonoBehaviour
         spriteRenderer = ingredientGameObject.GetComponent<SpriteRenderer>();
         
         // create an instance of an Ingredient data object
-        if (ingredientGameObject.name != "empty")
-        {
-            ingredient = IngredientMap.dict[ingredientGameObject.name];
-            // set the timer in the progress bar
-            progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
-            progressBarScript.SetTimer(ingredient.timeToCook);
-            Debug.Log(ingredient.name);
-        }
+        ingredient = IngredientMap.dict[ingredientGameObject.name];
+        // set the timer in the progress bar
+        progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
+        progressBarScript.SetTimer(ingredient.timeToCook);
+        Debug.Log(ingredient.name);
     }
 
     // Update is called once per frame
