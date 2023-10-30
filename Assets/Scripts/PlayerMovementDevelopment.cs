@@ -59,6 +59,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isAtPlateStation = false;
     private bool hasPlate = false;
     private LevelManager levelManager;
+    private bool isCollidedWithPlate;
+    private GameObject currentCollidedPlate;
     
     // Start is called before the first frame update
     void Start()
@@ -135,13 +137,20 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         // logic for pick up an ingredient
-        if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient)
+        if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
         {
-            PlayerPickUpIngredient(currentCollidedIngredient);
-        } 
+            PutIngredientOnPlate();
+        }
         else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient) // logic for drop ingredient
         {
             PlayerDropIngredientOrPlate();
+        } else if (Input.GetKeyDown(KeyCode.Return) && isCollidedWithPlate)
+        {
+            PlayerPickUpPlate();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient)
+        {
+            PlayerPickUpIngredient(currentCollidedIngredient);
         }
 
         // logic for grabbing plate from plate station and placing plate on floor
@@ -154,7 +163,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         } else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
         {
             PlayerDropIngredientOrPlate();
-        }
+        } 
+
 
         if (timing){
             float elapsedTime = Time.time - levelZeroStartTime; 
@@ -403,6 +413,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isAtPlateStation = true;
         }
+
+        if (other.gameObject.CompareTag("plate"))
+        {
+            isCollidedWithPlate = true;
+            currentCollidedPlate = other.gameObject;
+        }
         
         isJumping = false;
         airJumpCount = 0; //reset possible air jump count
@@ -425,6 +441,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Plates"))
         {
             isAtPlateStation = false;
+        }
+        
+        if (other.gameObject.CompareTag("plate"))
+        {
+            isCollidedWithPlate = false;
         }
     }
 
@@ -548,7 +569,27 @@ public class PlayerMovementDevelopment : MonoBehaviour
         
         plateGameObject.transform.SetParent(this.gameObject.transform);
         Vector3 playerPostion = gameObject.transform.position;
-        //plateGameObject.transform.position = new Vector3(playerPostion.x + 3.0f, playerPostion.y, playerPostion.z);
+        plateGameObject.transform.position = new Vector3(playerPostion.x + 3.0f, playerPostion.y, playerPostion.z);
+        hasPlate = true;
+    }
+
+    private void PutIngredientOnPlate()
+    {
+        currentlyHoldingIngredient.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        Destroy(currentlyHoldingIngredient.GetComponent<BoxCollider2D>());
+        currentlyHoldingIngredient.transform.position =
+            new Vector2(currentCollidedPlate.transform.position.x, currentCollidedPlate.transform.position.y + 1.0f);
+        GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+        wholeGameObject.transform.SetParent(currentCollidedPlate.transform);
+        isHoldingIngredient = false;
+    }
+
+    private void PlayerPickUpPlate()
+    {
+        Rigidbody2D rb = currentCollidedPlate.GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.simulated = false;
+        currentCollidedPlate.transform.SetParent(this.gameObject.transform);
         hasPlate = true;
     }
 
