@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class ProgressBar : MonoBehaviour
     private float cookTime;
     public bool isComplete = false;
     private int currentIndex = 0;
+    private bool disabled = true;
     private Color[] assignedColors = {
         new Color(1.0f, 0.0f, 0.0f),
         new Color(1.0f, 0.5f, 0.0f),
@@ -40,9 +42,17 @@ public class ProgressBar : MonoBehaviour
         
     }
 
-    void OnEnable(){
-         StartCoroutine(TransitionColors());
+    void OnEnable()
+    {
+        disabled = false;
+        StartCoroutine(TransitionColors());
     }
+
+    private void OnDisable()
+    {
+        disabled = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -52,9 +62,10 @@ public class ProgressBar : MonoBehaviour
     private IEnumerator TransitionColors()
     {   
         Debug.Log("Ingredient Cooktime: " + this.cookTime); 
-
+        
         for (int i = 0; i < imageElements.Length; i++)
         {
+            while (disabled) { }
             if (i > 0)
                 yield return new WaitForSeconds(delayBetweenElements);
 
@@ -88,7 +99,7 @@ public class ProgressBar : MonoBehaviour
 
     private IEnumerator ColorBlinking(){
         int counter = transitionColors.Length - 1;
-        
+        while (disabled) { }
        
         while(true){
             // turn all points to green 
@@ -115,19 +126,13 @@ public class ProgressBar : MonoBehaviour
 
                 }
                 yield return new WaitForSeconds(0.125f); 
-          
-
             
-          
-        
         counter --; 
         if(counter <0){
             counter = transitionColors.Length - 1;
         }
 
         }
-    
-        
     }
 
     private void ChangeToDefaultColor(){
