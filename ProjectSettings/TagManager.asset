@@ -10,6 +10,8 @@ TagManager:
   - meat
   - Plates
   - plate
+  - IngredientList
+  - LevelManager
   layers:
   - Default
   - TransparentFX

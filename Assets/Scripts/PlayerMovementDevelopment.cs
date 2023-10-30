@@ -58,6 +58,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private LevelCompletion levelCompletion;
     private bool isAtPlateStation = false;
     private bool hasPlate = false;
+    private LevelManager levelManager;
+    private bool isCollidedWithPlate;
+    private GameObject currentCollidedPlate;
     
     // Start is called before the first frame update
     void Start()
@@ -68,6 +71,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         playerRanking = GetComponent<PlayerRanking>();
         levelCompletion = GetComponent<LevelCompletion>();
+        levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
         
         //starting the timer for the level 
         levelZeroStartTime = Time.time; 
@@ -133,26 +137,34 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         // logic for pick up an ingredient
-        if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient)
+        if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
         {
-            PlayerPickUpIngredient(currentCollidedIngredient);
-        } 
+            PutIngredientOnPlate();
+        }
         else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient) // logic for drop ingredient
         {
             PlayerDropIngredientOrPlate();
+        } else if (Input.GetKeyDown(KeyCode.Return) && isCollidedWithPlate)
+        {
+            PlayerPickUpPlate();
         }
-
+        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient)
+        {
+            PlayerPickUpIngredient(currentCollidedIngredient);
+        }
         // logic for grabbing plate from plate station and placing plate on floor
-        if (Input.GetKeyDown(KeyCode.Return) && isAtPlateStation)
+        else if (Input.GetKeyDown(KeyCode.Return) && isAtPlateStation)
         {
             if (!isHoldingIngredient)
             {
                 GrabPlateFromPlateStation();
             }
-        } else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
+        } 
+        else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
         {
             PlayerDropIngredientOrPlate();
-        }
+        } 
+
 
         if (timing){
             float elapsedTime = Time.time - levelZeroStartTime; 
@@ -385,11 +397,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 }
 
                 IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-                if (ic.currentIngredientState == IngredientCookingState.COMPLETE)
-                {
-                    PlayerItems.collected.Add(other.gameObject.name);
-                    ic.DestroyIngredientAndProgressBar();
-                } else if (ic.currentIngredientState == IngredientCookingState.UNCOOKED)
+                if (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING)
                 {
                     //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
                     EnableProgressBar(other); 
@@ -400,6 +408,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Plates"))
         {
             isAtPlateStation = true;
+        }
+
+        if (other.gameObject.CompareTag("plate"))
+        {
+            isCollidedWithPlate = true;
+            currentCollidedPlate = other.gameObject;
         }
         
         isJumping = false;
@@ -424,35 +438,26 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isAtPlateStation = false;
         }
+        
+        if (other.gameObject.CompareTag("plate"))
+        {
+            isCollidedWithPlate = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {   
-        if (other.gameObject.CompareTag("Customer"))
+        if (other.gameObject.CompareTag("Customer") && hasPlate)
         {
-            //foreach (var x in collected)
-            //{
-            //    Debug.Log(x.ToString());
-            //}
-            if (PlayerItems.collected.Contains("lowerBread") && PlayerItems.collected.Contains("upperBread") && PlayerItems.collected.Contains("meat"))
-            {
-                // exit scene to be added
-                //Debug.Log("Exit Game");
-                OnLevelCompletion(); 
-                PlayManagerGame.isGameOver = true;
-
-
-            }
-            if (PlayerItems.collected.Contains("chicken"))
+            if (levelManager.CheckIfLevelComplete())
             {   //float timeToFinish =  Time.time - levelZeroStartTime;  
                 OnLevelCompletion(); 
                 //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                //PlayManagerGame.isGameOver = true;
             }
         }
-
-        
     }
 
     public void OnLevelCompletion(){
@@ -466,9 +471,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
         analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
-
-        int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-         
     }
 
     private void OnLandedAir()
@@ -478,23 +480,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
             rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
             airJumpCount++;
         }
-    }
-
-    private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
-    {
-        float duration = 0.4f; // Time to scale over
-        float elapsedTime = 0f;
-        Vector3 initialScale = obj.transform.localScale;
-        Vector3 targetScale = new Vector3(initialScale.x, targetScaleY, initialScale.z);
-
-        while (elapsedTime < duration)
-        {
-            obj.transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
     }
 
     private void OnLandedIce()
@@ -532,11 +517,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void PlayerPickUpIngredient(GameObject ingredientGameObject)
     {
         // get parent game object of the ingredient
+        Debug.Log("Pick up ingredient with name: " + ingredientGameObject.name);
         Rigidbody2D rb = ingredientGameObject.GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Static;
+        rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
         rb.simulated = false;
+        
         GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
-        wholeGameObject.transform.SetParent(this.gameObject.transform);
+        IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
+        ic.DisableProgressBar();
+        wholeGameObject.transform.SetParent(this.gameObject.transform); // set the player game object as the parent of the ingredient
         isHoldingIngredient = true;
         currentlyHoldingIngredient = ingredientGameObject;
     }
@@ -547,6 +536,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // root of the scene.
         if (hasPlate)
         {
+            Debug.Log("Drop plate");
             GameObject plate = this.gameObject.transform.GetChild(0).gameObject;
             Rigidbody2D rb = plate.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Dynamic;
@@ -554,6 +544,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             hasPlate = false;
         } else if (isHoldingIngredient)
         {
+            Debug.Log("Drop ingredient");
             Rigidbody2D rb = currentlyHoldingIngredient.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
@@ -580,7 +571,36 @@ public class PlayerMovementDevelopment : MonoBehaviour
         
         plateGameObject.transform.SetParent(this.gameObject.transform);
         Vector3 playerPostion = gameObject.transform.position;
-        //plateGameObject.transform.position = new Vector3(playerPostion.x + 3.0f, playerPostion.y, playerPostion.z);
+        plateGameObject.transform.position = new Vector3(playerPostion.x + 2.0f, playerPostion.y, playerPostion.z);
+        hasPlate = true;
+    }
+
+    private void PutIngredientOnPlate()
+    {
+        Debug.Log("Put ingredient on plate");
+        currentlyHoldingIngredient.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        Destroy(currentlyHoldingIngredient.GetComponent<BoxCollider2D>());
+        currentlyHoldingIngredient.transform.position =
+            new Vector2(currentCollidedPlate.transform.position.x, currentCollidedPlate.transform.position.y + 1.0f);
+        GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+        wholeGameObject.transform.SetParent(currentCollidedPlate.transform);
+        isHoldingIngredient = false;
+        
+        // add this ingredient to the players list of collected items/ ingredients that are on the plate
+        IngredientController ic = currentlyHoldingIngredient.GetComponentInParent<IngredientController>();
+        levelManager.PlateIngredient(currentlyHoldingIngredient.name, ic.currentIngredientState);
+    }
+
+    private void PlayerPickUpPlate()
+    {
+        Debug.Log("Player pick up plate");
+        Rigidbody2D rb = currentCollidedPlate.GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.simulated = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        currentCollidedPlate.transform.SetParent(this.gameObject.transform);
+        Vector3 playerPostion = gameObject.transform.position;
+        currentCollidedPlate.transform.position = new Vector3(playerPostion.x + 2.0f, playerPostion.y, playerPostion.z);
         hasPlate = true;
     }
 
