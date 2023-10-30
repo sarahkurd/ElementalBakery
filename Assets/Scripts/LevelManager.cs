@@ -32,6 +32,7 @@ public class LevelManager : MonoBehaviour
     public void PlateIngredient(string ingredientName, IngredientCookingState state)
     {
         playerCollected.Add(ingredientName, state);
+        Debug.Log(playerCollected); 
     }
 
     // Should be called when player collides with the customer
@@ -62,7 +63,9 @@ public class LevelManager : MonoBehaviour
                 if (count == 1)
                 {
                     Debug.Log("remove  " + item.Key + " from customer order");
-                    customerOrder.Remove(item.Key);
+                    customerOrder.Remove(item.Key); 
+
+                    //Need to add disabling the ingredient item that was collected. 
                 }
                 else
                 {
