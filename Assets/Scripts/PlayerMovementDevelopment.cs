@@ -502,10 +502,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             float scaleDirection = isFacingRight ? 1f : -1f;
-            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.1f, 0); // Adjust based on your needs
+            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -2.1f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectX(effect, 7f, scaleDirection));
-            Destroy(effect, 5f);
+            StartCoroutine(ScaleEffectX(effect, 10f, scaleDirection));
+            Destroy(effect, 7f);
         }
     }
 

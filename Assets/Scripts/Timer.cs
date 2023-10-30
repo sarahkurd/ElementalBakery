@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] GameObject timeUpScreen;
-    [SerializeField] bool countdownTimer = true; // Determine if timer is countdown or stopwatch
+    [SerializeField] bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
     float elapsedTime, timeUsed;
     float initialTime = 90f; // Set this to the starting time of your timer
