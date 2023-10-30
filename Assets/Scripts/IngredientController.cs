@@ -34,14 +34,11 @@ public class IngredientController : MonoBehaviour
         spriteRenderer = ingredientGameObject.GetComponent<SpriteRenderer>();
         
         // create an instance of an Ingredient data object
-        if (ingredientGameObject.name != "empty")
-        {
-            ingredient = IngredientMap.dict[ingredientGameObject.name];
-            // set the timer in the progress bar
-            progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
-            progressBarScript.SetTimer(ingredient.timeToCook);
-            Debug.Log(ingredient.name);
-        }
+        ingredient = IngredientMap.dict[ingredientGameObject.name];
+        // set the timer in the progress bar
+        progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
+        progressBarScript.SetTimer(ingredient.timeToCook);
+        Debug.Log(ingredient.name);
     }
 
     // Update is called once per frame
@@ -53,9 +50,8 @@ public class IngredientController : MonoBehaviour
             {
                 Debug.Log("Ingredient burned");
                 currentIngredientState = IngredientCookingState.BURNED;
-                DisableProgressBar(); 
-
-                //DestroyIngredientAndProgressBar();
+                ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.41f, 0.15f, 0.15f);
+                DisableProgressBar();
             }
             else if (currentIngredientState != IngredientCookingState.COMPLETE && progressBarScript.IsComplete())
             {
@@ -73,11 +69,13 @@ public class IngredientController : MonoBehaviour
 
     public void EnableProgressBar()
     {
+        Debug.Log("Enable progress bar");
         progressBarUiCanvas.SetActive(true);
     }
     
     public void DisableProgressBar()
     {
+        Debug.Log("Disable progress bar");
         progressBarUiCanvas.SetActive(false);
     }
 
@@ -85,7 +83,6 @@ public class IngredientController : MonoBehaviour
     {
         //yield return new WaitForSeconds(2.0f); 
         yield return new WaitForSeconds(5.0f);
-        ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.41f, 0.15f, 0.15f); 
         isIngredientBurned = true;
     }
 
