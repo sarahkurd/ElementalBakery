@@ -47,7 +47,7 @@ public class CollectAnalytics : MonoBehaviour
 
     }
 
-    private IEnumerator Post(string sessionId, string finishTime, string timeToGetFirstIngredient){
+    private IEnumerator Post(string sessionId,   string finishTime, string timeToGetFirstIngredient){
         WWWForm form = new WWWForm(); 
 
         form.AddField("entry.337704600", sessionId ); 
