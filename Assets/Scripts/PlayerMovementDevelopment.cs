@@ -6,7 +6,7 @@ using DefaultNamespace;
 using UnityEngine.SceneManagement;
 using UnityEngine.Analytics; 
 
-enum PlayerPowerState
+public enum PlayerPowerState
 {
     FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, NEUTRAL
 }
@@ -393,14 +393,16 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isOnIngredient = true;
             currentCollidedIngredient = other.gameObject;
-            if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
-            {   
-                if(isFirstIngredientCollected == false) {
-                     timeToGetIngredient =  Time.time - levelZeroStartTime; 
-                     isFirstIngredientCollected = true; 
-                }
+            IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
 
-                IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
+            if (ic.CanCookIngredient(currentPlayerState))
+            {
+                Debug.Log("Can cook ingredient with this player power");
+                if(isFirstIngredientCollected == false) {
+                    timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                    isFirstIngredientCollected = true; 
+                }
+                
                 if (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING)
                 {
                     //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
