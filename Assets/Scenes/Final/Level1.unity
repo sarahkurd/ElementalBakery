@@ -491,6 +491,20 @@ MonoBehaviour:
   rankSThreshold: 30
   rankAThreshold: 50
   rankBThreshold: 80
+--- !u!114 &161663376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161663374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952e3dca4a440488bbd6e7fb229ab5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRanking: {fileID: 161663375}
+  gameTimer: {fileID: 1598856995}
 --- !u!1001 &362522008
 PrefabInstance:
   m_ObjectHideFlags: 0
