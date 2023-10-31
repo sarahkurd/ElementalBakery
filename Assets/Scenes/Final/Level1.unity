@@ -8449,6 +8449,10 @@ PrefabInstance:
       propertyPath: timeUpScreen
       value: 
       objectReference: {fileID: 12798230}
+    - target: {fileID: 8299113562216986302, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
+      propertyPath: countdownTimer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8299113562216986303, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
       propertyPath: m_Name
       value: TimerManager
