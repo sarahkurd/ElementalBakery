@@ -173,7 +173,13 @@ public class LevelManager : MonoBehaviour
     private void CallAnalyticsManager(){ 
         CollectAnalytics analyticsScript = analyticsManager.GetComponent<CollectAnalytics>(); 
         
-        analyticsScript.putAnalytics(timeToFinishLevel, timeToGetFirstIngredient); 
+        analyticsScript.putAnalytics(
+            levelNumber, 
+            timeToFinishLevel, 
+            timeToGetFirstIngredient, 
+            incorrectIngredientCollectedCount, 
+            incorrectIngredientStateCount,
+            playerRank ); 
     }
  
 }

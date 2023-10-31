@@ -33,7 +33,14 @@ public class CollectAnalytics : MonoBehaviour
     }
         
     
-    public void putAnalytics(float finishTime, float timeToGetFirstIngredient ){
+    public void putAnalytics(
+                int levelNumber, 
+                float finishTime, 
+                float timeToGetFirstIngredient, 
+                int incorrectIngredientCollectedCount, 
+                int incorrectIngredientStateCount,
+                string playerRank
+                ){
        string sessionID; 
        long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         
@@ -42,17 +49,40 @@ public class CollectAnalytics : MonoBehaviour
         
         
        sessionID = timestamp.ToString() + randomValue.ToString();
-       StartCoroutine(Post(sessionID, finishTime.ToString(), timeToGetFirstIngredient.ToString() )); 
+       StartCoroutine(Post(
+            sessionID, 
+            levelNumber.ToString(), 
+            finishTime.ToString(), 
+            timeToGetFirstIngredient.ToString(), 
+            incorrectIngredientCollectedCount.ToString(), 
+            incorrectIngredientStateCount.ToString(), 
+            playerRank 
+        )); 
 
 
     }
 
-    private IEnumerator Post(string sessionId,   string finishTime, string timeToGetFirstIngredient){
+    private IEnumerator Post(
+        string sessionId,  
+        string levelNumber, 
+        string finishTime, 
+        string timeToGetFirstIngredient, 
+        string incorrectIngredientCollectedCount, 
+        string incorrectIngredientStateCount, 
+        string playerRank 
+        ){
         WWWForm form = new WWWForm(); 
 
         form.AddField("entry.337704600", sessionId ); 
+        form.AddField("entry.578045944", levelNumber); 
         form.AddField("entry.666891163", finishTime); 
         form.AddField("entry.1115350779", timeToGetFirstIngredient); 
+        form.AddField("entry.1128722234", incorrectIngredientCollectedCount); 
+        form.AddField("entry.1053662980", incorrectIngredientStateCount); 
+        form.AddField("entry.1965104821",playerRank); 
+
+
+
 
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
         {
@@ -65,7 +95,13 @@ public class CollectAnalytics : MonoBehaviour
             }
         }
     }
-
+    //<input type="hidden" name="entry.337704600" value="">
+    //<input type="hidden" name="entry.578045944" value="">
+    //<input type="hidden" name="entry.666891163" value="">
+    //<input type="hidden" name="entry.1115350779" value="">
+    //<input type="hidden" name="entry.1128722234" value="">
+    //<input type="hidden" name="entry.1053662980" value="">
+    //<input type="hidden" name="entry.1965104821" value="">
 
     
 }
