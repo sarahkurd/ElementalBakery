@@ -14,7 +14,10 @@ public class LevelManager : MonoBehaviour
     private int incorrectIngredientCollectedCount;
     private int incorrectIngredientStateCount;
     private bool isLevelComplete;
-    
+
+    private float startLevelTimer; 
+    private float timeToFinishLevel; 
+    public int levelNumber;     
     // Start is called before the first frame update
     void Start()
     {
