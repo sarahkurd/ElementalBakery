@@ -604,13 +604,9 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
-      propertyPath: uiObjectToShow
-      value: 
-      objectReference: {fileID: 1230577587}
-    - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
-      propertyPath: collectAnalyticsObject
-      value: 
-      objectReference: {fileID: 1626829063}
+      propertyPath: flyTime
+      value: 1.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
 --- !u!4 &161663373 stripped
@@ -2535,11 +2531,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
---- !u!1 &1230577587 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5088744748164104738, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
-  m_PrefabInstance: {fileID: 1966517564}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1248826821
 GameObject:
   m_ObjectHideFlags: 0

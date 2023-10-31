@@ -40,9 +40,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private const int MAX_JUMPS = 1;
     private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    private float airForce = 10f;
-    private int airJumpCount = 0;
-    private int MAX_AIR_JUMP = 3;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject;
@@ -61,6 +58,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private LevelManager levelManager;
     private bool isCollidedWithPlate;
     private GameObject currentCollidedPlate;
+    [SerializeField] private float flyTime = 1.0f;
+    private float flyStartTime;
+    private bool returnToGroundAfterFlying = false;
     
     // Start is called before the first frame update
     void Start()
@@ -95,6 +95,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         // vertical jump mechanics
+        if (CanJump())
+        {
+            Jump();
+        }
 
         // animations for moving left/right and jumping
         if (horizontalInput > 0f && !isJumping)
@@ -127,7 +131,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         // logic for air and water power activation
-        if(PlayerPowerState.AIR_ACTIVE == currentPlayerState)
+        if (PlayerPowerState.AIR_ACTIVE == currentPlayerState)
         {
             OnLandedAir();
         }
@@ -417,7 +421,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         
         isJumping = false;
-        airJumpCount = 0; //reset possible air jump count
+        Debug.Log("Oncollision");
+        returnToGroundAfterFlying = false;
     }
 
     private void EnableProgressBar(Collision2D other)
@@ -476,10 +481,28 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedAir()
     {
-        if (Input.GetKeyDown(KeyCode.S) && airJumpCount < MAX_AIR_JUMP)
+        if (IsGrounded())
         {
-            rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
-            airJumpCount++;
+            returnToGroundAfterFlying = false;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.S) && !returnToGroundAfterFlying)
+        {
+            Debug.Log("set fly start time");
+            flyStartTime = Time.time;
+        }
+
+        if (Input.GetKey(KeyCode.S) && !returnToGroundAfterFlying)
+        {
+            if (flyStartTime + flyTime >= Time.time)
+            {
+                rb.AddForce(Vector3.up * 0.025f, ForceMode2D.Impulse);
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            returnToGroundAfterFlying = true;
         }
     }
 
