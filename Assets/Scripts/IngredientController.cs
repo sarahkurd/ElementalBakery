@@ -39,6 +39,7 @@ public class IngredientController : MonoBehaviour
         progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
         progressBarScript.SetTimer(ingredient.timeToCook);
         Debug.Log(ingredient.name);
+        Debug.Log(ingredient.cookType);
     }
 
     // Update is called once per frame
@@ -94,5 +95,12 @@ public class IngredientController : MonoBehaviour
     public void SetIngredientSprite(Sprite ingredientSprite)
     {
         spriteRenderer.sprite = ingredientSprite;
+    }
+
+    public bool CanCookIngredient(PlayerPowerState playerState)
+    {
+        return (playerState == PlayerPowerState.FIRE_ACTIVE && ingredient.cookType == CookType.FIRE)
+               || (playerState == PlayerPowerState.WATER_ACTIVE && ingredient.cookType == CookType.WATER)
+               || (playerState == PlayerPowerState.AIR_ACTIVE && ingredient.cookType == CookType.AIR);
     }
 }
