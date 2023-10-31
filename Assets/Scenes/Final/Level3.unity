@@ -457,8 +457,8 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
-      propertyPath: uiObjectToShow
-      value: 
+      propertyPath: flyTime
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: collectAnalyticsObject
