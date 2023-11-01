@@ -29,6 +29,7 @@ public class LevelManager : MonoBehaviour
 
     private string playerRank; 
 
+    
     // Start is called before the first frame update
     void Start()
     {
