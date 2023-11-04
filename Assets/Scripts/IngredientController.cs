@@ -50,7 +50,7 @@ public class IngredientController : MonoBehaviour
             {
                 Debug.Log("Ingredient burned");
                 currentIngredientState = IngredientCookingState.BURNED;
-                ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.41f, 0.15f, 0.15f);
+              
                 DisableProgressBar();
             }
             else if (currentIngredientState != IngredientCookingState.COMPLETE && progressBarScript.IsComplete())
@@ -65,6 +65,7 @@ public class IngredientController : MonoBehaviour
                 currentIngredientState = IngredientCookingState.COOKING;
             }
         }
+        SetIngredientStateColor(currentIngredientState); 
     }
 
     public void EnableProgressBar()
@@ -94,5 +95,23 @@ public class IngredientController : MonoBehaviour
     public void SetIngredientSprite(Sprite ingredientSprite)
     {
         spriteRenderer.sprite = ingredientSprite;
+    }
+
+    public void SetIngredientStateColor(IngredientCookingState state){
+        if (state == IngredientCookingState.UNCOOKED){
+             ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.55f, 0.55f, 0.55f);
+        }
+        else if (state == IngredientCookingState.COOKING){
+             ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.79f, 0.79f, 0.79f);
+        }
+        else if (state == IngredientCookingState.COMPLETE){
+            ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
+        }
+        else if (state == IngredientCookingState.BURNED) {
+              ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(0.41f, 0.15f, 0.15f);
+        }
+        else if(state == IngredientCookingState.DISPOSED){ 
+                 ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
+        }
     }
 }
