@@ -389,8 +389,34 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             breakableLayer = other.gameObject;
         }
+    }
 
-        //destroying the ingredient 
+    private void EnableProgressBar(Collider2D other)
+    {
+         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
+         ic.EnableProgressBar();
+    }
+    
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {   
+        if (other.gameObject.CompareTag("Customer") && hasPlate)
+        {
+            if (levelManager.CheckIfLevelComplete())
+            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
+                OnLevelCompletion(); 
+                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+
+                //call the game over panel that shows "next level" button for level selection 
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                //PlayManagerGame.isGameOver = true;
+            }
+        }
+         //destroying the ingredient 
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnIngredient = true;
@@ -426,13 +452,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         returnToGroundAfterFlying = false;
     }
 
-    private void EnableProgressBar(Collision2D other)
-    {
-         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-         ic.EnableProgressBar();
-    }
-    
-    private void OnCollisionExit2D(Collision2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Ingredient")) 
         {   
@@ -448,22 +468,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("plate"))
         {
             isCollidedWithPlate = false;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {   
-        if (other.gameObject.CompareTag("Customer") && hasPlate)
-        {
-            if (levelManager.CheckIfLevelComplete())
-            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
-                OnLevelCompletion(); 
-                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-
-                //call the game over panel that shows "next level" button for level selection 
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                //PlayManagerGame.isGameOver = true;
-            }
         }
     }
 
