@@ -28,20 +28,20 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isHoldingIngredient = false;
     private GameObject currentlyHoldingIngredient;
     
-    private int breakableGroundJumpCount = 0;
+    //private int breakableGroundJumpCount = 0;
     private GameObject halfBrokenGround;
     private GameObject breakableLayer;
     private bool isBreakableLayer;
 
     private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
-    private float timer = 0f;
+    //private float timer = 0f;
     private bool isJumping = false;
     private const int MAX_JUMPS = 1;
-    private int jumpsLeft = MAX_JUMPS;
+   // private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    private float airForce = 10f;
-    private int airJumpCount = 0;
+    //private float airForce = 10f;
+    //private int airJumpCount = 0;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject;
@@ -50,7 +50,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     // Parameters for tracking the time for level 0 
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
-    private bool timing = false; 
+    //private bool timing = false; 
     private bool activate;
     public GameObject tree, ice;
     private PlayerRanking playerRanking;
@@ -76,9 +76,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
         levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
         
         //starting the timer for the level 
-        levelZeroStartTime = Time.time; 
+        //levelZeroStartTime = Time.time; 
        
-        timing = true;
+        //timing = true;
     }
 
     // Update is called once per frame
@@ -172,9 +172,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         } 
 
 
-        if (timing){
-            float elapsedTime = Time.time - levelZeroStartTime; 
-        }
+        
 
     }
 
@@ -424,7 +422,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {   
                 if(isFirstIngredientCollected == false) {
-                     timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                     //timeToGetIngredient =  Time.time - levelZeroStartTime; 
                      isFirstIngredientCollected = true; 
                 }
 
@@ -457,7 +455,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Ingredient")) 
         {   
             isOnIngredient = false;
-            timer = 0f; 
+            //timer = 0f; 
         }
         
         if (other.gameObject.CompareTag("Plates"))
@@ -478,10 +476,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
             Debug.LogError("LevelCompletion component not found!");
         }
 
-        float timeToFinish =  Time.time - levelZeroStartTime;  
-        CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
+        //float timeToFinish =  Time.time - levelZeroStartTime;  
+        //CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
-        analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
+        //analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
     }
 
     private void OnLandedAir()
