@@ -86,8 +86,8 @@ public class ProgressBar : MonoBehaviour
 
             while (Time.time < startTime + colorTransitionSpeed)
             {
-                float journeyCovered = (Time.time - startTime) * colorTransitionSpeed;
-                float fractionOfJourney = journeyCovered / journeyLength;
+                float journeyCovered = (Time.time - startTime) * colorTransitionSpeed ;
+                float fractionOfJourney = Mathf.Clamp01(journeyCovered / journeyLength);
                 image.color = Color.Lerp(image.color, targetColor, fractionOfJourney);
                 yield return null;
             }
