@@ -547,6 +547,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // get parent game object of the ingredient
         Debug.Log("Pick up ingredient with name: " + ingredientGameObject.name);
         Rigidbody2D rb = ingredientGameObject.GetComponent<Rigidbody2D>();
+        BoxCollider2D bc = ingredientGameObject.GetComponent<BoxCollider2D>();
+        bc.isTrigger = false;
         rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
         rb.simulated = false;
         rb.constraints = RigidbodyConstraints2D.None;

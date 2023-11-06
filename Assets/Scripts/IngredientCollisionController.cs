@@ -6,11 +6,12 @@ using UnityEngine;
 public class IngredientCollisionController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private BoxCollider2D bc;
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("IngredientCollisionController Start()");
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -24,8 +25,8 @@ public class IngredientCollisionController : MonoBehaviour
         Debug.Log("IngredientCollisionController OnCollisionEnter2D");
         if (!other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("IngredientCollisionController OnCollisionEnter2D NOT COLLIDING WITH PLAYER");
-            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionX;
+            rb.bodyType = RigidbodyType2D.Static;
+            bc.isTrigger = true;
         }
     }
 }

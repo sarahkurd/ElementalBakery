@@ -12,7 +12,7 @@ public class PlateController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bc = this.GetComponent<BoxCollider2D>();
+        bc = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();
     }
 
