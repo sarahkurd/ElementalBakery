@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using DefaultNamespace;
+using models;
 using UnityEngine.SceneManagement;
 using UnityEngine.Analytics; 
 
@@ -40,7 +41,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject;
-    public GameObject SpriteManager;
 
     // Parameters for tracking the time for level 0 
     public float timeToGetIngredient; 
@@ -61,6 +61,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isAirJump = false;
     private float airForceUp = 45.0f;
     private bool isApplyingPowerToCook = false;
+    private bool isAtStove;
+    private bool isAtSink;
     
     // Start is called before the first frame update
     void Start()
@@ -152,6 +154,22 @@ public class PlayerMovementDevelopment : MonoBehaviour
                     ic.EnableProgressBar();
                 }
             }
+        } 
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isAtStove)
+        {
+            PlaceItemOnStove();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isAtSink)
+        {
+            PlaceItemOnSink();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isAtStove)
+        {
+            PickUpItemFromStove();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isAtSink)
+        {
+            PickUpItemFromSink();
         }
         // logic for pick up an ingredient or plate or drop items
         else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
@@ -435,21 +453,26 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isOnIngredient = true;
             currentCollidedIngredient = other.gameObject;
-        }
-
-        if (other.gameObject.CompareTag("Plates"))
+        } 
+        else if (other.gameObject.CompareTag("Plates"))
         {
             Debug.Log("Collided with plate station");
             isAtPlateStation = true;
-        }
-
-        if (other.gameObject.CompareTag("plate"))
+        } 
+        else if (other.gameObject.CompareTag("plate"))
         {
             Debug.Log("Collided with plate");
             isCollidedWithPlate = true;
             currentCollidedPlate = other.gameObject;
+        } 
+        else if (other.gameObject.CompareTag("Stove"))
+        {
+            isAtStove = true;
+        } 
+        else if (other.gameObject.CompareTag("Sink"))
+        {
+            isAtSink = true;
         }
-        
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -463,14 +486,22 @@ public class PlayerMovementDevelopment : MonoBehaviour
             //timer = 0f; 
         }
         
-        if (other.gameObject.CompareTag("Plates"))
+        else if (other.gameObject.CompareTag("Plates"))
         {
             isAtPlateStation = false;
         }
         
-        if (other.gameObject.CompareTag("plate"))
+        else if (other.gameObject.CompareTag("plate"))
         {
             isCollidedWithPlate = false;
+        }
+        else if (other.gameObject.CompareTag("Stove"))
+        {
+            isAtStove = false;
+        } 
+        else if (other.gameObject.CompareTag("Sink"))
+        {
+            isAtSink = false;
         }
     }
 
@@ -556,7 +587,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         bc.isTrigger = false;
         rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
         rb.simulated = false;
-        rb.constraints = RigidbodyConstraints2D.None;
         
         GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
         IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
@@ -597,6 +627,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             currentlyHoldingIngredient.transform.localScale = new Vector3(1f, 1f, 1f);
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
+            rb.constraints = RigidbodyConstraints2D.None;
             isHoldingIngredient = false;
         }
         this.gameObject.transform.DetachChildren();
@@ -656,6 +687,66 @@ public class PlayerMovementDevelopment : MonoBehaviour
         Vector3 playerPostion = gameObject.transform.position;
         currentCollidedPlate.transform.position = new Vector3(playerPostion.x + 2.0f, playerPostion.y, playerPostion.z);
         hasPlate = true;
+    }
+
+    private void PlaceItemOnStove()
+    {
+        GameObject stoveGameObject = GameObject.FindGameObjectWithTag("Stove");
+        if (stoveGameObject.transform.childCount == 0) // if there is nothing else on the stove
+        {
+            GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+            wholeGameObject.transform.SetParent(stoveGameObject.transform);
+            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
+                wholeGameObject.transform.position.y + 5.0f); // move the item up a bit so it sits on the stove
+            currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
+            CookType cookType = ic.GetIngredientCookType();
+            if (cookType == CookType.FIRE)
+            {
+                ic.EnableProgressBar();
+            }
+            isHoldingIngredient = false;
+        }
+    }
+    
+    private void PlaceItemOnSink()
+    {
+        GameObject sinkGameObject = GameObject.FindGameObjectWithTag("Sink");
+        if (sinkGameObject.transform.childCount == 0)
+        {
+            GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+            wholeGameObject.transform.SetParent(sinkGameObject.transform);
+            currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
+                wholeGameObject.transform.position.y + 5.0f);
+            IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
+            CookType cookType = ic.GetIngredientCookType();
+            if (cookType == CookType.WATER)
+            {
+                ic.EnableProgressBar();
+            }
+            isHoldingIngredient = false;
+        }
+    }
+
+    private void PickUpItemFromStove()
+    {
+        GameObject stoveGameObject = GameObject.FindGameObjectWithTag("Stove");
+        if (stoveGameObject.transform.childCount == 1) // there is something on the stove so pick it up
+        {
+            GameObject wholeObject = stoveGameObject.transform.GetChild(0).gameObject;
+            PlayerPickUpIngredient(wholeObject.transform.GetChild(0).gameObject);
+        }
+    }
+
+    private void PickUpItemFromSink()
+    {
+        GameObject sinkGameobject = GameObject.FindGameObjectWithTag("Sink");
+        if (sinkGameobject.transform.childCount == 1) // there is something on the stove so pick it up
+        {
+            GameObject wholeObject = sinkGameobject.transform.GetChild(0).gameObject;
+            PlayerPickUpIngredient(wholeObject.transform.GetChild(0).gameObject);
+        }
     }
 
 }

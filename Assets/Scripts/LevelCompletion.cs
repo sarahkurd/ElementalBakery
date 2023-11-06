@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class LevelCompletion : MonoBehaviour
 {
-    [SerializeField] private PlayerRanking playerRanking;
-    [SerializeField] private Timer gameTimer;
-
+    private PlayerRanking playerRanking;
+    private Timer gameTimer;
     private void Start()
     {
-        if (!gameTimer) gameTimer = GetComponent<Timer>();
-        if (!playerRanking) playerRanking = GetComponent<PlayerRanking>();
+        gameTimer = GetComponent<Timer>();
+        playerRanking = GetComponent<PlayerRanking>();
     }
 
     public void OnLevelComplete()

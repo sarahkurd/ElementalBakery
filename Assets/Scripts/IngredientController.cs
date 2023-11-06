@@ -121,4 +121,9 @@ public class IngredientController : MonoBehaviour
                || (ingredient.cookType == CookType.FIRE && state == PlayerPowerState.FIRE_ACTIVE)
                || (ingredient.cookType == CookType.AIR && state == PlayerPowerState.AIR_ACTIVE);
     }
+
+    public CookType GetIngredientCookType()
+    {
+        return ingredient.cookType;
+    }
 }

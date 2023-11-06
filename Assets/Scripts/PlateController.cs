@@ -24,10 +24,10 @@ public class PlateController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (!other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Ground"))
         {
             Debug.Log("PlateController OnCollisionEnter2D");
-            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionX;
+            rb.bodyType = RigidbodyType2D.Static;
             bc.isTrigger = true;
         }
     }

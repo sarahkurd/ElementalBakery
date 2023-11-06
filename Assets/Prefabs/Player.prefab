@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 6867408002736625520}
   - component: {fileID: 6867408002736625532}
   - component: {fileID: 6867408002736625533}
+  - component: {fileID: 5707995471708373003}
+  - component: {fileID: 4352188683094538926}
+  - component: {fileID: 5671174193469562459}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -154,8 +157,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   plateSprite: {fileID: 21300000, guid: 080ebb42dd6044dd482c014384a10b70, type: 3}
-  collectAnalyticsObject: {fileID: 0}
-  SpriteManager: {fileID: 0}
+  collectAnalyticsObject: {fileID: 9055739098889636189, guid: 9e4dbb0f0975c493881d20b24545c901, type: 3}
   timeToGetIngredient: 0
   tree: {fileID: 3217876077566229026, guid: 9260983d48dcb4cb09752d8dc8ae5d34, type: 3}
   ice: {fileID: 315072361894213870, guid: e533ce217b5dd48c5adfaf4a8cba3bb8, type: 3}
@@ -180,3 +182,47 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5707995471708373003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867408002736625527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952e3dca4a440488bbd6e7fb229ab5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4352188683094538926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867408002736625527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b6ff204bfd448ff8f2463e1beceae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTimer: {fileID: 8299113562216986302, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
+  rankText: {fileID: 0}
+  rankSThreshold: 30
+  rankAThreshold: 50
+  rankBThreshold: 80
+--- !u!114 &5671174193469562459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867408002736625527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e6c5795b66944eba87ee18ac4a1cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerText: {fileID: 0}
+  timeUpScreen: {fileID: 0}
+  countdownTimer: 0
