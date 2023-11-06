@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] GameObject timeUpScreen;
-    [SerializeField] bool countdownTimer = false; // Determine if timer is countdown or stopwatch
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private GameObject timeUpScreen;
+    [SerializeField] private bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
-    float elapsedTime, timeUsed;
-    float initialTime = 90f; // Set this to the starting time of your timer
-    bool timerActive = true;
+    private float elapsedTime;
+    private float timeUsed;
+    private float initialTime = 90f; // Set this to the starting time of your timer
+    private bool timerActive = true;
 
     void Start()
     {
@@ -26,10 +27,7 @@ public class Timer : MonoBehaviour
             Debug.LogError("TimeUpScreen is not assigned!");
         }
 
-        if (countdownTimer)
-            elapsedTime = initialTime;
-        else
-            elapsedTime = 0f;
+        elapsedTime = countdownTimer ? initialTime : 0f;
     }
 
     void Update()
@@ -40,33 +38,47 @@ public class Timer : MonoBehaviour
         {
             if (elapsedTime <= 0)
             {
-                timerText.text = "Time Up!";
-                if (timeUpScreen != null)
+                if (timerText != null) // Ensure there is a reference to update the text
+                {
+                    timerText.text = "Time Up!";
+                }
+
+                if (timeUpScreen != null) // Ensure there is a reference before calling SetActive
                 {
                     timeUpScreen.SetActive(true);
                 }
+
                 timerActive = false;
+                // When time runs out, time used should be equal to the initial time.
                 timeUsed = initialTime;
             }
             else
             {
                 elapsedTime -= Time.deltaTime;
+                // Update time used as the countdown proceeds
                 timeUsed = initialTime - elapsedTime;
             }
         }
         else
         {
             elapsedTime += Time.deltaTime;
+            // In a stopwatch scenario, time used is just the elapsed time
             timeUsed = elapsedTime;
         }
 
-        UpdateTimerDisplay(elapsedTime);
+        // Ensure the timer display is updated only when timerText is not null.
+        if (timerText != null)
+        {
+            UpdateTimerDisplay(elapsedTime);
+        }
     }
 
     private void UpdateTimerDisplay(float time)
     {
-        int minutes = Mathf.FloorToInt(time / 60);
-        int seconds = Mathf.FloorToInt(time % 60);
+        // The time to display is different based on whether it's a countdown or stopwatch.
+        float displayTime = countdownTimer ? time : timeUsed;
+        int minutes = Mathf.FloorToInt(displayTime / 60);
+        int seconds = Mathf.FloorToInt(displayTime % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
