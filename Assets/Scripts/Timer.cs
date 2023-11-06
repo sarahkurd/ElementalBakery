@@ -4,7 +4,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-
 public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
@@ -17,6 +16,16 @@ public class Timer : MonoBehaviour
 
     void Start()
     {
+        if (timerText == null)
+        {
+            Debug.LogError("TimerText is not assigned!");
+        }
+
+        if (timeUpScreen == null)
+        {
+            Debug.LogError("TimeUpScreen is not assigned!");
+        }
+
         if (countdownTimer)
             elapsedTime = initialTime;
         else
@@ -25,14 +34,17 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        if (!timerActive) return;
+        if (!timerActive || timerText == null) return;
 
         if (countdownTimer)
         {
             if (elapsedTime <= 0)
             {
                 timerText.text = "Time Up!";
-                timeUpScreen.SetActive(true);
+                if (timeUpScreen != null)
+                {
+                    timeUpScreen.SetActive(true);
+                }
                 timerActive = false;
                 timeUsed = initialTime;
             }
@@ -48,8 +60,13 @@ public class Timer : MonoBehaviour
             timeUsed = elapsedTime;
         }
 
-        int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        UpdateTimerDisplay(elapsedTime);
+    }
+
+    private void UpdateTimerDisplay(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60);
+        int seconds = Mathf.FloorToInt(time % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
