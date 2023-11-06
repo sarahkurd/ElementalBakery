@@ -587,7 +587,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         bc.isTrigger = false;
         rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
         rb.simulated = false;
-        rb.constraints = RigidbodyConstraints2D.None;
         
         GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
         IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
@@ -628,6 +627,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             currentlyHoldingIngredient.transform.localScale = new Vector3(1f, 1f, 1f);
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
+            rb.constraints = RigidbodyConstraints2D.None;
             isHoldingIngredient = false;
         }
         this.gameObject.transform.DetachChildren();

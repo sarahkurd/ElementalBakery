@@ -22,8 +22,8 @@ public class IngredientCollisionController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("IngredientCollisionController OnCollisionEnter2D");
-        if (!other.gameObject.CompareTag("Player"))
+        Debug.Log("IngredientCollisionController OnCollisionEnter2D with object " + other.gameObject.name);
+        if (other.gameObject.CompareTag("Ground"))
         {
             rb.bodyType = RigidbodyType2D.Static;
             bc.isTrigger = true;
