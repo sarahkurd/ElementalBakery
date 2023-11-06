@@ -33,6 +33,8 @@ public class Timer : MonoBehaviour
     void Update()
     {
         if (!timerActive || timerText == null) return;
+        // Add a Debug statement to log every frame
+        // Debug.Log("Timer Update: elapsedTime = " + elapsedTime + ", timeUsed = " + timeUsed);
 
         if (countdownTimer)
         {
