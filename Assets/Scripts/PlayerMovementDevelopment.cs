@@ -442,8 +442,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 OnLevelCompletion(); 
                 //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
 
-                //call the game over panel that shows "next level" button for level selection 
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                //call the game over panel that shows "next level" button for level selection  // Yiyi is commenting out this line because she uses LevelCompletion to increment scene
+                // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 //PlayManagerGame.isGameOver = true;
             }
         }
