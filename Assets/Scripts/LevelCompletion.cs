@@ -10,15 +10,21 @@ public class LevelCompletion : MonoBehaviour
     {
         // Find the LevelManager instance in the scene.
         levelManager = FindObjectOfType<LevelManager>();
-        playerRanking = FindObjectOfType<PlayerRanking>();
         if (levelManager == null)
+        {
+            Debug.LogError("LevelManager not found in the scene.");
+            return;
+        }
+        
+        playerRanking = FindObjectOfType<PlayerRanking>();
+        if (playerRanking == null)
         {
             Debug.LogError("LevelManager not found in the scene.");
             return;
         }
 
         // Assuming the Timer component is on the same GameObject as LevelCompletion.
-        gameTimer = GetComponent<Timer>();
+        gameTimer = FindObjectOfType<Timer>();
         if (gameTimer == null)
         {
             Debug.LogError("Timer component not found on the GameObject.");
