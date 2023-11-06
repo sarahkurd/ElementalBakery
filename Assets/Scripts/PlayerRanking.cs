@@ -5,23 +5,18 @@ using UnityEngine;
 
 public class PlayerRanking : MonoBehaviour
 {
-    [SerializeField] private Timer gameTimer;
-    [SerializeField] private TextMeshProUGUI rankText;
+    [SerializeField] private LevelManager levelManager; // Reference to the LevelManager script
+    [SerializeField] private TextMeshProUGUI rankText; // UI element to display rank
 
-    // Define rank thresholds (in seconds)
-    [SerializeField] private float rankSThreshold = 30f, rankAThreshold = 50f, rankBThreshold = 80f;
-
-    public void CalculateRank()
+    // This method should be called when you want to update the rank text on the UI.
+    public void DisplayRank()
     {
-        // Ensure that gameTimer is not null before trying to access TimeUsed
-        if (gameTimer == null)
+        // Ensure that levelManager is not null before trying to access playerRank
+        if (levelManager == null)
         {
-            Debug.LogError("GameTimer is not set in PlayerRanking.");
+            Debug.LogError("LevelManager is not set in PlayerRanking.");
             return;
         }
-
-        float completionTime = gameTimer.TimeUsed;
-        Debug.Log("Completion Time: " + completionTime);
 
         // Ensure that rankText is not null before trying to update the text
         if (rankText == null)
@@ -30,20 +25,10 @@ public class PlayerRanking : MonoBehaviour
             return;
         }
 
-        string rank = "Novice Chef!"; // Default rank if no thresholds are met
-        if (completionTime <= rankSThreshold)
-        {
-            rank = "Master Chef!!!";
-        }
-        else if (completionTime <= rankAThreshold)
-        {
-            rank = "Great Chef!!";
-        }
-        else if (completionTime <= rankBThreshold)
-        {
-            rank = "Novice Chef!";
-        }
+        // Read the rank from the LevelManager script
+        string rank = levelManager.PlayerRank; // Assuming there's a public property for playerRank in LevelManager
 
+        // Update the UI element with the rank
         rankText.text = "Rank: " + rank;
     }
 }
