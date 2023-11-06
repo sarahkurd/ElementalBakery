@@ -28,20 +28,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isHoldingIngredient = false;
     private GameObject currentlyHoldingIngredient;
     
-    private int breakableGroundJumpCount = 0;
+    //private int breakableGroundJumpCount = 0;
     private GameObject halfBrokenGround;
     private GameObject breakableLayer;
     private bool isBreakableLayer;
 
     private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
-    private float timer = 0f;
     private bool isJumping = false;
-    private const int MAX_JUMPS = 1;
-    private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    private float airForce = 10f;
-    private int airJumpCount = 0;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject;
@@ -50,7 +45,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     // Parameters for tracking the time for level 0 
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
-    private bool timing = false; 
+    //private bool timing = false; 
     private bool activate;
     public GameObject tree, ice;
     private PlayerRanking playerRanking;
@@ -63,6 +58,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private float flyTime = 1.0f;
     private float flyStartTime;
     private bool returnToGroundAfterFlying = false;
+    private bool isAirJump = false;
+    private float airForceUp = 45.0f;
     
     // Start is called before the first frame update
     void Start()
@@ -76,9 +73,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
         levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
         
         //starting the timer for the level 
-        levelZeroStartTime = Time.time; 
+        //levelZeroStartTime = Time.time; 
        
-        timing = true;
+        //timing = true;
     }
 
     // Update is called once per frame
@@ -86,20 +83,17 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (isJumping) // slow down horizontal movement wheN player is in the air
+        if (!isAirJump)
         {
-            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
+            if (isJumping) // slow down horizontal movement wheN player is in the air
+            {
+                transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
 
-        }
-        else
-        {
-            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
-        }
-        
-        // vertical jump mechanics
-        if (CanJump())
-        {
-            Jump();
+            }
+            else
+            {
+                transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+            }  
         }
 
         // animations for moving left/right and jumping
@@ -121,6 +115,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             animator.SetBool("isMovingRight", false);
             animator.SetBool("isMovingLeft", false);
             animator.SetBool("isIdle", true);
+        }
+        
+        // vertical jump mechanics
+        if (CanJump())
+        {
+            Jump();
         }
 
         // rotate player mechanics
@@ -154,14 +154,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             PlayerPickUpPlate();
         }
-        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient)
+        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient && !hasPlate)
         {
             PlayerPickUpIngredient(currentCollidedIngredient);
         }
         // logic for grabbing plate from plate station and placing plate on floor
         else if (Input.GetKeyDown(KeyCode.Return) && isAtPlateStation)
         {
-            if (!isHoldingIngredient)
+            if (!isHoldingIngredient && !hasPlate)
             {
                 GrabPlateFromPlateStation();
             }
@@ -169,13 +169,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
         {
             PlayerDropIngredientOrPlate();
-        } 
-
-
-        if (timing){
-            float elapsedTime = Time.time - levelZeroStartTime; 
         }
-
     }
 
     private bool CanJump()
@@ -186,7 +180,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
     void Jump()
     {
         isJumping = true;
-        //animator.SetBool("isIdle", true);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
     }
 
@@ -389,8 +382,39 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             breakableLayer = other.gameObject;
         }
+        
+        isJumping = false;
+        returnToGroundAfterFlying = false;
+        isAirJump = false;
+    }
 
-        //destroying the ingredient 
+    private void EnableProgressBar(Collider2D other)
+    {
+         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
+         ic.EnableProgressBar();
+    }
+    
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {   
+        if (other.gameObject.CompareTag("Customer") && hasPlate)
+        {
+            Debug.Log("OnTrigger with customer");
+            if (levelManager.CheckIfLevelComplete())
+            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
+                OnLevelCompletion(); 
+                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
+
+                //call the game over panel that shows "next level" button for level selection 
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                //PlayManagerGame.isGameOver = true;
+            }
+        }
+         //destroying the ingredient 
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnIngredient = true;
@@ -398,7 +422,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
             {   
                 if(isFirstIngredientCollected == false) {
-                     timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                     //timeToGetIngredient =  Time.time - levelZeroStartTime; 
                      isFirstIngredientCollected = true; 
                 }
 
@@ -413,31 +437,25 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         if (other.gameObject.CompareTag("Plates"))
         {
+            Debug.Log("Collided with plate station");
             isAtPlateStation = true;
         }
 
         if (other.gameObject.CompareTag("plate"))
         {
+            Debug.Log("Collided with plate");
             isCollidedWithPlate = true;
             currentCollidedPlate = other.gameObject;
         }
         
-        isJumping = false;
-        returnToGroundAfterFlying = false;
     }
 
-    private void EnableProgressBar(Collision2D other)
-    {
-         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-         ic.EnableProgressBar();
-    }
-    
-    private void OnCollisionExit2D(Collision2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Ingredient")) 
         {   
             isOnIngredient = false;
-            timer = 0f; 
+            //timer = 0f; 
         }
         
         if (other.gameObject.CompareTag("Plates"))
@@ -451,22 +469,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {   
-        if (other.gameObject.CompareTag("Customer") && hasPlate)
-        {
-            if (levelManager.CheckIfLevelComplete())
-            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
-                OnLevelCompletion(); 
-                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-
-                //call the game over panel that shows "next level" button for level selection 
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                //PlayManagerGame.isGameOver = true;
-            }
-        }
-    }
-
     public void OnLevelCompletion(){
         if (levelCompletion != null) {
             levelCompletion.OnLevelComplete();
@@ -474,10 +476,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
             Debug.LogError("LevelCompletion component not found!");
         }
 
-        float timeToFinish =  Time.time - levelZeroStartTime;  
-        CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
+        //float timeToFinish =  Time.time - levelZeroStartTime;  
+        //CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
         
-        analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
+        //analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
     }
 
     private void OnLandedAir()
@@ -491,19 +493,21 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             Debug.Log("set fly start time");
             flyStartTime = Time.time;
+            isAirJump = true;
         }
 
         if (Input.GetKey(KeyCode.S) && !returnToGroundAfterFlying)
         {
             if (flyStartTime + flyTime >= Time.time)
             {
-                rb.AddForce(Vector3.up * 0.03f, ForceMode2D.Impulse);
+                rb.AddForce(Vector3.up * airForceUp * Time.deltaTime, ForceMode2D.Impulse);
             }
         }
 
         if (Input.GetKeyUp(KeyCode.S))
         {
             returnToGroundAfterFlying = true;
+            isAirJump = false;
         }
     }
 
@@ -512,7 +516,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             float scaleDirection = isFacingRight ? 1f : -1f;
-            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -2.1f, 0); // Adjust based on your needs
+            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.0f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
             StartCoroutine(ScaleEffectX(effect, 10f, scaleDirection));
             Destroy(effect, 7f);
@@ -551,6 +555,17 @@ public class PlayerMovementDevelopment : MonoBehaviour
         IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
         ic.DisableProgressBar();
         wholeGameObject.transform.SetParent(this.gameObject.transform); // set the player game object as the parent of the ingredient
+        if (!isFacingRight)
+        {
+            ingredientGameObject.transform.position = new Vector2(ingredientGameObject.transform.position.x - 1.0f,
+                ingredientGameObject.transform.position.y);
+        }
+        else
+        {
+            ingredientGameObject.transform.position = new Vector2(ingredientGameObject.transform.position.x + 1.0f,
+                ingredientGameObject.transform.position.y);
+        }
+        ingredientGameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         isHoldingIngredient = true;
         currentlyHoldingIngredient = ingredientGameObject;
     }
@@ -567,10 +582,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
             hasPlate = false;
-        } else if (isHoldingIngredient)
+        } 
+        else if (isHoldingIngredient)
         {
             Debug.Log("Drop ingredient");
             Rigidbody2D rb = currentlyHoldingIngredient.GetComponent<Rigidbody2D>();
+            currentlyHoldingIngredient.transform.localScale = new Vector3(1f, 1f, 1f);
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
             isHoldingIngredient = false;
@@ -586,6 +603,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         SpriteRenderer sr = plateGameObject.GetComponent<SpriteRenderer>();
         plateGameObject.AddComponent<BoxCollider2D>();
         plateGameObject.AddComponent<Rigidbody2D>();
+        plateGameObject.AddComponent<PlateController>();
         Rigidbody2D rb = plateGameObject.GetComponent<Rigidbody2D>();
         BoxCollider2D bc = plateGameObject.GetComponent<BoxCollider2D>();
         bc.size = new Vector2(2.5f, 1.0f);
@@ -593,6 +611,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         rb.simulated = false;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         sr.sprite = plateSprite;
+        sr.sortingLayerName = "ingredients";
         
         plateGameObject.transform.SetParent(this.gameObject.transform);
         Vector3 playerPostion = gameObject.transform.position;
@@ -607,6 +626,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         Destroy(currentlyHoldingIngredient.GetComponent<BoxCollider2D>());
         currentlyHoldingIngredient.transform.position =
             new Vector2(currentCollidedPlate.transform.position.x, currentCollidedPlate.transform.position.y + 1.0f);
+        currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
         wholeGameObject.transform.SetParent(currentCollidedPlate.transform);
         isHoldingIngredient = false;
@@ -623,6 +643,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Static;
         rb.simulated = false;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        BoxCollider2D bc = currentCollidedPlate.GetComponent<BoxCollider2D>();
+        bc.isTrigger = false;
         currentCollidedPlate.transform.SetParent(this.gameObject.transform);
         Vector3 playerPostion = gameObject.transform.position;
         currentCollidedPlate.transform.position = new Vector3(playerPostion.x + 2.0f, playerPostion.y, playerPostion.z);
