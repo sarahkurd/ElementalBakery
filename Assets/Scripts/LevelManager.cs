@@ -182,4 +182,13 @@ public class LevelManager : MonoBehaviour
             incorrectIngredientStateCount,
             playerRank ); 
     }
+
+    public string PlayerRank
+    {
+        get { return playerRank; }
+        // Add a setter if we need to modify it from outside this script.
+        // set { playerRank = value; }
+    }
+    
+    public bool IsLevelComplete { get { return isLevelComplete; } }
 }
