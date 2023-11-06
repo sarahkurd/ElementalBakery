@@ -35,13 +35,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
-    //private float timer = 0f;
     private bool isJumping = false;
-    private const int MAX_JUMPS = 1;
-   // private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    //private float airForce = 10f;
-    //private int airJumpCount = 0;
     private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
 
     public GameObject collectAnalyticsObject;
@@ -63,6 +58,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private float flyTime = 1.0f;
     private float flyStartTime;
     private bool returnToGroundAfterFlying = false;
+    private bool isAirJump = false;
+    private float airForceUp = 45.0f;
     
     // Start is called before the first frame update
     void Start()
@@ -86,14 +83,17 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (isJumping) // slow down horizontal movement wheN player is in the air
+        if (!isAirJump)
         {
-            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
+            if (isJumping) // slow down horizontal movement wheN player is in the air
+            {
+                transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
 
-        }
-        else
-        {
-            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+            }
+            else
+            {
+                transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+            }  
         }
 
         // animations for moving left/right and jumping
@@ -385,6 +385,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         
         isJumping = false;
         returnToGroundAfterFlying = false;
+        isAirJump = false;
     }
 
     private void EnableProgressBar(Collider2D other)
@@ -492,19 +493,21 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             Debug.Log("set fly start time");
             flyStartTime = Time.time;
+            isAirJump = true;
         }
 
         if (Input.GetKey(KeyCode.S) && !returnToGroundAfterFlying)
         {
             if (flyStartTime + flyTime >= Time.time)
             {
-                rb.AddForce(Vector3.up * 1.0f * Time.deltaTime, ForceMode2D.Impulse);
+                rb.AddForce(Vector3.up * airForceUp * Time.deltaTime, ForceMode2D.Impulse);
             }
         }
 
         if (Input.GetKeyUp(KeyCode.S))
         {
             returnToGroundAfterFlying = true;
+            isAirJump = false;
         }
     }
 
