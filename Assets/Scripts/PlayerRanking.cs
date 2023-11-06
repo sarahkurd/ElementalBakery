@@ -16,7 +16,7 @@ public class PlayerRanking : MonoBehaviour
         float completionTime = gameTimer.TimeUsed;
         Debug.Log("Completion Time: " + completionTime);
 
-        string rank = "You meow out of time";
+        string rank = "Novice Chef!";
         if (completionTime <= rankSThreshold) rank = "Master Chef!!!";
         else if (completionTime <= rankAThreshold) rank = "Great Chef!!";
         else if (completionTime <= rankBThreshold) rank = "Novice Chef!";
