@@ -141,6 +141,25 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             OnLandedIce();
         }
+
+        // Use S to cook ingredients when you collide with them
+        if (Input.GetKeyDown(KeyCode.S) && isOnIngredient)
+        {
+            IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
+            if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
+            {   
+                if(isFirstIngredientCollected == false) {
+                    //timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                    isFirstIngredientCollected = true; 
+                }
+
+                if (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING)
+                {
+                    //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+                    ic.EnableProgressBar();
+                }
+            }
+        }
         
         // logic for pick up an ingredient
         if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
@@ -387,12 +406,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         returnToGroundAfterFlying = false;
         isAirJump = false;
     }
-
-    private void EnableProgressBar(Collider2D other)
-    {
-         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-         ic.EnableProgressBar();
-    }
     
     private void OnCollisionExit2D(Collision2D other)
     {
@@ -414,25 +427,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 //PlayManagerGame.isGameOver = true;
             }
         }
-         //destroying the ingredient 
+        
+        // mark that player collided with ingredient
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnIngredient = true;
             currentCollidedIngredient = other.gameObject;
-            IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-            if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
-            {   
-                if(isFirstIngredientCollected == false) {
-                     //timeToGetIngredient =  Time.time - levelZeroStartTime; 
-                     isFirstIngredientCollected = true; 
-                }
-
-                if (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING)
-                {
-                    //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
-                    EnableProgressBar(other); 
-                }
-            }
         }
 
         if (other.gameObject.CompareTag("Plates"))
