@@ -268,6 +268,10 @@ PrefabInstance:
       propertyPath: rankText
       value: 
       objectReference: {fileID: 961610722}
+    - target: {fileID: 4352188683094538926, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: levelManager
+      value: 
+      objectReference: {fileID: 110375628809556}
     - target: {fileID: 5671174193469562459, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: timerText
       value: 
@@ -18982,7 +18986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2733152320817116883, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -31.9
+      value: -77.3
       objectReference: {fileID: 0}
     - target: {fileID: 2733152321604924037, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_Name
@@ -19584,6 +19588,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
+--- !u!114 &110375628809556 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
+  m_PrefabInstance: {fileID: 110375628809555}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd40979bb96ad415c8c88d2df75a978d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5283349317548255061
 PrefabInstance:
   m_ObjectHideFlags: 0
