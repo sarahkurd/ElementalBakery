@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelCompletion : MonoBehaviour
 {
@@ -6,34 +8,21 @@ public class LevelCompletion : MonoBehaviour
     private Timer gameTimer;
     private PlayerRanking playerRanking;
 
+    // Add a field for the next scene's name or index
+    [SerializeField] private string nextSceneName;
+
     private void Start()
     {
-        // Find the LevelManager instance in the scene.
         levelManager = FindObjectOfType<LevelManager>();
-        if (levelManager == null)
-        {
-            Debug.LogError("LevelManager not found in the scene.");
-            return;
-        }
-        
         playerRanking = FindObjectOfType<PlayerRanking>();
-        if (playerRanking == null)
-        {
-            Debug.LogError("LevelManager not found in the scene.");
-            return;
-        }
+        gameTimer = GetComponent<Timer>();
 
-        // Assuming the Timer component is on the same GameObject as LevelCompletion.
-        gameTimer = FindObjectOfType<Timer>();
-        if (gameTimer == null)
-        {
-            Debug.LogError("Timer component not found on the GameObject.");
-        }
+        if (levelManager == null) Debug.LogError("LevelManager not found in the scene.");
+        if (gameTimer == null) Debug.LogError("Timer component not found on the GameObject.");
     }
 
     private void Update()
     {
-        // Check if the level is complete by accessing the IsLevelComplete property.
         if (levelManager.IsLevelComplete)
         {
             OnLevelComplete();
@@ -42,8 +31,19 @@ public class LevelCompletion : MonoBehaviour
 
     public void OnLevelComplete()
     {
-        // Stop the timer when the level is complete.
+        Debug.Log("Level complete. Stopping timer and showing rank.");
         gameTimer.StopTimer();
         playerRanking.DisplayRank();
+        Debug.Log("Starting coroutine to wait 3 seconds before loading the next scene.");
+        StartCoroutine(WaitAndLoadNextScene());
     }
+
+    private IEnumerator WaitAndLoadNextScene()
+    {
+        Debug.Log("Entered coroutine, waiting for 3 seconds.");
+        yield return new WaitForSeconds(3f);
+        Debug.Log("3 seconds passed, now loading next scene: " + nextSceneName);
+        SceneManager.LoadScene(nextSceneName);
+    }
+
 }
