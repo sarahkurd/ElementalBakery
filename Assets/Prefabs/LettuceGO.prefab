@@ -12,6 +12,10 @@ PrefabInstance:
       value: 12.62
       objectReference: {fileID: 0}
     - target: {fileID: 1487534805995875697, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
+      propertyPath: m_BodyType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1487534805995875697, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
       propertyPath: m_Constraints
       value: 3
       objectReference: {fileID: 0}

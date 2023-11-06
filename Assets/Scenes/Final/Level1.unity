@@ -394,6 +394,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 921813218}
     m_Modifications:
+    - target: {fileID: 4705899728089617946, guid: f583bf665a55d410bb32a27ef4357618, type: 3}
+      propertyPath: m_Constraints
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5330062755574800126, guid: f583bf665a55d410bb32a27ef4357618, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -967,6 +971,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 921813218}
     m_Modifications:
+    - target: {fileID: 1053694075802973823, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1053694075802973823, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
+      propertyPath: m_Constraints
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6306448859142760212, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
       propertyPath: m_Name
       value: ChickenGO
