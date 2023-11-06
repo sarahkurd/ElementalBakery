@@ -114,4 +114,11 @@ public class IngredientController : MonoBehaviour
                  ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
         }
     }
+
+    public bool CanApplyPower(PlayerPowerState state)
+    {
+        return (ingredient.cookType == CookType.WATER && state == PlayerPowerState.WATER_ACTIVE)
+               || (ingredient.cookType == CookType.FIRE && state == PlayerPowerState.FIRE_ACTIVE)
+               || (ingredient.cookType == CookType.AIR && state == PlayerPowerState.AIR_ACTIVE);
+    }
 }

@@ -6,7 +6,7 @@ using DefaultNamespace;
 using UnityEngine.SceneManagement;
 using UnityEngine.Analytics; 
 
-enum PlayerPowerState
+public enum PlayerPowerState
 {
     FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, NEUTRAL
 }
@@ -419,14 +419,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isOnIngredient = true;
             currentCollidedIngredient = other.gameObject;
-            if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
+            IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
+            if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
             {   
                 if(isFirstIngredientCollected == false) {
                      //timeToGetIngredient =  Time.time - levelZeroStartTime; 
                      isFirstIngredientCollected = true; 
                 }
 
-                IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
                 if (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING)
                 {
                     //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
@@ -491,7 +491,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.S) && !returnToGroundAfterFlying)
         {
-            Debug.Log("set fly start time");
             flyStartTime = Time.time;
             isAirJump = true;
         }
@@ -550,6 +549,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         Rigidbody2D rb = ingredientGameObject.GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
         rb.simulated = false;
+        rb.constraints = RigidbodyConstraints2D.None;
         
         GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
         IngredientController ic = wholeGameObject.GetComponent<IngredientController>();

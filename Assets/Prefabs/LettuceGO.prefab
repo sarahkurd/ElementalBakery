@@ -83,5 +83,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: lettuce
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 267957810664289459, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
+--- !u!1 &1938594621337947244 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8916175496185270622, guid: 4e57ab3138f6644da91ad5d8fe98bcb6, type: 3}
+  m_PrefabInstance: {fileID: 7015442560176790834}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &558847668007123044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938594621337947244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788a1de919df9461c82781b8a42c21d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
