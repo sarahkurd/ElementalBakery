@@ -38,7 +38,7 @@ public class PlayerRanking : MonoBehaviour
         }
 
         // Read the rank from the LevelManager script
-        string rank = levelManager.PlayerRank; // Assuming there's a public property for playerRank in LevelManager
+        string rank = levelManager.PlayerRank;
 
         // Update the UI element with the rank
         rankText.text = "Rank: " + rank;
