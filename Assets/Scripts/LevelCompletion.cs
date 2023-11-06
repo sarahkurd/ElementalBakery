@@ -8,9 +8,6 @@ public class LevelCompletion : MonoBehaviour
     private Timer gameTimer;
     private PlayerRanking playerRanking;
 
-    // Add a field for the next scene's name or index
-    [SerializeField] private string nextSceneName;
-
     private void Start()
     {
         levelManager = FindObjectOfType<LevelManager>();
@@ -42,8 +39,9 @@ public class LevelCompletion : MonoBehaviour
     {
         Debug.Log("Entered coroutine, waiting for 3 seconds.");
         yield return new WaitForSeconds(3f);
-        Debug.Log("3 seconds passed, now loading next scene: " + nextSceneName);
-        SceneManager.LoadScene(nextSceneName);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+        Debug.Log("3 seconds passed, now loading next scene index: " + nextSceneIndex);
+        SceneManager.LoadScene(nextSceneIndex);
     }
-
 }
