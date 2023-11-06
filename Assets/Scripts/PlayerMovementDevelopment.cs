@@ -60,6 +60,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool returnToGroundAfterFlying = false;
     private bool isAirJump = false;
     private float airForceUp = 45.0f;
+    private bool isApplyingPowerToCook = false;
     
     // Start is called before the first frame update
     void Start()
@@ -132,22 +133,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
             Destroy(breakableLayer);
         }
         
-        // logic for air and water power activation
-        if(PlayerPowerState.AIR_ACTIVE == currentPlayerState)
-        {
-            OnLandedAir();
-        }
-        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
-        {
-            OnLandedIce();
-        }
 
         // Use S to cook ingredients when you collide with them
         if (Input.GetKeyDown(KeyCode.S) && isOnIngredient)
         {
             IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
             if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
-            {   
+            {
+                isApplyingPowerToCook = true;
                 if(isFirstIngredientCollected == false) {
                     //timeToGetIngredient =  Time.time - levelZeroStartTime; 
                     isFirstIngredientCollected = true; 
@@ -160,9 +153,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 }
             }
         }
-        
-        // logic for pick up an ingredient
-        if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
+        // logic for pick up an ingredient or plate or drop items
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
         {
             PutIngredientOnPlate();
         }
@@ -188,6 +180,16 @@ public class PlayerMovementDevelopment : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
         {
             PlayerDropIngredientOrPlate();
+        }
+        
+        // logic for air and water power activation
+        if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && !isApplyingPowerToCook)
+        {
+            OnLandedAir();
+        }
+        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
+        {
+            OnLandedIce();
         }
     }
 
@@ -455,6 +457,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Ingredient")) 
         {   
             isOnIngredient = false;
+            IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
+            isApplyingPowerToCook = false;
+            ic.DisableProgressBar(); //stop cooking when player leaves contact with the ingredient
             //timer = 0f; 
         }
         
