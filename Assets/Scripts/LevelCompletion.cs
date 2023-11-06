@@ -37,8 +37,8 @@ public class LevelCompletion : MonoBehaviour
 
     private IEnumerator WaitAndLoadNextScene()
     {
-        Debug.Log("Entered coroutine, waiting for 3 seconds.");
-        yield return new WaitForSeconds(3f);
+        Debug.Log("Entered coroutine, waiting for 2 seconds.");
+        yield return new WaitForSeconds(2f);
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
         Debug.Log("3 seconds passed, now loading next scene index: " + nextSceneIndex);
