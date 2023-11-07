@@ -10486,6 +10486,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7527032285255885895, guid: 183e1c53ee2bf4af0ab006e3c6b29409, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 183e1c53ee2bf4af0ab006e3c6b29409, type: 3}
 --- !u!1 &1913418399
@@ -11467,9 +11471,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5438470881861170247, guid: c13bcb286d2a34b09bdc0e6b71cb20bc, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5438470881861170264, guid: c13bcb286d2a34b09bdc0e6b71cb20bc, type: 3}
       propertyPath: m_Name
       value: InstructionCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438470881861170264, guid: c13bcb286d2a34b09bdc0e6b71cb20bc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c13bcb286d2a34b09bdc0e6b71cb20bc, type: 3}
