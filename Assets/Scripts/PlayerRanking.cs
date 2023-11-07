@@ -5,22 +5,42 @@ using UnityEngine;
 
 public class PlayerRanking : MonoBehaviour
 {
-    [SerializeField] private Timer gameTimer;
-    [SerializeField] TextMeshProUGUI rankText;
+    private LevelManager levelManager; // Reference to the LevelManager script
+    private TextMeshProUGUI rankText; // UI element to display rank
 
-    // Define rank thresholds (in seconds)
-    [SerializeField] private float rankSThreshold = 30f, rankAThreshold = 50f, rankBThreshold = 80f;
-
-    public void CalculateRank()
+    private void Start()
     {
-        float completionTime = gameTimer.TimeUsed;
-        Debug.Log("Completion Time: " + completionTime);
+        // Using FindObjectOfType to find the LevelManager component in the scene
+        levelManager = FindObjectOfType<LevelManager>();
+        if (levelManager == null)
+        {
+            Debug.LogError("LevelManager is not found in the scene.");
+            return;
+        }
 
-        string rank = "You meow out of time";
-        if (completionTime <= rankSThreshold) rank = "Master Chef!!!";
-        else if (completionTime <= rankAThreshold) rank = "Great Chef!!";
-        else if (completionTime <= rankBThreshold) rank = "Novice Chef!";
+        // Using FindObjectOfType to find the TextMeshProUGUI component in the scene
+        rankText = FindObjectOfType<TextMeshProUGUI>();
+        if (rankText == null)
+        {
+            Debug.LogError("RankText is not found in the scene.");
+            return;
+        }
+    }
 
+    // This method should be called when you want to update the rank text on the UI.
+    public void DisplayRank()
+    {
+        // Check is redundant if you're already doing this in Start, but added for safety.
+        if (levelManager == null || rankText == null)
+        {
+            Debug.LogError("Dependencies are not set in PlayerRanking.");
+            return;
+        }
+
+        // Read the rank from the LevelManager script
+        string rank = levelManager.PlayerRank;
+
+        // Update the UI element with the rank
         rankText.text = "Rank: " + rank;
     }
 }

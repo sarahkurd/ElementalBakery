@@ -21,7 +21,8 @@ public class IngredientController : MonoBehaviour
     private GameObject ingredientGameObject;
     private GameObject progressBarUiCanvas;
 
-    private bool isIngredientBurned;
+    public bool isIngredientBurned;
+    private Vector3 initialPosition; 
     
     // Start is called before the first frame update
     void Start()
@@ -32,13 +33,13 @@ public class IngredientController : MonoBehaviour
         
         // will be used to update color of sprite if it is burned
         spriteRenderer = ingredientGameObject.GetComponent<SpriteRenderer>();
-        
+        initialPosition = ingredientGameObject.transform.position; 
         // create an instance of an Ingredient data object
         ingredient = IngredientMap.dict[ingredientGameObject.name];
         // set the timer in the progress bar
         progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
         progressBarScript.SetTimer(ingredient.timeToCook);
-        Debug.Log(ingredient.name);
+        //Debug.Log(ingredient.name);
     }
 
     // Update is called once per frame
@@ -46,19 +47,23 @@ public class IngredientController : MonoBehaviour
     {
         if (progressBarUiCanvas.activeSelf)
         {
-            if (isIngredientBurned)
+            if (progressBarScript.isBurned)
             {
                 Debug.Log("Ingredient burned");
                 currentIngredientState = IngredientCookingState.BURNED;
               
                 DisableProgressBar();
+                
+                StartCoroutine(RespawnIngredient());
+                //Start();
             }
             else if (currentIngredientState != IngredientCookingState.COMPLETE && progressBarScript.IsComplete())
             {
                 Debug.Log("Timer complete");
                 currentIngredientState = IngredientCookingState.COMPLETE;
                 // start timer that will give some wiggle room before it burns
-                StartCoroutine(StartIngredientCompleteTimer());
+                StartCoroutine((progressBarScript.ColorBlinking()));
+                
             } 
             else if (currentIngredientState != IngredientCookingState.COMPLETE)
             {
@@ -91,7 +96,24 @@ public class IngredientController : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
+    public IEnumerator RespawnIngredient()
+    {   progressBarScript.isBurned=false; 
+        progressBarScript.isComplete = false; 
+        yield return new WaitForSeconds(2.0f);
+        ingredientGameObject.SetActive(false);
+       yield return new WaitForSeconds(2.0f);
 
+        // Reset the position to the initial position
+        ingredientGameObject.transform.position = initialPosition;
+        isIngredientBurned = false;
+        currentIngredientState = IngredientCookingState.UNCOOKED;
+
+        // Restore the initial state of progressBarUiCanvas
+        //progressBarUiCanvas.SetActive(initialProgressBarState);
+
+        // Re-enable the object if needed
+        ingredientGameObject.SetActive(true);
+    }
     public void SetIngredientSprite(Sprite ingredientSprite)
     {
         spriteRenderer.sprite = ingredientSprite;
@@ -113,5 +135,17 @@ public class IngredientController : MonoBehaviour
         else if(state == IngredientCookingState.DISPOSED){ 
                  ingredientGameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
         }
+    }
+
+    public bool CanApplyPower(PlayerPowerState state)
+    {
+        return (ingredient.cookType == CookType.WATER && state == PlayerPowerState.WATER_ACTIVE)
+               || (ingredient.cookType == CookType.FIRE && state == PlayerPowerState.FIRE_ACTIVE)
+               || (ingredient.cookType == CookType.AIR && state == PlayerPowerState.AIR_ACTIVE);
+    }
+
+    public CookType GetIngredientCookType()
+    {
+        return ingredient.cookType;
     }
 }

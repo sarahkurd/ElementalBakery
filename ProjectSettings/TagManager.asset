@@ -12,6 +12,9 @@ TagManager:
   - plate
   - IngredientList
   - LevelManager
+  - Stove
+  - Sink
+  - Ground
   layers:
   - Default
   - TransparentFX

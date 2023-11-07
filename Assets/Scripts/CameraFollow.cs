@@ -20,7 +20,7 @@ public class CameraFollow : MonoBehaviour
     void Update()
     {
         // Keep the camera's x position constant
-        Vector3 newPos = new Vector3(originalXPosition, target.position.y, -20f);
+        Vector3 newPos = new Vector3(originalXPosition, target.position.y + 5.0f, -20f);
         transform.position = Vector3.Slerp(transform.position, newPos, followSpeed * Time.deltaTime);
     }
 }
