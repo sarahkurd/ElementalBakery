@@ -511,11 +511,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
         } else {
             Debug.LogError("LevelCompletion component not found!");
         }
-
-        //float timeToFinish =  Time.time - levelZeroStartTime;  
-        //CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
-        
-        //analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
     }
 
     private void OnLandedAir()

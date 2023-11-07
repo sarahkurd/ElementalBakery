@@ -5,42 +5,86 @@ using UnityEngine;
 
 public class PlayerRanking : MonoBehaviour
 {
-    private LevelManager levelManager; // Reference to the LevelManager script
-    private TextMeshProUGUI rankText; // UI element to display rank
+    public GameObject PlayerRankingUiCanvas; // UI element to display rank
+    public GameObject IncorrectOrderCanvas;
+    public TextMeshProUGUI totalTimeText;
+    public TextMeshProUGUI headerText;
+    public TextMeshProUGUI incorrectlyCookedIngredientsText;
+    public TextMeshProUGUI rankingText;
+    public TextMeshProUGUI incorrectPlatesDeliveredText;
+    
+    private const string MasterChefHeader = "Well Done! Amazing! You have achieved ... ";
+    private const string GreatChefHeader = "Great skills. You have achieved ... ";
+    private const string NoviceChefHeader = "You delivered the order. But there is room for improvement.";
+    private const string UnrankedChefHeader = "You don't seem like you know what you're doing. Try again?";
 
     private void Start()
     {
-        // Using FindObjectOfType to find the LevelManager component in the scene
-        levelManager = FindObjectOfType<LevelManager>();
-        if (levelManager == null)
-        {
-            Debug.LogError("LevelManager is not found in the scene.");
-            return;
-        }
+        PlayerRankingUiCanvas.SetActive(false);
+        IncorrectOrderCanvas.SetActive(false);
+    }
 
-        // Using FindObjectOfType to find the TextMeshProUGUI component in the scene
-        rankText = FindObjectOfType<TextMeshProUGUI>();
-        if (rankText == null)
+    public void SetTotalTime(float totalTime)
+    {
+        int minutes = Mathf.FloorToInt(totalTime / 60);
+        int seconds = Mathf.FloorToInt(totalTime % 60);
+        totalTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    public void SetHeaderText(PlayerRank rank)
+    {
+        switch (rank)
         {
-            Debug.LogError("RankText is not found in the scene.");
-            return;
+            case PlayerRank.Master:
+                headerText.text = MasterChefHeader;
+                return;
+            case PlayerRank.Great:
+                headerText.text = GreatChefHeader;
+                return;
+            case PlayerRank.Novice:
+                headerText.text = NoviceChefHeader;
+                return;
+            case PlayerRank.Unranked:
+                headerText.text = UnrankedChefHeader;
+                return;
         }
+    }
+
+    public void SetIncorrectIngredientsText(int count)
+    {
+        incorrectlyCookedIngredientsText.text = count.ToString();
+    }
+    
+    public void SetIncorrectPlatesDelivered(int count)
+    {
+        incorrectPlatesDeliveredText.text = count.ToString();
+    }
+
+    public void SetRankingText(PlayerRank rank)
+    {
+        rankingText.text = rank.ToString();
     }
 
     // This method should be called when you want to update the rank text on the UI.
     public void DisplayRank()
     {
-        // Check is redundant if you're already doing this in Start, but added for safety.
-        if (levelManager == null || rankText == null)
-        {
-            Debug.LogError("Dependencies are not set in PlayerRanking.");
-            return;
-        }
+        PlayerRankingUiCanvas.SetActive(true);
+    }
 
-        // Read the rank from the LevelManager script
-        string rank = levelManager.PlayerRank;
+    public void DisplayIncorrectOrder()
+    {
+        IncorrectOrderCanvas.SetActive(true);
+        StartCoroutine(WaitAndDisplayIncorrectOrder());
+    }
 
-        // Update the UI element with the rank
-        rankText.text = "Rank: " + rank;
+    private IEnumerator WaitAndDisplayIncorrectOrder()
+    {
+        yield return new WaitForSeconds(4f);
+        IncorrectOrderCanvas.SetActive(false);
+    }
+
+    public void SetYouTookToLong()
+    {
+        rankingText.text = "You Took To Long. Restart.";
     }
 }
