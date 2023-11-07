@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4540649ce689d4a63aa92a35d04cf680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 2083966271}
+  target: {fileID: 0}
 --- !u!1 &1180543398
 GameObject:
   m_ObjectHideFlags: 0
@@ -3527,8 +3527,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952e3dca4a440488bbd6e7fb229ab5c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRanking: {fileID: 2083966273}
-  gameTimer: {fileID: 8299113562216986302, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
 --- !u!114 &2083966273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3541,8 +3539,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b6ff204bfd448ff8f2463e1beceae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimer: {fileID: 8299113562216986302, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
-  rankText: {fileID: 431549894}
-  rankSThreshold: 30
-  rankAThreshold: 50
-  rankBThreshold: 80
