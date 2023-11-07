@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
 {   public Image healthBar; 
-    public Image[] imageElements; // Reference to the 10 Image UI elements
+    public Image[] imageElements; 
+    private Image[] imageElementsStartState; // Reference to the 10 Image UI elements
     public float colorTransitionSpeed = 0.2f; // Speed of color transition
     public float delayBetweenElements = 0.3f; // Delay between transitioning each element
     public float disappearanceDelay = 0.75f;
@@ -16,6 +17,7 @@ public class ProgressBar : MonoBehaviour
     public Transform targetSprite; 
     private RectTransform rectTransform; 
     private bool disabled = true;
+    public bool isBurned = false; 
     private Color[] assignedColors = {
         new Color(1.0f, 0.0f, 0.0f),
         new Color(1.0f, 0.5f, 0.0f),
@@ -41,7 +43,7 @@ public class ProgressBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   rectTransform = GetComponent<RectTransform>(); 
-        
+        imageElementsStartState = imageElements; 
         
     }
 
@@ -49,10 +51,12 @@ public class ProgressBar : MonoBehaviour
     {
         disabled = false;
         StartCoroutine(TransitionColors());
+        
+        
     }
 
     private void OnDisable()
-    {
+    {   
         disabled = true;
     }
 
@@ -70,7 +74,7 @@ public class ProgressBar : MonoBehaviour
 
     private IEnumerator TransitionColors()
     {   
-        Debug.Log("Ingredient Cooktime: " + this.cookTime); 
+        
         
         for (int i = 0; i < imageElements.Length; i++)
         {
@@ -99,18 +103,21 @@ public class ProgressBar : MonoBehaviour
                
                 yield return new WaitForSeconds(disappearanceDelay);
                 isComplete = true;
-                
-                StartCoroutine(ColorBlinking()); 
+             
+                //StartCoroutine( ColorBlinking()); 
+      
+               
               
             }
         }
     }
 
-    private IEnumerator ColorBlinking(){
+    public IEnumerator ColorBlinking(){
         int counter = transitionColors.Length - 1;
+
         while (disabled) { }
        
-        while(true){
+        while(counter>0){
             // turn all points to green 
             for (int i = 0; i < imageElements.Length; i++)
             {
@@ -121,34 +128,35 @@ public class ProgressBar : MonoBehaviour
             
             //blink transition from white to black 
             
-                
-                for (int i = 0; i < imageElements.Length; i++)
-                {
-                    imageElements[i].color =  new Color(1.0f, 1.0f, 1.0f); 
-
-                }
-                yield return new WaitForSeconds(0.125f); 
-
-                  for (int i = 0; i < imageElements.Length; i++)
-                {
-                    imageElements[i].color =  new Color(0.0f, 0.0f, 0.0f); 
-
-                }
-                yield return new WaitForSeconds(0.125f); 
             
-        counter --; 
-        if(counter <0){
-            counter = transitionColors.Length - 1;
-        }
+            for (int i = 0; i < imageElements.Length; i++)
+            {
+                imageElements[i].color =  new Color(1.0f, 1.0f, 1.0f); 
+
+            }
+            yield return new WaitForSeconds(0.125f); 
+
+            for (int i = 0; i < imageElements.Length; i++)
+            {
+                imageElements[i].color =  new Color(0.0f, 0.0f, 0.0f); 
+
+            }
+            yield return new WaitForSeconds(0.125f); 
+            
+            counter --; 
+
 
         }
+        isBurned = true;
+        ChangeToDefaultColor();
+        
     }
 
     private void ChangeToDefaultColor(){
-
+       
         for (int i = 0; i < imageElements.Length; i++)
         {
-            imageElements[i].color = cookedColor; 
+            imageElements[i].color = Color.white; 
 
         }
 
