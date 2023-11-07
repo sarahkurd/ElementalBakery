@@ -24905,7 +24905,6 @@ MonoBehaviour:
   - {fileID: 7835174527998858704}
   - {fileID: 1714101153}
   - {fileID: 1983936810}
-  riddle: {fileID: 1493699960}
   hintTexts:
   - {fileID: 7835174527210525176}
   - {fileID: 1714101151}
