@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerRank
+{
+    Master, Great, Novice, Unranked
+}
+
 public class LevelManager : MonoBehaviour
 {
     public GameObject analyticsManager; // pass in a reference to the AnalyticsManager game object
@@ -20,15 +25,21 @@ public class LevelManager : MonoBehaviour
     public int levelNumber;  
 
     private float timeToGetFirstIngredient; 
-    private bool firstIngredientTimeCalculated; 
+    private bool firstIngredientTimeCalculated;
+    public bool tookToLong = false;
+    
     //variables for ranking player performance 
-    private float rankSThreshold = 30.0f; 
-    private float rankAThreshold = 50.0f; 
-    //private float rankBThreshold = 80.0f;  
+    private float masterTimeThreshold = 60.0f; 
+    private float greatChefTimeThreshold = 90.0f; 
+    private float noviceChefTimeThreshold = 150.0f;
+    private float unrankedChefTimeThreshold = 180.0f;
+
+    private const int MaxScore = 100;
+    private int playerScore = MaxScore; // reduce this score as they make mistakes or if they take too long
     //can be assigned anything between "master_chef", "great_chef", "novice_chef", "unranked" 
 
-    private string playerRank; 
-
+    public PlayerRank playerRank;
+    private PlayerRanking PlayerRankingController;
     
     // Start is called before the first frame update
     void Start()
@@ -36,24 +47,33 @@ public class LevelManager : MonoBehaviour
         analyticsScript = analyticsManager.GetComponent<CollectAnalytics>();
         customerOrderGO = GameObject.FindWithTag("Customer").transform.GetChild(1).gameObject;
         startLevelTimer = Time.time; 
-        playerRank = "unranked";
-        firstIngredientTimeCalculated = false;  
+        playerRank = PlayerRank.Unranked;
+        firstIngredientTimeCalculated = false;
+        PlayerRankingController = GameObject.FindWithTag("Player").GetComponent<PlayerRanking>();
         PopulateCustomerOrder();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isLevelComplete){ 
-            UpdateLevelTimer(); 
-            CalculatePlayerRank(); 
-            CallAnalyticsManager();
-
+        if (isLevelComplete){
+            if (tookToLong)
+            {
+                PlayerRankingController.SetYouTookToLong();
+            }
+            else
+            {
+                UpdateLevelTimer(); 
+                CalculatePlayerRank(); 
+                CallAnalyticsManager();
+            }
+            isLevelComplete = false;
+            tookToLong = false;
         }
-        if(playerCollected.Count == 1 && !firstIngredientTimeCalculated){ 
+        
+        if (playerCollected.Count == 1 && !firstIngredientTimeCalculated){ 
             UpdateFirstIngredientCollection(); 
-            firstIngredientTimeCalculated = true; 
-
+            firstIngredientTimeCalculated = true;
         }
     }
 
@@ -84,6 +104,7 @@ public class LevelManager : MonoBehaviour
                 if (item.Value != IngredientCookingState.COMPLETE)
                 {
                     Debug.Log("incorrect state: " + item.Value);
+                    DecreasePlayerScore(11);
                     incorrectIngredientStateCount++;
                 }
                 // whether the item is cooked/burned/uncooked, we still count it but if the
@@ -92,8 +113,7 @@ public class LevelManager : MonoBehaviour
                 if (count == 1)
                 {
                     Debug.Log("remove  " + item.Key + " from customer order");
-                    customerOrder.Remove(item.Key); 
-
+                    customerOrder.Remove(item.Key);
                     //Need to add disabling the ingredient item that was collected. 
                 }
                 else
@@ -104,6 +124,7 @@ public class LevelManager : MonoBehaviour
             else
             {
                 Debug.Log("incorrect ingredient collected");
+                DecreasePlayerScore(20);
                 incorrectIngredientCollectedCount++;
             }
         }
@@ -120,8 +141,18 @@ public class LevelManager : MonoBehaviour
             Debug.Log("isLevelComplete = false");
             isLevelComplete = false;
             incorrectOrderCount++;
+            DecreasePlayerScore(25);
             PopulateCustomerOrder();
+            PlayerRankingController.DisplayIncorrectOrder();
             return false;
+        }
+    }
+
+    private void DecreasePlayerScore(int decrease)
+    {
+        if (playerScore != 0)
+        {
+            playerScore -= decrease;
         }
     }
 
@@ -146,29 +177,58 @@ public class LevelManager : MonoBehaviour
     }
 
     private void UpdateLevelTimer(){
-
-        timeToFinishLevel = Time.time - startLevelTimer; 
-
-
+        timeToFinishLevel = Time.time - startLevelTimer;
+        PlayerRankingController.SetTotalTime(timeToFinishLevel);
     }
+    
     private void UpdateFirstIngredientCollection(){
-        timeToGetFirstIngredient = Time.time - startLevelTimer; 
-
+        timeToGetFirstIngredient = Time.time - startLevelTimer;
     }
-
 
     private void CalculatePlayerRank(){
         //One player per level 
-        if(timeToFinishLevel <= rankSThreshold){
-            playerRank = "master_chef"; 
+        if(timeToFinishLevel <= masterTimeThreshold){
+            playerRank = PlayerRank.Master;
         }
-        else if(timeToFinishLevel> rankSThreshold && timeToFinishLevel <= rankAThreshold){
-            playerRank = "great_chef"; 
+        else if(timeToFinishLevel > masterTimeThreshold && timeToFinishLevel <= greatChefTimeThreshold){
+            DecreasePlayerScore(10);
         }
-        else{
-            playerRank = "novice_chef"; 
+        else if (timeToFinishLevel > greatChefTimeThreshold && timeToFinishLevel <= noviceChefTimeThreshold){
+            DecreasePlayerScore(15);
+        } else if (timeToFinishLevel > noviceChefTimeThreshold && timeToFinishLevel <= unrankedChefTimeThreshold)
+        {
+            DecreasePlayerScore(20);
         }
-        Debug.Log("rank of the player"+ playerRank); 
+        else
+        {
+            tookToLong = true;
+        }
+
+        if (!tookToLong)
+        {
+            if (playerScore >= 80)
+            {
+                playerRank = PlayerRank.Master;
+            }
+            else if (playerScore >= 60)
+            {
+                playerRank = PlayerRank.Great;
+            }
+            else if (playerScore >= 40)
+            {
+                playerRank = PlayerRank.Novice;
+            }
+            else
+            {
+                playerRank = PlayerRank.Unranked;
+            }
+            
+            PlayerRankingController.SetRankingText(playerRank);
+        }
+        PlayerRankingController.SetHeaderText(playerRank);
+        PlayerRankingController.SetIncorrectIngredientsText(incorrectIngredientStateCount);
+        PlayerRankingController.SetIncorrectPlatesDelivered(incorrectOrderCount);
+        Debug.Log("rank of the player: " + playerRank.ToString()); 
     }
 
     private void CallAnalyticsManager(){ 
@@ -180,14 +240,8 @@ public class LevelManager : MonoBehaviour
             timeToGetFirstIngredient, 
             incorrectIngredientCollectedCount, 
             incorrectIngredientStateCount,
-            playerRank ); 
-    }
-
-    public string PlayerRank
-    {
-        get { return playerRank; }
-        // Add a setter if we need to modify it from outside this script.
-        // set { playerRank = value; }
+            playerRank.ToString() 
+            ); 
     }
     
     public bool IsLevelComplete { get { return isLevelComplete; } }

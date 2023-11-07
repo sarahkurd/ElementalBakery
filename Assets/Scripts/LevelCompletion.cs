@@ -22,7 +22,14 @@ public class LevelCompletion : MonoBehaviour
     {
         if (levelManager.IsLevelComplete)
         {
-            OnLevelComplete();
+            if (levelManager.tookToLong)
+            {
+                OnTookToLong();
+            }
+            else
+            {
+                OnLevelComplete();
+            }
         }
     }
 
@@ -35,10 +42,18 @@ public class LevelCompletion : MonoBehaviour
         StartCoroutine(WaitAndLoadNextScene());
     }
 
+    public void OnTookToLong()
+    {
+        Debug.Log("Level complete. Took to long.");
+        gameTimer.StopTimer();
+        playerRanking.DisplayRank();
+        StartCoroutine(WaitAndLoadNextScene());
+    }
+
     private IEnumerator WaitAndLoadNextScene()
     {
-        Debug.Log("Entered coroutine, waiting for 2 seconds.");
-        yield return new WaitForSeconds(2f);
+        Debug.Log("Entered coroutine, waiting for 8 seconds.");
+        yield return new WaitForSeconds(8f);
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
         Debug.Log("3 seconds passed, now loading next scene index: " + nextSceneIndex);
         SceneManager.LoadScene(nextSceneIndex);
