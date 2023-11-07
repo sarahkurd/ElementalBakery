@@ -104,7 +104,7 @@ public class LevelManager : MonoBehaviour
                 if (item.Value != IngredientCookingState.COMPLETE)
                 {
                     Debug.Log("incorrect state: " + item.Value);
-                    DecreasePlayerScore(11);
+                    DecreasePlayerScore(20);
                     incorrectIngredientStateCount++;
                 }
                 // whether the item is cooked/burned/uncooked, we still count it but if the
@@ -124,7 +124,7 @@ public class LevelManager : MonoBehaviour
             else
             {
                 Debug.Log("incorrect ingredient collected");
-                DecreasePlayerScore(20);
+                DecreasePlayerScore(25);
                 incorrectIngredientCollectedCount++;
             }
         }
@@ -141,7 +141,7 @@ public class LevelManager : MonoBehaviour
             Debug.Log("isLevelComplete = false");
             isLevelComplete = false;
             incorrectOrderCount++;
-            DecreasePlayerScore(25);
+            DecreasePlayerScore(35);
             PopulateCustomerOrder();
             PlayerRankingController.DisplayIncorrectOrder();
             return false;
@@ -188,16 +188,16 @@ public class LevelManager : MonoBehaviour
     private void CalculatePlayerRank(){
         //One player per level 
         if(timeToFinishLevel <= masterTimeThreshold){
-            playerRank = PlayerRank.Master;
+            DecreasePlayerScore(0);
         }
         else if(timeToFinishLevel > masterTimeThreshold && timeToFinishLevel <= greatChefTimeThreshold){
-            DecreasePlayerScore(10);
+            DecreasePlayerScore(20);
         }
         else if (timeToFinishLevel > greatChefTimeThreshold && timeToFinishLevel <= noviceChefTimeThreshold){
-            DecreasePlayerScore(15);
+            DecreasePlayerScore(25);
         } else if (timeToFinishLevel > noviceChefTimeThreshold && timeToFinishLevel <= unrankedChefTimeThreshold)
         {
-            DecreasePlayerScore(20);
+            DecreasePlayerScore(30);
         }
         else
         {
