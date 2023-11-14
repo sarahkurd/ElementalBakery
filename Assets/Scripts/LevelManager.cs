@@ -40,6 +40,7 @@ public class LevelManager : MonoBehaviour
 
     public PlayerRank playerRank;
     private PlayerRanking PlayerRankingController;
+    private Vector3 playerStartPosition; 
     
     // Start is called before the first frame update
     void Start()
@@ -49,6 +50,7 @@ public class LevelManager : MonoBehaviour
         startLevelTimer = Time.time; 
         playerRank = PlayerRank.Unranked;
         firstIngredientTimeCalculated = false;
+        playerStartPosition = GameObject.FindWithTag("Player").transform.position; 
         PlayerRankingController = GameObject.FindWithTag("Player").GetComponent<PlayerRanking>();
         PopulateCustomerOrder();
     }
@@ -75,9 +77,12 @@ public class LevelManager : MonoBehaviour
             UpdateFirstIngredientCollection(); 
             firstIngredientTimeCalculated = true;
         }
+
+
     }
 
     // should be called when player puts an ingredient on the plate
+    
     public void PlateIngredient(string ingredientName, IngredientCookingState state)
     {
         playerCollected.Add(ingredientName, state);
@@ -242,6 +247,15 @@ public class LevelManager : MonoBehaviour
             incorrectIngredientStateCount,
             playerRank.ToString() 
             ); 
+    }
+    
+    
+    private void OnCollisionEnter2D(Collision2D other)
+    {   Debug.Log("Player fell!");
+        if(other.gameObject.CompareTag("Player")){
+            other.transform.position = playerStartPosition; 
+        }
+        
     }
     
     public bool IsLevelComplete { get { return isLevelComplete; } }
