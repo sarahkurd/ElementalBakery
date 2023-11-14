@@ -15,6 +15,7 @@ TagManager:
   - Stove
   - Sink
   - Ground
+  - playerCatcher
   layers:
   - Default
   - TransparentFX
