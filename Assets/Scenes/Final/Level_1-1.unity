@@ -1644,7 +1644,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2733152320817116845, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_text
-      value: meow
+      value: Count Down
       objectReference: {fileID: 0}
     - target: {fileID: 2733152320817116845, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_fontSize
@@ -11597,7 +11597,6 @@ MonoBehaviour:
   - {fileID: 7835174527998858704}
   - {fileID: 1714101153}
   - {fileID: 1983936810}
-  riddle: {fileID: 0}
   hintTexts:
   - {fileID: 7835174527210525176}
   - {fileID: 1714101151}
