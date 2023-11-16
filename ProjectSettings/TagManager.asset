@@ -16,6 +16,7 @@ TagManager:
   - Sink
   - Ground
   - playerCatcher
+  - obstacle
   layers:
   - Default
   - TransparentFX

@@ -63,6 +63,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isApplyingPowerToCook = false;
     private bool isAtStove;
     private bool isAtSink;
+
+    public Transform respawnPoint;
     
     // Start is called before the first frame update
     void Start()
@@ -447,7 +449,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 //PlayManagerGame.isGameOver = true;
             }
         }
-        
+
+
+        if (other.gameObject.CompareTag("obstacle"))
+        {
+            Debug.Log("Colision with knife");
+            RespawnPlayer();
+        }
+
+
         // mark that player collided with ingredient
         if (other.gameObject.CompareTag("Ingredient"))
         {
@@ -473,6 +483,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isAtSink = true;
         }
+
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -744,5 +756,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
     }
 
+    // Respawn the player to the original position
+    private void RespawnPlayer()
+    {
+        // Move the player to the respawn point
+        transform.position = respawnPoint.position;
+        transform.rotation = respawnPoint.rotation;
+    }
 }
  
