@@ -63,6 +63,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isApplyingPowerToCook = false;
     private bool isAtStove;
     private bool isAtSink;
+    private int maxIcePlatforms=2;
+    private int currIcePlatforms=0;
     
     // Start is called before the first frame update
     void Start()
@@ -207,7 +209,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
         {
-            OnLandedIce();
+            if(currIcePlatforms < maxIcePlatforms && Input.GetKeyDown(KeyCode.S))
+            {
+                OnLandedIce();
+            }
         }
     }
 
@@ -548,9 +553,17 @@ public class PlayerMovementDevelopment : MonoBehaviour
             float scaleDirection = isFacingRight ? 1f : -1f;
             Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.0f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectX(effect, 10f, scaleDirection));
-            Destroy(effect, 7f);
+            currIcePlatforms++;
+            StartCoroutine(ScaleEffectX(effect, 10f, scaleDirection));            
+            StartCoroutine(DestroyPrefabAfterDelay(effect, 7f)); // Destroy after 5 seconds
         }
+    }
+
+    System.Collections.IEnumerator DestroyPrefabAfterDelay(GameObject prefab, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(prefab);
+        currIcePlatforms--; // Decrement the counter
     }
 
     private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX, float scaleDirection)
