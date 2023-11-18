@@ -65,6 +65,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool isAtSink;
     private int maxIcePlatforms=2;
     private int currIcePlatforms=0;
+    public GameObject[] powerVfx;
     
     // Start is called before the first frame update
     void Start()
@@ -130,6 +131,22 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
         // rotate player mechanics
         SetCurrentSpriteOnRotation();
+
+        if(currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
+        {
+            GameObject fire = Instantiate(powerVfx[0], transform.position, Quaternion.identity);
+            Destroy(fire, 2f);
+        }
+        else if(currentPlayerState == PlayerPowerState.WATER_ACTIVE && Input.GetKey(KeyCode.S))
+        {
+            GameObject mist = Instantiate(powerVfx[1], transform.position, Quaternion.identity);
+            Destroy(mist, 2f);
+        }
+        else if(currentPlayerState == PlayerPowerState.AIR_ACTIVE && Input.GetKey(KeyCode.S))
+        {
+            GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
+            Destroy(steam, 2f);
+        }
         
         // logic for breakable grounds
         if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
@@ -205,11 +222,16 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // logic for air and water power activation
         if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && !isApplyingPowerToCook)
         {
+            if(Input.GetKeyDown(KeyCode.S))
+            {
+                GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
+                Destroy(steam, 2f);
+            }
             OnLandedAir();
         }
         else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
         {
-            if(currIcePlatforms < maxIcePlatforms && Input.GetKeyDown(KeyCode.S))
+            if(Input.GetKeyDown(KeyCode.S) && currIcePlatforms < maxIcePlatforms )
             {
                 OnLandedIce();
             }
