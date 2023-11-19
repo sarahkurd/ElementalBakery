@@ -498,9 +498,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: powerVfx.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: collectAnalyticsObject
       value: 
       objectReference: {fileID: 2038116837}
+    - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: powerVfx.Array.data[0]
+      value: 
+      objectReference: {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
+    - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: powerVfx.Array.data[1]
+      value: 
+      objectReference: {fileID: 1763180707548296989, guid: d35b80c750946f142a778ec4d4ed5516, type: 3}
+    - target: {fileID: 6867408002736625532, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: powerVfx.Array.data[2]
+      value: 
+      objectReference: {fileID: 4729546934675383613, guid: a540ec1f15200634499ce708844f28bb, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
 --- !u!1 &227214624
@@ -11117,7 +11133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2733152321604924042, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -14.999756
+      value: -14.999771
       objectReference: {fileID: 0}
     - target: {fileID: 2733152321604924042, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
