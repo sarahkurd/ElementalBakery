@@ -16,6 +16,7 @@ TagManager:
   - Sink
   - Ground
   - playerCatcher
+  - Banana
   layers:
   - Default
   - TransparentFX

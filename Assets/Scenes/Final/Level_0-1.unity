@@ -303,6 +303,10 @@ PrefabInstance:
       propertyPath: timeUpScreen
       value: 
       objectReference: {fileID: 2025683362}
+    - target: {fileID: 5671174193469562459, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: countdownTimer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625522, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: m_Sprite
       value: 
