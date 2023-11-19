@@ -1,15 +1,54 @@
+//using UnityEngine;
+//using UnityEngine.UI;
+//public class WordTrigger : MonoBehaviour
+//{
+//    public Image imageToShow; // Assign this in the Inspector
+
+//    private void OnTriggerEnter2D(Collider2D other)
+//    {
+//        if (other.CompareTag("Player")) // Make sure your player GameObject has the tag "Player"
+//        {
+//            imageToShow.gameObject.SetActive(true); // Show the image
+//        }
+//    }
+
+//    private void OnTriggerExit2D(Collider2D other)
+//    {
+//        if (other.CompareTag("Player"))
+//        {
+//            Debug.Log("Trigger Exited");
+//            imageToShow.gameObject.SetActive(false); // Hide the image when the player leaves the trigger
+//        }
+//    }
+//}
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WordTrigger : MonoBehaviour
 {
-    public string messageToShow; // The message to show when the player enters the trigger
+    public Image imageToShow; // Assign this in the Inspector
+
+    private void Start()
+    {
+        // Ensure the image is hidden on scene start
+        if (imageToShow != null)
+        {
+            imageToShow.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("Image to show not assigned in WordTrigger script.");
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player")) // Make sure your player GameObject has the tag "Player"
         {
-            Debug.Log("Trigger Entered: " + messageToShow);
-            TutorialTextManager.Instance.DisplayMessage(messageToShow);
+            if (imageToShow != null)
+            {
+                imageToShow.gameObject.SetActive(true); // Show the image
+            }
         }
     }
 
@@ -17,8 +56,13 @@ public class WordTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Trigger Exited");
-            TutorialTextManager.Instance.ClearMessage();
+            if (imageToShow != null)
+            {
+                imageToShow.gameObject.SetActive(false); // Hide the image when the player leaves the trigger
+            }
         }
     }
 }
+
+
+
