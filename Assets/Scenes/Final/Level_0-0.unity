@@ -11905,10 +11905,46 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4900634578024954465, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5157812875098413883, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Texture
       value: 
       objectReference: {fileID: 2800000, guid: f89a4c1fde78944dcb14ead5d40721bc, type: 3}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1965634176}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781414848506022850, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5915397426595038722, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Name
       value: UIButtonsCanvas
