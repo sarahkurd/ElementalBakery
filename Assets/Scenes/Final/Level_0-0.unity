@@ -11376,6 +11376,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: fire
       objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1965634176}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483267504725382284, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5157812875098413883, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Texture
       value: 
@@ -11498,6 +11530,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+--- !u!1 &1965634176 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9153708187276928299, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1960537914}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2015123907
 PrefabInstance:
   m_ObjectHideFlags: 0
