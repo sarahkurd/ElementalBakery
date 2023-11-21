@@ -10,7 +10,8 @@ public enum PlayerRank
 public class LevelManager : MonoBehaviour
 {
     public GameObject analyticsManager; // pass in a reference to the AnalyticsManager game object
-
+    private FallCountCatch countFallenScript;  
+    public GameObject fallCounter; 
     private CollectAnalytics analyticsScript;
     private GameObject customerOrderGO;
     private Dictionary<string, int> customerOrder = new Dictionary<string, int>();
@@ -46,12 +47,16 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         analyticsScript = analyticsManager.GetComponent<CollectAnalytics>();
+        countFallenScript = fallCounter.GetComponent<FallCountCatch>(); 
+
+
         customerOrderGO = GameObject.FindWithTag("Customer").transform.GetChild(1).gameObject;
         startLevelTimer = Time.time; 
         playerRank = PlayerRank.Unranked;
         firstIngredientTimeCalculated = false;
         playerStartPosition = GameObject.FindWithTag("Player").transform.position; 
         PlayerRankingController = GameObject.FindWithTag("Player").GetComponent<PlayerRanking>();
+
         PopulateCustomerOrder();
     }
 
@@ -78,7 +83,7 @@ public class LevelManager : MonoBehaviour
             firstIngredientTimeCalculated = true;
         }
 
-
+        //Debug.Log(countFallenScript.countNumTimesFallen); 
     }
 
     // should be called when player puts an ingredient on the plate
@@ -158,6 +163,7 @@ public class LevelManager : MonoBehaviour
         if (playerScore != 0)
         {
             playerScore -= decrease;
+
         }
     }
 
