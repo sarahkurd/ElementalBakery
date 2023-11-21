@@ -854,7 +854,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 756990902746354224, guid: e2bc573457fc366428df10ca21f93d05, type: 3}
       propertyPath: orthographic size
-      value: 17
+      value: 16.132381
       objectReference: {fileID: 0}
     - target: {fileID: 756990902746354226, guid: e2bc573457fc366428df10ca21f93d05, type: 3}
       propertyPath: m_Name
@@ -882,11 +882,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 756990902746354239, guid: e2bc573457fc366428df10ca21f93d05, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.8
+      value: 1.31
       objectReference: {fileID: 0}
     - target: {fileID: 756990902746354239, guid: e2bc573457fc366428df10ca21f93d05, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8
+      value: 6.84
       objectReference: {fileID: 0}
     - target: {fileID: 756990902746354239, guid: e2bc573457fc366428df10ca21f93d05, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2608,7 +2608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 873d3999c35014a0a942ff1ef46d53c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageToShow: 'Put all cooked ingredients on one plate. '
+  imageToShow: {fileID: 0}
 --- !u!1001 &1239573929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2732,6 +2732,10 @@ PrefabInstance:
       propertyPath: m_Texture
       value: 
       objectReference: {fileID: 2800000, guid: 69b363fa5beab4341a3fb0ec46d449e7, type: 3}
+    - target: {fileID: 9153708187276928299, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
 --- !u!4 &1239573930 stripped
@@ -3139,7 +3143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8486279358726093697, guid: e758fe5182f594671b754547349dffc0, type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8486279358726093697, guid: e758fe5182f594671b754547349dffc0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24621,11 +24625,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7353461891275707724, guid: 84aa4bf540a504dbab7288629b7a5f1b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7353461891438995239, guid: 84aa4bf540a504dbab7288629b7a5f1b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7353461892290057748, guid: 84aa4bf540a504dbab7288629b7a5f1b, type: 3}
       propertyPath: m_RootOrder
