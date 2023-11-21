@@ -137,31 +137,31 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // rotate player mechanics
         SetCurrentSpriteOnRotation();
 
-        if(currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
+        if(currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.E))
         {
             GameObject fire = Instantiate(powerVfx[0], transform.position, Quaternion.identity);
             Destroy(fire, 2f);
         }
-        else if(currentPlayerState == PlayerPowerState.WATER_ACTIVE && Input.GetKey(KeyCode.S))
+        else if(currentPlayerState == PlayerPowerState.WATER_ACTIVE && Input.GetKey(KeyCode.E))
         {
             GameObject mist = Instantiate(powerVfx[1], transform.position, Quaternion.identity);
             Destroy(mist, 2f);
         }
-        else if(currentPlayerState == PlayerPowerState.AIR_ACTIVE && Input.GetKey(KeyCode.S))
+        else if(currentPlayerState == PlayerPowerState.AIR_ACTIVE && Input.GetKey(KeyCode.E))
         {
             GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
             Destroy(steam, 2f);
         }
         
         // logic for breakable grounds
-        if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
+        if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.E))
         {
             Destroy(breakableLayer);
         }
         
 
         // Use S to cook ingredients when you collide with them
-        if (Input.GetKeyDown(KeyCode.S) && isOnIngredient)
+        if (Input.GetKeyDown(KeyCode.E) && isOnIngredient)
         {
             IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
             if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
@@ -227,7 +227,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // logic for air and water power activation
         if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && !isApplyingPowerToCook)
         {
-            if(Input.GetKeyDown(KeyCode.S))
+            if(Input.GetKeyDown(KeyCode.E))
             {
                 GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
                 Destroy(steam, 2f);
@@ -236,7 +236,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
         {
-            if(Input.GetKeyDown(KeyCode.S) && currIcePlatforms < maxIcePlatforms )
+            if(Input.GetKeyDown(KeyCode.E) && currIcePlatforms < maxIcePlatforms )
             {
                 OnLandedIce();
             }
@@ -250,7 +250,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private bool CanJump()
     {
-        return Input.GetKeyDown(KeyCode.W) && IsGrounded();
+        return (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded();
     }
 
     void Jump()
@@ -260,175 +260,90 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     private void SetCurrentSpriteOnRotation()
-    {   
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+    {
+        // rotate powers clockwise on space bar press
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            switch (currentPlayerState)
             {
-                switch (currentPlayerState)
-                {
-                    case PlayerPowerState.NEUTRAL:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break; 
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                    case PlayerPowerState.FIRE_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break;
-                        }
-                        
-                    case PlayerPowerState.WATER_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break;
-                        }
-                    
-                    case PlayerPowerState.AIR_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break;
-                        }
-                    
-                }
+                case PlayerPowerState.NEUTRAL:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireActive", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                        break;
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", true);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                        break;
+                    }
+                case PlayerPowerState.FIRE_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireLeft", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                        break; 
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireLeft", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.NEUTRAL;
+                        break; 
+                    }
+                case PlayerPowerState.WATER_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireTop", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                        break;
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireActive", true);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                        break;
+                    }
+                case PlayerPowerState.AIR_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireRight", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.NEUTRAL;
+                        break;
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireRight", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                        break;
+                    }
             }
-            
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                switch (currentPlayerState)
-                {
-                    case PlayerPowerState.NEUTRAL:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break;
-                        }
-                    case PlayerPowerState.FIRE_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break; 
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break; 
-                        }
-                    case PlayerPowerState.WATER_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                    case PlayerPowerState.AIR_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break;
-                        }
-                }
-            }
+        }
     }
 
     private bool IsGrounded()
@@ -579,13 +494,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
             returnToGroundAfterFlying = false;
         }
         
-        if (Input.GetKeyDown(KeyCode.S) && !returnToGroundAfterFlying)
+        if (Input.GetKeyDown(KeyCode.E) && !returnToGroundAfterFlying)
         {
             flyStartTime = Time.time;
             isAirJump = true;
         }
 
-        if (Input.GetKey(KeyCode.S) && !returnToGroundAfterFlying)
+        if (Input.GetKey(KeyCode.E) && !returnToGroundAfterFlying)
         {
             if (flyStartTime + flyTime >= Time.time)
             {
@@ -593,7 +508,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.S))
+        if (Input.GetKeyUp(KeyCode.E))
         {
             returnToGroundAfterFlying = true;
             isAirJump = false;
@@ -602,7 +517,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnLandedIce()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             float scaleDirection = isFacingRight ? 1f : -1f;
             Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.0f, 0); // Adjust based on your needs

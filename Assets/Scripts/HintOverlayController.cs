@@ -34,7 +34,7 @@ public class HintOverlayController : MonoBehaviour
             hintsShown[0] = true;
         }
     
-        if (hintsShown[0] && hintsShown[1] && !chicken && !hintsShown[2])
+        if (hintsShown[0] && hintsShown[1] && !hintsShown[2])
         {
             HideHint(1);
             ShowHint(2);
