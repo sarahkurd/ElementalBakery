@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using System.Numerics;
 using DefaultNamespace;
 using models;
 using UnityEngine.SceneManagement;
-using UnityEngine.Analytics; 
+using UnityEngine.Analytics;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public enum PlayerPowerState
 {
@@ -22,7 +26,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     [SerializeField] private LayerMask breakableGround;
     public Sprite plateSprite;
     
-    private float jumpForce = 12f;
+    private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
     private GameObject currentCollidedIngredient;
@@ -66,6 +70,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private int maxIcePlatforms=2;
     private int currIcePlatforms=0;
     public GameObject[] powerVfx;
+    private bool bananaCollision;
     
     // Start is called before the first frame update
     void Start()
@@ -235,6 +240,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
             {
                 OnLandedIce();
             }
+        }
+
+        if (bananaCollision)
+        {
+            this.gameObject.transform.Rotate(0.0f, 0.0f, 1.0f, Space.World);
         }
     }
 
@@ -444,9 +454,31 @@ public class PlayerMovementDevelopment : MonoBehaviour
     {
         // Logic to break the breakable ground with fire side 
         isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
+        bool isGround = other.gameObject.layer == LayerMask.NameToLayer("Ground");
         if (isBreakableLayer)
         {
             breakableLayer = other.gameObject;
+        }
+
+        if ((isGround || isBreakableLayer) && bananaCollision)
+        {
+            this.gameObject.transform.rotation = Quaternion.identity;
+            bananaCollision = false;
+        }
+        
+        // move the player back in the x and y direction like they are slipping back
+        if (other.gameObject.CompareTag("Banana"))
+        {
+            Debug.Log("Banana collision");
+            bananaCollision = true;
+            if (isFacingRight)
+            {
+                rb.AddForce(new Vector2(-17.0f, 15.0f), ForceMode2D.Impulse);
+            }
+            else 
+            {
+                rb.AddForce(new Vector2(17.0f, 15.0f), ForceMode2D.Impulse);
+            }
         }
         
         isJumping = false;

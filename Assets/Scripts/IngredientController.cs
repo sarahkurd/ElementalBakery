@@ -148,4 +148,10 @@ public class IngredientController : MonoBehaviour
     {
         return ingredient.cookType;
     }
+
+    public void AnimateIngredientDrop()
+    {
+        // when player drops an ingredient, give some force in the x and y direction to look
+        // like it is being tossed
+    }
 }
