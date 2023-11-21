@@ -231,4 +231,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerText: {fileID: 0}
   timeUpScreen: {fileID: 0}
-  countdownTimer: 0
+  countdownTimer: 1
