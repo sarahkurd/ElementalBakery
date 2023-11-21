@@ -23,9 +23,16 @@ public class FallCountCatch : MonoBehaviour
     {   if(other.gameObject.CompareTag("Player")){
             
             other.transform.position = playerStartPosition; 
+            StartCoroutine(FallCoroutine()); 
             countNumTimesFallen++; 
 
         }
         
     }
+
+     private IEnumerator FallCoroutine()
+    {
+        // Wait for 2 seconds
+        yield return new WaitForSeconds(2f);
+    } 
 }
