@@ -8,6 +8,8 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject timeUpScreen;
+
+    [SerializeField] private GameObject timerPanel;
     [SerializeField] private bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
     private float elapsedTime;
@@ -31,7 +33,8 @@ public class Timer : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        //timeUpScreen.SetActive(true);
         if (!timerActive || timerText == null) return;
         // Add a Debug statement to log every frame
         // Debug.Log("Timer Update: elapsedTime = " + elapsedTime + ", timeUsed = " + timeUsed);
@@ -46,7 +49,8 @@ public class Timer : MonoBehaviour
                 }
 
                 if (timeUpScreen != null) // Ensure there is a reference before calling SetActive
-                {
+                {   //timerText.SetActive(false); 
+                    timerText.text = "Time Up!";
                     timeUpScreen.SetActive(true);
                 }
 
@@ -68,6 +72,7 @@ public class Timer : MonoBehaviour
             timeUsed = elapsedTime;
         }
 
+        
         // Ensure the timer display is updated only when timerText is not null.
         if (timerText != null)
         {
