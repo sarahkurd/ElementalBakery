@@ -3191,6 +3191,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e758fe5182f594671b754547349dffc0, type: 3}
+--- !u!1 &1363936149 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2144889723073068745, guid: e758fe5182f594671b754547349dffc0, type: 3}
+  m_PrefabInstance: {fileID: 1363936148}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1392098157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6306448859142760213, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
@@ -24361,6 +24366,10 @@ PrefabInstance:
       propertyPath: playerRank
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
+      propertyPath: fallCounter
+      value: 
+      objectReference: {fileID: 1363936149}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: levelNumber
       value: 1

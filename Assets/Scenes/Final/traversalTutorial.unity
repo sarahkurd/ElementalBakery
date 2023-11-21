@@ -27144,6 +27144,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
+      propertyPath: fallCounter
+      value: 
+      objectReference: {fileID: 1965647553}
+    - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: levelNumber
       value: -4
       objectReference: {fileID: 0}
@@ -29770,6 +29774,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1965247336}
   m_CullTransparentMesh: 1
+--- !u!1 &1965647553 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2144889723073068745, guid: e758fe5182f594671b754547349dffc0, type: 3}
+  m_PrefabInstance: {fileID: 2144889723915416771}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1966517564
 PrefabInstance:
   m_ObjectHideFlags: 0
