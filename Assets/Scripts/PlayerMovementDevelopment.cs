@@ -370,15 +370,20 @@ public class PlayerMovementDevelopment : MonoBehaviour
                );
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         // Logic to break the breakable ground with fire side 
         isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        bool isGround = other.gameObject.layer == LayerMask.NameToLayer("Ground");
         if (isBreakableLayer)
         {
             breakableLayer = other.gameObject;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
+        bool isGround = other.gameObject.layer == LayerMask.NameToLayer("Ground");
 
         if ((isGround || isBreakableLayer) && bananaCollision)
         {
@@ -393,11 +398,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
             bananaCollision = true;
             if (isFacingRight)
             {
-                rb.AddForce(new Vector2(-17.0f, 15.0f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(-10.0f, 15.0f), ForceMode2D.Impulse);
             }
             else 
             {
-                rb.AddForce(new Vector2(17.0f, 15.0f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(10.0f, 15.0f), ForceMode2D.Impulse);
             }
         }
         
@@ -405,25 +410,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
         returnToGroundAfterFlying = false;
         isAirJump = false;
     }
-    
-    private void OnCollisionExit2D(Collision2D other)
+
+    private void OnTriggerStay2D(Collider2D other)
     {
-        
-    }
-    
-    private void OnTriggerEnter2D(Collider2D other)
-    {   
         if (other.gameObject.CompareTag("Customer") && hasPlate)
         {
             Debug.Log("OnTrigger with customer");
             if (levelManager.CheckIfLevelComplete())
-            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
-                OnLevelCompletion(); 
-                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-
-                //call the game over panel that shows "next level" button for level selection  // Yiyi is commenting out this line because she uses LevelCompletion to increment scene
-                // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                //PlayManagerGame.isGameOver = true;
+            {    
+                OnLevelCompletion();
             }
         }
         
@@ -452,6 +447,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isAtSink = true;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {   
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)
