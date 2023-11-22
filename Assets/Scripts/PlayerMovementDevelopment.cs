@@ -137,31 +137,31 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // rotate player mechanics
         SetCurrentSpriteOnRotation();
 
-        if(currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.E))
+        if(currentPlayerState == PlayerPowerState.FIRE_ACTIVE && IsCommandKey())
         {
             GameObject fire = Instantiate(powerVfx[0], transform.position, Quaternion.identity);
             Destroy(fire, 2f);
         }
-        else if(currentPlayerState == PlayerPowerState.WATER_ACTIVE && Input.GetKey(KeyCode.E))
+        else if(currentPlayerState == PlayerPowerState.WATER_ACTIVE && IsCommandKey())
         {
             GameObject mist = Instantiate(powerVfx[1], transform.position, Quaternion.identity);
             Destroy(mist, 2f);
         }
-        else if(currentPlayerState == PlayerPowerState.AIR_ACTIVE && Input.GetKey(KeyCode.E))
+        else if(currentPlayerState == PlayerPowerState.AIR_ACTIVE && IsCommandKey())
         {
             GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
             Destroy(steam, 2f);
         }
         
         // logic for breakable grounds
-        if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.E))
+        if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && IsCommandKey())
         {
             Destroy(breakableLayer);
         }
         
 
         // Use S to cook ingredients when you collide with them
-        if (Input.GetKeyDown(KeyCode.E) && isOnIngredient)
+        if (IsCommandKey() && isOnIngredient)
         {
             IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
             if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
@@ -227,7 +227,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         // logic for air and water power activation
         if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && !isApplyingPowerToCook)
         {
-            if(Input.GetKeyDown(KeyCode.E))
+            if(IsCommandKey())
             {
                 GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
                 Destroy(steam, 2f);
@@ -236,7 +236,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
         {
-            if(Input.GetKeyDown(KeyCode.E) && currIcePlatforms < maxIcePlatforms )
+            if(IsCommandKey() && currIcePlatforms < maxIcePlatforms )
             {
                 OnLandedIce();
             }
@@ -248,9 +248,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
     }
 
+    private bool IsCommandKey()
+    {
+        return Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+    }
+
     private bool CanJump()
     {
-        return (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded();
+        return Input.GetKeyDown(KeyCode.Space) && IsGrounded();
     }
 
     void Jump()
@@ -262,7 +267,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void SetCurrentSpriteOnRotation()
     {
         // rotate powers clockwise on space bar press
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
         {
             switch (currentPlayerState)
             {
@@ -365,15 +370,20 @@ public class PlayerMovementDevelopment : MonoBehaviour
                );
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         // Logic to break the breakable ground with fire side 
         isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        bool isGround = other.gameObject.layer == LayerMask.NameToLayer("Ground");
         if (isBreakableLayer)
         {
             breakableLayer = other.gameObject;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
+        bool isGround = other.gameObject.layer == LayerMask.NameToLayer("Ground");
 
         if ((isGround || isBreakableLayer) && bananaCollision)
         {
@@ -388,11 +398,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
             bananaCollision = true;
             if (isFacingRight)
             {
-                rb.AddForce(new Vector2(-17.0f, 15.0f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(-10.0f, 15.0f), ForceMode2D.Impulse);
             }
             else 
             {
-                rb.AddForce(new Vector2(17.0f, 15.0f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(10.0f, 15.0f), ForceMode2D.Impulse);
             }
         }
         
@@ -400,25 +410,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
         returnToGroundAfterFlying = false;
         isAirJump = false;
     }
-    
-    private void OnCollisionExit2D(Collision2D other)
+
+    private void OnTriggerStay2D(Collider2D other)
     {
-        
-    }
-    
-    private void OnTriggerEnter2D(Collider2D other)
-    {   
         if (other.gameObject.CompareTag("Customer") && hasPlate)
         {
             Debug.Log("OnTrigger with customer");
             if (levelManager.CheckIfLevelComplete())
-            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
-                OnLevelCompletion(); 
-                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-
-                //call the game over panel that shows "next level" button for level selection  // Yiyi is commenting out this line because she uses LevelCompletion to increment scene
-                // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                //PlayManagerGame.isGameOver = true;
+            {    
+                OnLevelCompletion();
             }
         }
         
@@ -447,6 +447,11 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             isAtSink = true;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {   
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -494,13 +499,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
             returnToGroundAfterFlying = false;
         }
         
-        if (Input.GetKeyDown(KeyCode.E) && !returnToGroundAfterFlying)
+        if ((Input.GetKeyDown(KeyCode.LeftCommand) || Input.GetKeyDown(KeyCode.RightCommand)) && !returnToGroundAfterFlying)
         {
             flyStartTime = Time.time;
             isAirJump = true;
+            returnToGroundAfterFlying = true;
         }
 
-        if (Input.GetKey(KeyCode.E) && !returnToGroundAfterFlying)
+        if (IsCommandKey())
         {
             if (flyStartTime + flyTime >= Time.time)
             {
@@ -508,16 +514,15 @@ public class PlayerMovementDevelopment : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.LeftCommand) || Input.GetKeyUp(KeyCode.RightCommand))
         {
-            returnToGroundAfterFlying = true;
             isAirJump = false;
         }
     }
 
     private void OnLandedIce()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (IsCommandKey())
         {
             float scaleDirection = isFacingRight ? 1f : -1f;
             Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.0f, 0); // Adjust based on your needs
