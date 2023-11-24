@@ -1851,7 +1851,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6983288689471558504}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Home
         m_Mode: 1
@@ -2634,7 +2634,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6983288689471558504}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -2899,6 +2899,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4268133211968780495}
   - component: {fileID: 25282084651771442}
+  - component: {fileID: 7401790871260286928}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -2941,6 +2942,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 5492049176385007032}
+--- !u!114 &7401790871260286928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5492049176385007032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e1554e9ab9342e59fd91d2609fb760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timesUpScreen: {fileID: 8171479411620581844}
+  timerPanel: {fileID: 0}
 --- !u!1 &5695107332363322965
 GameObject:
   m_ObjectHideFlags: 0
@@ -3969,7 +3984,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8470136375522402010}
-  - component: {fileID: 6983288689471558504}
+  - component: {fileID: 7443857371037046482}
   m_Layer: 5
   m_Name: TimesUpPanel
   m_TagString: Untagged
@@ -4000,7 +4015,7 @@ RectTransform:
   m_AnchoredPosition: {x: -45.194, y: 29.728}
   m_SizeDelta: {x: 93.686, y: 89.458}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6983288689471558504
+--- !u!114 &7443857371037046482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4009,10 +4024,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8171479411620581844}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e67c69744bc24a06ac4f39be8556735, type: 3}
+  m_Script: {fileID: 11500000, guid: b0e1554e9ab9342e59fd91d2609fb760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 8171479411620581844}
+  timesUpScreen: {fileID: 8171479411620581844}
+  timerPanel: {fileID: 1132511733569174010}
 --- !u!1 &8257955446377766487
 GameObject:
   m_ObjectHideFlags: 0
@@ -4436,5 +4452,10 @@ PrefabInstance:
 --- !u!224 &1132511733569174005 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733152321604924042, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
+  m_PrefabInstance: {fileID: 3051583360029789055}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1132511733569174010 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2733152321604924037, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
   m_PrefabInstance: {fileID: 3051583360029789055}
   m_PrefabAsset: {fileID: 0}
