@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject timeUpScreen;
 
-    [SerializeField] private GameObject timerPanel;
+   
     [SerializeField] private bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
     private float elapsedTime;

@@ -249,13 +249,13 @@ public class PlayerMovementDevelopment : MonoBehaviour
     }
 
     private bool IsCommandKey()
-    {
-        return Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
+    {   return Input.GetKey(KeyCode.E); 
+        //return Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
     }
 
     private bool CanJump()
     {
-        return Input.GetKeyDown(KeyCode.Space) && IsGrounded();
+        return (Input.GetKeyDown(KeyCode.Space) ||Input.GetKeyDown(KeyCode.W))  && IsGrounded();
     }
 
     void Jump()
@@ -499,7 +499,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             returnToGroundAfterFlying = false;
         }
         
-        if ((Input.GetKeyDown(KeyCode.LeftCommand) || Input.GetKeyDown(KeyCode.RightCommand)) && !returnToGroundAfterFlying)
+        if ((Input.GetKeyDown(KeyCode.E)) && !returnToGroundAfterFlying)
         {
             flyStartTime = Time.time;
             isAirJump = true;
@@ -514,7 +514,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftCommand) || Input.GetKeyUp(KeyCode.RightCommand))
+        if ((Input.GetKeyDown(KeyCode.E)))
         {
             isAirJump = false;
         }

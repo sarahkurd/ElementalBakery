@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentIngredientState: 0
+  isIngredientBurned: 0
 --- !u!1001 &3612756911339823470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -339,11 +340,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.7064703
+      value: 1.3343185
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.7064703
+      value: 1.4770775
       objectReference: {fileID: 0}
     - target: {fileID: 5088744748164104739, guid: 0399133277cbb4a36b0bd9db65984cfd, type: 3}
       propertyPath: m_LocalScale.z
