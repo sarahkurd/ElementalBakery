@@ -563,26 +563,27 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void PlayerPickUpIngredient(GameObject ingredientGameObject)
     {
         // get parent game object of the ingredient
-        Debug.Log("Pick up ingredient with name: " + ingredientGameObject.name);
+        //Debug.Log("Pick up ingredient with name: " + ingredientGameObject.name);
         Rigidbody2D rb = ingredientGameObject.GetComponent<Rigidbody2D>();
         BoxCollider2D bc = ingredientGameObject.GetComponent<BoxCollider2D>();
         bc.isTrigger = false;
         rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
         rb.simulated = false;
-        
+        float yOffset =0.5f;
+        BoxCollider2D playerCollider = this.GetComponent<BoxCollider2D>();
         GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
         IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
         ic.DisableProgressBar();
         wholeGameObject.transform.SetParent(this.gameObject.transform); // set the player game object as the parent of the ingredient
         if (!isFacingRight)
         {
-            ingredientGameObject.transform.position = new Vector2(ingredientGameObject.transform.position.x - 1.0f,
-                ingredientGameObject.transform.position.y);
+            ingredientGameObject.transform.position = new Vector2(playerCollider.bounds.min.x - 0.75f,
+                playerCollider.bounds.center.y + yOffset);
         }
         else
         {
-            ingredientGameObject.transform.position = new Vector2(ingredientGameObject.transform.position.x + 1.0f,
-                ingredientGameObject.transform.position.y);
+            ingredientGameObject.transform.position = new Vector2(playerCollider.bounds.max.x+0.75f,
+                playerCollider.bounds.center.y + yOffset);
         }
         ingredientGameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         isHoldingIngredient = true;

@@ -182,6 +182,22 @@ PrefabInstance:
       propertyPath: nextSceneName
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6867408002736625520, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: m_Size.x
+      value: 0.5261712
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867408002736625520, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: m_Size.y
+      value: 1.0027981
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867408002736625520, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.015718222
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867408002736625520, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.05616188
+      objectReference: {fileID: 0}
     - target: {fileID: 6867408002736625522, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -989,11 +1005,10 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8171479411620581844, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
   m_PrefabInstance: {fileID: 1239573929}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &499954974
+--- !u!114 &499954976 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 7443857371037046482, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1239573929}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499954971}
   m_Enabled: 1
@@ -1001,13 +1016,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e1554e9ab9342e59fd91d2609fb760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timesUpScreen: {fileID: 499954971}
-  timerPanel: {fileID: 508296506}
---- !u!1 &508296506 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1132511733569174010, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-  m_PrefabInstance: {fileID: 1239573929}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &546922563 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6014782238059803228, guid: d075ce63e45ba42c39c08f08cdd6f1f3, type: 3}
@@ -2837,7 +2845,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1132511733569174005, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473499343011010885, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 499954976}
+    - target: {fileID: 1473499343011010885, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473499343011010885, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TimesUp, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3524253263894992910, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2890,6 +2910,62 @@ PrefabInstance:
     - target: {fileID: 5915397426595038722, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Name
       value: UIButtonsCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 499954976}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 499954976}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TimesUp, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TimesUp, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: TimesUp, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6877572690651391219, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7333761353745960991, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Pivot.x
