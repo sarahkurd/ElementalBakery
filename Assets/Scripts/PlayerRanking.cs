@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerRanking : MonoBehaviour
 {
     public GameObject PlayerRankingUiCanvas; // UI element to display rank
-    public GameObject IncorrectOrderCanvas;
+    //public GameObject IncorrectOrderCanvas;
     public TextMeshProUGUI totalTimeText;
     public TextMeshProUGUI headerText;
     public TextMeshProUGUI incorrectlyCookedIngredientsText;
@@ -21,7 +21,7 @@ public class PlayerRanking : MonoBehaviour
     private void Start()
     {
         PlayerRankingUiCanvas.SetActive(false);
-        IncorrectOrderCanvas.SetActive(false);
+        //IncorrectOrderCanvas.SetActive(false);
     }
 
     public void SetTotalTime(float totalTime)
@@ -73,14 +73,14 @@ public class PlayerRanking : MonoBehaviour
 
     public void DisplayIncorrectOrder()
     {
-        IncorrectOrderCanvas.SetActive(true);
+        //IncorrectOrderCanvas.SetActive(true);
         StartCoroutine(WaitAndDisplayIncorrectOrder());
     }
 
     private IEnumerator WaitAndDisplayIncorrectOrder()
     {
         yield return new WaitForSeconds(4f);
-        IncorrectOrderCanvas.SetActive(false);
+        //IncorrectOrderCanvas.SetActive(false);
     }
 
     public void SetYouTookToLong()

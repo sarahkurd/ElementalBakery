@@ -420,7 +420,7 @@ PrefabInstance:
     - target: {fileID: 5671174193469562459, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: timeUpScreen
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1055819638}
     - target: {fileID: 5671174193469562459, guid: 631ca95acad904076a085b5bfb77f7a4, type: 3}
       propertyPath: countdownTimer
       value: 1
@@ -1614,6 +1614,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 921813218}
     m_Modifications:
+    - target: {fileID: 1577973942754464159, guid: d075ce63e45ba42c39c08f08cdd6f1f3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6014782237550585962, guid: d075ce63e45ba42c39c08f08cdd6f1f3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6014782238059803228, guid: d075ce63e45ba42c39c08f08cdd6f1f3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1799,7 +1807,7 @@ PrefabInstance:
     - target: {fileID: 8299113562216986302, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
       propertyPath: timeUpScreen
       value: 
-      objectReference: {fileID: 1414964914}
+      objectReference: {fileID: 1055819638}
     - target: {fileID: 8299113562216986302, guid: b53fca490ed984570ae71a5c80d5c097, type: 3}
       propertyPath: countdownTimer
       value: 0
@@ -2022,11 +2030,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
---- !u!1 &878613861 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2169196570510905347, guid: 8990e6c0b9b5c4ede89cc065a11c874e, type: 3}
-  m_PrefabInstance: {fileID: 878613860}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &884912465
 GameObject:
   m_ObjectHideFlags: 0
@@ -2331,6 +2334,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988048885}
   m_CullTransparentMesh: 1
+--- !u!1 &1055819638 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8171479411620581844, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 423868939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1058527598
 GameObject:
   m_ObjectHideFlags: 0
@@ -3427,11 +3435,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
---- !u!1 &1414964914 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2733152321604924037, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
-  m_PrefabInstance: {fileID: 1414964913}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1414964915 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733152321604924042, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
@@ -58032,28 +58035,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &7835174527326488010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7835174527326488012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785b47d3d912849ac86a6d25dbb87ae3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hintPanels:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  hintTexts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  halfBroken: {fileID: 587874042}
-  chicken: {fileID: 878613861}
 --- !u!1 &7835174527326488012
 GameObject:
   m_ObjectHideFlags: 0
@@ -58066,7 +58047,6 @@ GameObject:
   - component: {fileID: 7835174527326488023}
   - component: {fileID: 7835174527326488008}
   - component: {fileID: 7835174527326488009}
-  - component: {fileID: 7835174527326488010}
   m_Layer: 5
   m_Name: HintsProgressBar
   m_TagString: Untagged
