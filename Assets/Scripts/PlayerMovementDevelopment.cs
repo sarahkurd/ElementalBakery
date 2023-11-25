@@ -72,6 +72,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public GameObject[] powerVfx;
     private bool bananaCollision;
     
+
     // Start is called before the first frame update
     void Start()
     {
@@ -426,6 +427,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnIngredient = true;
+            //Debug.Log("On Ingredient!");
             currentCollidedIngredient = other.gameObject;
         } 
         else if (other.gameObject.CompareTag("Plates"))
@@ -610,6 +612,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             currentlyHoldingIngredient.transform.localScale = new Vector3(1f, 1f, 1f);
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
+            
             rb.constraints = RigidbodyConstraints2D.None;
             isHoldingIngredient = false;
         }
@@ -675,16 +678,18 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void PlaceItemOnStove()
     {
         GameObject stoveGameObject = GameObject.FindGameObjectWithTag("Stove");
-        if (stoveGameObject.transform.childCount == 0) // if there is nothing else on the stove
+        BoxCollider2D stoveCollider = stoveGameObject.GetComponent<BoxCollider2D>();
+        if (stoveGameObject.transform.childCount == 0 && isHoldingIngredient) // if there is nothing else on the stove
         {
             GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
             wholeGameObject.transform.SetParent(stoveGameObject.transform);
-            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
-                wholeGameObject.transform.position.y + 5.0f); // move the item up a bit so it sits on the stove
+            wholeGameObject.transform.position = new Vector2(stoveGameObject.transform.position.x,
+                stoveGameObject.transform.position.y ); // move the item up a bit so it sits on the stove
             currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
             CookType cookType = ic.GetIngredientCookType();
-            if (cookType == CookType.FIRE)
+            //Debug.Log("From Stove! "+ ic.currentIngredientState); 
+            if (cookType == CookType.FIRE && (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING) )
             {
                 ic.EnableProgressBar();
             }
@@ -695,7 +700,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private void PlaceItemOnSink()
     {
         GameObject sinkGameObject = GameObject.FindGameObjectWithTag("Sink");
-        if (sinkGameObject.transform.childCount == 0)
+        if (sinkGameObject.transform.childCount == 0 && isHoldingIngredient)
         {
             GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
             wholeGameObject.transform.SetParent(sinkGameObject.transform);
@@ -704,7 +709,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 wholeGameObject.transform.position.y + 5.0f);
             IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
             CookType cookType = ic.GetIngredientCookType();
-            if (cookType == CookType.WATER)
+            if (cookType == CookType.WATER  && (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING))
             {
                 ic.EnableProgressBar();
             }
@@ -720,6 +725,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             GameObject wholeObject = stoveGameObject.transform.GetChild(0).gameObject;
             PlayerPickUpIngredient(wholeObject.transform.GetChild(0).gameObject);
         }
+        isHoldingIngredient = true; 
     }
 
     private void PickUpItemFromSink()
@@ -730,6 +736,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             GameObject wholeObject = sinkGameobject.transform.GetChild(0).gameObject;
             PlayerPickUpIngredient(wholeObject.transform.GetChild(0).gameObject);
         }
+        isHoldingIngredient = true;
     }
 
 }

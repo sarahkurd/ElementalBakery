@@ -52,6 +52,7 @@ public class Timer : MonoBehaviour
                 {   //timerText.SetActive(false); 
                     timerText.text = "Time Up!";
                     timeUpScreen.SetActive(true);
+                    Time.timeScale = 0;
                 }
 
                 timerActive = false;
