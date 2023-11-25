@@ -75,13 +75,13 @@ public class IngredientController : MonoBehaviour
 
     public void EnableProgressBar()
     {
-        Debug.Log("Enable progress bar");
+        //Debug.Log("Enable progress bar");
         progressBarUiCanvas.SetActive(true);
     }
     
     public void DisableProgressBar()
     {
-        Debug.Log("Disable progress bar");
+        //Debug.Log("Disable progress bar");
         progressBarUiCanvas.SetActive(false);
     }
 
@@ -101,7 +101,7 @@ public class IngredientController : MonoBehaviour
         progressBarScript.isComplete = false; 
         yield return new WaitForSeconds(2.0f);
         ingredientGameObject.SetActive(false);
-       yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(2.0f);
 
         // Reset the position to the initial position
         ingredientGameObject.transform.position = initialPosition;
