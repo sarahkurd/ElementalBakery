@@ -10,6 +10,7 @@ using UnityEngine.Analytics;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
+using UnityEngine.UI;
 
 public enum PlayerPowerState
 {
@@ -71,7 +72,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private int currIcePlatforms=0;
     public GameObject[] powerVfx;
     private bool bananaCollision;
-    
+    public PowerProgressBar powerProgressBar;
+    public GameObject powerProgressMask;
 
     // Start is called before the first frame update
     void Start()
@@ -93,8 +95,30 @@ public class PlayerMovementDevelopment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentPlayerState == PlayerPowerState.WATER_ACTIVE || currentPlayerState == PlayerPowerState.AIR_ACTIVE)
+        {
+            powerProgressMask.SetActive(true);
+            if(currentPlayerState == PlayerPowerState.WATER_ACTIVE)
+            {
+                powerProgressBar.SetPowerValue(maxIcePlatforms - currIcePlatforms, maxIcePlatforms);
+            }
+            else
+            {
+                powerProgressBar.SetPowerValue(flyTime - (Time.time - flyStartTime), flyTime);
+                Debug.Log("Fly time: " + (flyTime - (Time.time - flyStartTime)));
+                if(flyTime - (Time.time - flyStartTime)<0)
+                {
+                    powerProgressMask.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            powerProgressMask.SetActive(false);
+        }
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
+
         if (!isAirJump)
         {
             if (isJumping) // slow down horizontal movement wheN player is in the air
@@ -237,7 +261,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
         else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
         {
-            if(IsCommandKey() && currIcePlatforms < maxIcePlatforms )
+            if(Input.GetKeyDown(KeyCode.E) && currIcePlatforms < maxIcePlatforms )
             {
                 OnLandedIce();
             }
