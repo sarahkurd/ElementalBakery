@@ -26941,6 +26941,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 8.8
       objectReference: {fileID: 0}
+    - target: {fileID: 1132511733819588050, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1671715134898688121, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_sharedMaterial
       value: 
