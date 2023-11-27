@@ -73516,6 +73516,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -11.399997
       objectReference: {fileID: 0}
+    - target: {fileID: 4814007078658885134, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4814007078658885134, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cb38608c1848846dfa06711133795f6a, type: 3}
     - target: {fileID: 5915397426595038722, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Name
       value: UIButtonsCanvas
@@ -73535,6 +73543,10 @@ PrefabInstance:
     - target: {fileID: 6083365382180294853, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 211.71124
+      objectReference: {fileID: 0}
+    - target: {fileID: 7081025011683466907, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7333761353745960991, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Pivot.x
@@ -73619,6 +73631,22 @@ PrefabInstance:
     - target: {fileID: 7333761353745960991, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 335
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 304.4166
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -791
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 393
       objectReference: {fileID: 0}
     - target: {fileID: 9128394917701258766, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -74607,6 +74635,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: headerText
+      value: 
+      objectReference: {fileID: 111199103}
+    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: rankingText
+      value: 
+      objectReference: {fileID: 1988477503}
+    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: totalTimeText
+      value: 
+      objectReference: {fileID: 536520581}
+    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: PlayerRankingUiCanvas
+      value: 
+      objectReference: {fileID: 1743687671}
+    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: incorrectPlatesDeliveredText
+      value: 
+      objectReference: {fileID: 1493119813}
+    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: incorrectlyCookedIngredientsText
+      value: 
+      objectReference: {fileID: 1967262562}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
 --- !u!1001 &756990903540316215
