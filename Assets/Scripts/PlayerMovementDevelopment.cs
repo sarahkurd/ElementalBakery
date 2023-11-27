@@ -74,7 +74,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool bananaCollision;
     public PowerProgressBar powerProgressBar;
     public GameObject powerProgressMask;
-
+    public GameObject ingredientList; 
 
 
     // Start is called before the first frame update
@@ -234,7 +234,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             PlayerPickUpPlate();
         }
-        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient && !hasPlate)
+        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient && !hasPlate && !isHoldingIngredient)
         {
             PlayerPickUpIngredient(currentCollidedIngredient);
         }
@@ -625,11 +625,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (hasPlate)
         {
             Debug.Log("Drop plate");
-            GameObject plate = this.gameObject.transform.GetChild(0).gameObject;
+            GameObject plate = this.gameObject.transform.GetChild(1).gameObject;
             Rigidbody2D rb = plate.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
             hasPlate = false;
+            plate.transform.SetParent(null);
         } 
         else if (isHoldingIngredient)
         {
@@ -640,11 +641,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             rb.simulated = true;
             
             rb.constraints = RigidbodyConstraints2D.None;
-            
+            currentlyHoldingIngredient.transform.parent.transform.SetParent(ingredientList.transform);
 
             isHoldingIngredient = false;
         }
-        this.gameObject.transform.DetachChildren();
+
+       
     }
 
     private void GrabPlateFromPlateStation()
