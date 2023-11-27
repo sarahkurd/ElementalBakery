@@ -15,7 +15,6 @@ public class Timer : MonoBehaviour
 
     private float elapsedTime;
     private float timeUsed;
-    private float initialTime;  // Set this to the starting time of your timer
     private bool timerActive = true;
 
     private GameObject background; 
@@ -25,6 +24,8 @@ public class Timer : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
+
+    private float initialTime;
 
     void Start()
     {   levelManager = GameObject.FindWithTag("LevelManager"); 
@@ -41,7 +42,7 @@ public class Timer : MonoBehaviour
             initialTime = 90f; 
         }
         else if(levelManagerScript.levelNumber == 1){
-            initialTime = 150f;  //150f
+            initialTime = 210f;  //150f
         }
         else if(levelManagerScript.levelNumber == 2){
             initialTime = 360f; 
