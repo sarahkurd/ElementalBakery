@@ -57074,7 +57074,7 @@ PrefabInstance:
       objectReference: {fileID: 343088000}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: levelNumber
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: analyticsManager

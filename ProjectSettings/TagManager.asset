@@ -17,6 +17,7 @@ TagManager:
   - Ground
   - playerCatcher
   - Banana
+  - background
   layers:
   - Default
   - TransparentFX

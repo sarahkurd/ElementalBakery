@@ -8,17 +8,57 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject timeUpScreen;
-
+    private GameObject levelManager;
    
     [SerializeField] private bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
     public float initialTime = 90f;
     private float elapsedTime;
     private float timeUsed;
+    private float initialTime;  // Set this to the starting time of your timer
     private bool timerActive = true;
 
+    private GameObject background; 
+
+    public float blinkSpeed = 1.0f; // Adjust this value to control the speed of blinking
+    public Color blinkColor;
+
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+
     void Start()
-    {
+    {   levelManager = GameObject.FindWithTag("LevelManager"); 
+        LevelManager levelManagerScript = levelManager.GetComponent<LevelManager>();
+        background = GameObject.FindWithTag("background");
+
+        int levelNumber = levelManagerScript.levelNumber;
+
+        if(levelManagerScript.levelNumber< 0){
+        // Implies these are tutorial levels. 
+            initialTime = 300f; 
+        }
+        else if(levelManagerScript.levelNumber == 0){
+            initialTime = 90f; 
+        }
+        else if(levelManagerScript.levelNumber == 1){
+            initialTime = 30f;  //150f
+        }
+        else if(levelManagerScript.levelNumber == 2){
+            initialTime = 360f; 
+
+        }
+        else if(levelManagerScript.levelNumber== 3){
+            initialTime = 360f; 
+        }
+        else if(levelManagerScript.levelNumber== 4){
+            initialTime = 360f; 
+        }
+        else if(levelManagerScript.levelNumber== 5){
+            initialTime = 360f; 
+        }
+
+       
+       
         if (timerText == null)
         {
             Debug.LogError("TimerText is not assigned!");
@@ -65,6 +105,9 @@ public class Timer : MonoBehaviour
                 // Update time used as the countdown proceeds
                 timeUsed = initialTime - elapsedTime;
             }
+
+
+
         }
         else
         {
@@ -79,6 +122,15 @@ public class Timer : MonoBehaviour
         {
             UpdateTimerDisplay(elapsedTime);
         }
+
+
+
+        if (countdownTimer && elapsedTime <=20f){
+            StartCoroutine(BlinkingBackground());
+        }
+
+
+
     }
 
     private void UpdateTimerDisplay(float time)
@@ -104,4 +156,29 @@ public class Timer : MonoBehaviour
     {
         get { return timeUsed; }
     }
+
+
+    private IEnumerator BlinkingBackground()
+    {
+        // Get the SpriteRenderer component of the background GameObject
+        spriteRenderer = background.GetComponent<SpriteRenderer>();
+
+        // Save the original color of the background
+        originalColor = spriteRenderer.color;
+
+        while (elapsedTime <= 20f)
+        {
+            // Blink to red
+            spriteRenderer.color = blinkColor;
+            yield return new WaitForSeconds(1f / blinkSpeed);
+
+            // Blink back to original color
+            spriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(1f / blinkSpeed);
+        }
+
+        // Ensure the background returns to its original color after blinking
+        spriteRenderer.color = originalColor;
+    }
+    
 }
