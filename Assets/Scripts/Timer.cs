@@ -40,7 +40,7 @@ public class Timer : MonoBehaviour
             initialTime = 90f; 
         }
         else if(levelManagerScript.levelNumber == 1){
-            initialTime = 30f;  //150f
+            initialTime = 210f;  //150f
         }
         else if(levelManagerScript.levelNumber == 2){
             initialTime = 360f; 
