@@ -15,7 +15,6 @@ public class Timer : MonoBehaviour
     public float initialTime = 90f;
     private float elapsedTime;
     private float timeUsed;
-    private float initialTime;  // Set this to the starting time of your timer
     private bool timerActive = true;
 
     private GameObject background; 
