@@ -74,6 +74,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool bananaCollision;
     public PowerProgressBar powerProgressBar;
     public GameObject powerProgressMask;
+    public GameObject ingredientList; 
+
 
     // Start is called before the first frame update
     void Start()
@@ -105,7 +107,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             else
             {
                 powerProgressBar.SetPowerValue(flyTime - (Time.time - flyStartTime), flyTime);
-                Debug.Log("Fly time: " + (flyTime - (Time.time - flyStartTime)));
+                //Debug.Log("Fly time: " + (flyTime - (Time.time - flyStartTime)));
                 if(flyTime - (Time.time - flyStartTime)<0)
                 {
                     powerProgressMask.SetActive(false);
@@ -232,7 +234,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             PlayerPickUpPlate();
         }
-        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient && !hasPlate)
+        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient && !hasPlate && !isHoldingIngredient)
         {
             PlayerPickUpIngredient(currentCollidedIngredient);
         }
@@ -623,11 +625,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
         if (hasPlate)
         {
             Debug.Log("Drop plate");
-            GameObject plate = this.gameObject.transform.GetChild(0).gameObject;
+            GameObject plate = this.gameObject.transform.GetChild(1).gameObject;
             Rigidbody2D rb = plate.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.simulated = true;
             hasPlate = false;
+            plate.transform.SetParent(null);
         } 
         else if (isHoldingIngredient)
         {
@@ -638,9 +641,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             rb.simulated = true;
             
             rb.constraints = RigidbodyConstraints2D.None;
+            currentlyHoldingIngredient.transform.parent.transform.SetParent(ingredientList.transform);
+
             isHoldingIngredient = false;
         }
-        this.gameObject.transform.DetachChildren();
+
+       
     }
 
     private void GrabPlateFromPlateStation()
@@ -707,8 +713,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
             wholeGameObject.transform.SetParent(stoveGameObject.transform);
-            wholeGameObject.transform.position = new Vector2(stoveGameObject.transform.position.x,
-                stoveGameObject.transform.position.y ); // move the item up a bit so it sits on the stove
+            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
+                wholeGameObject.transform.position.y + 5.0f); // move the item up a bit so it sits on the stove
             currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
             CookType cookType = ic.GetIngredientCookType();

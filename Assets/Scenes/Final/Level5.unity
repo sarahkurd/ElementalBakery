@@ -207,6 +207,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &25946515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1132511733569174010, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1805957745}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &34126353 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 756990902746354226, guid: e2bc573457fc366428df10ca21f93d05, type: 3}
@@ -1519,7 +1524,7 @@ PrefabInstance:
       objectReference: {fileID: 1016214190}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: levelNumber
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: analyticsManager
@@ -73033,6 +73038,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5330062755574800126, guid: f583bf665a55d410bb32a27ef4357618, type: 3}
   m_PrefabInstance: {fileID: 1528385359}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1534090165 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1132511733819588050, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1805957745}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1564432423
 GameObject:
   m_ObjectHideFlags: 0
@@ -74635,30 +74651,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: headerText
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timerText
       value: 
-      objectReference: {fileID: 111199103}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: rankingText
+      objectReference: {fileID: 1534090165}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: initialTime
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timeUpScreen
       value: 
-      objectReference: {fileID: 1988477503}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: totalTimeText
-      value: 
-      objectReference: {fileID: 536520581}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: PlayerRankingUiCanvas
-      value: 
-      objectReference: {fileID: 1743687671}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: incorrectPlatesDeliveredText
-      value: 
-      objectReference: {fileID: 1493119813}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: incorrectlyCookedIngredientsText
-      value: 
-      objectReference: {fileID: 1967262562}
+      objectReference: {fileID: 25946515}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
 --- !u!1001 &756990903540316215

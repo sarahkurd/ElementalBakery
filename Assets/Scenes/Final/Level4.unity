@@ -866,30 +866,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: headerText
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timerText
       value: 
-      objectReference: {fileID: 820422541}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: rankingText
+      objectReference: {fileID: 1425162061}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timeUpScreen
       value: 
-      objectReference: {fileID: 1669374623}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: totalTimeText
-      value: 
-      objectReference: {fileID: 373021370}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: PlayerRankingUiCanvas
-      value: 
-      objectReference: {fileID: 609733442}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: incorrectPlatesDeliveredText
-      value: 
-      objectReference: {fileID: 543233273}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: incorrectlyCookedIngredientsText
-      value: 
-      objectReference: {fileID: 947794849}
+      objectReference: {fileID: 1097106374}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
 --- !u!1 &419884461
@@ -22342,6 +22326,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1097106374 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1132511733569174010, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1772504823}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1146673575 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2583319075155053364, guid: aa611bbcc5a2449bbb5c679dc04034d1, type: 3}
@@ -22778,6 +22767,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a18fcd4f72c7a43eb9537940f03eedcd, type: 3}
+--- !u!114 &1425162061 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1132511733819588050, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1772504823}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1438751440 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3567070737113872544, guid: 260c0618c31a54803a59d6b16f98bbbf, type: 3}
@@ -23357,7 +23357,7 @@ PrefabInstance:
       objectReference: {fileID: 240728437}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: levelNumber
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: analyticsManager
@@ -23708,7 +23708,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2733152320817116845, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_text
-      value: Count Down
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2733152320817116845, guid: 7dc8fcb9235514324b52f685a4743ca0, type: 3}
       propertyPath: m_fontSize

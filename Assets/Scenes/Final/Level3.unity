@@ -415,14 +415,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -11.0872555
       objectReference: {fileID: 0}
-    - target: {fileID: 4814007078658885134, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4814007078658885134, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: cb38608c1848846dfa06711133795f6a, type: 3}
     - target: {fileID: 5915397426595038722, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Name
       value: UIButtonsCanvas
@@ -442,10 +434,6 @@ PrefabInstance:
     - target: {fileID: 6083365382180294853, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 187.7727
-      objectReference: {fileID: 0}
-    - target: {fileID: 7081025011683466907, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_text
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7333761353745960991, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_Pivot.x
@@ -530,22 +518,6 @@ PrefabInstance:
     - target: {fileID: 7333761353745960991, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 335
-      objectReference: {fileID: 0}
-    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 304.4166
-      objectReference: {fileID: 0}
-    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -791
-      objectReference: {fileID: 0}
-    - target: {fileID: 8777479952087976866, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 393
       objectReference: {fileID: 0}
     - target: {fileID: 9128394917701258766, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -828,6 +800,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519308030}
   m_CullTransparentMesh: 1
+--- !u!114 &548337353 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1132511733819588050, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 423868939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &587874042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1464,30 +1447,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 396582957}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: headerText
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timerText
       value: 
-      objectReference: {fileID: 1854337384}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: rankingText
+      objectReference: {fileID: 548337353}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timeUpScreen
       value: 
-      objectReference: {fileID: 884912467}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: totalTimeText
-      value: 
-      objectReference: {fileID: 470828992}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: PlayerRankingUiCanvas
-      value: 
-      objectReference: {fileID: 68420619}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: incorrectPlatesDeliveredText
-      value: 
-      objectReference: {fileID: 988048887}
-    - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
-      propertyPath: incorrectlyCookedIngredientsText
-      value: 
-      objectReference: {fileID: 1058527600}
+      objectReference: {fileID: 1832631135}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
 --- !u!1001 &878613860
@@ -56775,6 +56742,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715673345}
   m_CullTransparentMesh: 1
+--- !u!1 &1832631135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1132511733569174010, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 423868939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1848109158
 GameObject:
   m_ObjectHideFlags: 0
@@ -57102,7 +57074,7 @@ PrefabInstance:
       objectReference: {fileID: 343088000}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: levelNumber
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 110375741020296, guid: c62a5276ed2ff451895473fb46426d9f, type: 3}
       propertyPath: analyticsManager
