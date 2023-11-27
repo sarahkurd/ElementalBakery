@@ -75,6 +75,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
     public PowerProgressBar powerProgressBar;
     public GameObject powerProgressMask;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -105,7 +107,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             else
             {
                 powerProgressBar.SetPowerValue(flyTime - (Time.time - flyStartTime), flyTime);
-                Debug.Log("Fly time: " + (flyTime - (Time.time - flyStartTime)));
+                //Debug.Log("Fly time: " + (flyTime - (Time.time - flyStartTime)));
                 if(flyTime - (Time.time - flyStartTime)<0)
                 {
                     powerProgressMask.SetActive(false);
@@ -638,6 +640,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
             rb.simulated = true;
             
             rb.constraints = RigidbodyConstraints2D.None;
+            
+
             isHoldingIngredient = false;
         }
         this.gameObject.transform.DetachChildren();
@@ -707,8 +711,8 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
             wholeGameObject.transform.SetParent(stoveGameObject.transform);
-            wholeGameObject.transform.position = new Vector2(stoveGameObject.transform.position.x,
-                stoveGameObject.transform.position.y ); // move the item up a bit so it sits on the stove
+            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
+                wholeGameObject.transform.position.y + 5.0f); // move the item up a bit so it sits on the stove
             currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
             CookType cookType = ic.GetIngredientCookType();
