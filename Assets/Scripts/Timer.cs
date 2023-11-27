@@ -12,7 +12,7 @@ public class Timer : MonoBehaviour
    
     [SerializeField] private bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
-    public float initialTime = 90f;
+
     private float elapsedTime;
     private float timeUsed;
     private float initialTime;  // Set this to the starting time of your timer
@@ -41,7 +41,7 @@ public class Timer : MonoBehaviour
             initialTime = 90f; 
         }
         else if(levelManagerScript.levelNumber == 1){
-            initialTime = 30f;  //150f
+            initialTime = 150f;  //150f
         }
         else if(levelManagerScript.levelNumber == 2){
             initialTime = 360f; 
@@ -124,11 +124,11 @@ public class Timer : MonoBehaviour
         }
 
 
-
+        /*
         if (countdownTimer && elapsedTime <=20f){
             StartCoroutine(BlinkingBackground());
         }
-
+        */ 
 
 
     }
