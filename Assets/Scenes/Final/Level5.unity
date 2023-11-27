@@ -73033,6 +73033,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5330062755574800126, guid: f583bf665a55d410bb32a27ef4357618, type: 3}
   m_PrefabInstance: {fileID: 1528385359}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1534090165 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1132511733819588050, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1805957745}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1564432423
 GameObject:
   m_ObjectHideFlags: 0
@@ -74606,6 +74617,14 @@ PrefabInstance:
     - target: {fileID: 2690548061228903902, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timerText
+      value: 
+      objectReference: {fileID: 1534090165}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: initialTime
+      value: 120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
