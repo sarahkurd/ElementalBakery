@@ -12,9 +12,9 @@ public class Timer : MonoBehaviour
    
     [SerializeField] private bool countdownTimer = false; // Determine if timer is countdown or stopwatch
 
+    public float initialTime = 90f;
     private float elapsedTime;
     private float timeUsed;
-    private float initialTime = 90f; // Set this to the starting time of your timer
     private bool timerActive = true;
 
     void Start()
