@@ -43,7 +43,7 @@ public class Timer : MonoBehaviour
             initialTime = 210f;  //150f
         }
         else if(levelManagerScript.levelNumber == 2){
-            initialTime = 360f; 
+            initialTime = 240f; 
 
         }
         else if(levelManagerScript.levelNumber== 3){
@@ -124,9 +124,9 @@ public class Timer : MonoBehaviour
 
 
 
-        if (countdownTimer && elapsedTime <=20f){
-            StartCoroutine(BlinkingBackground());
-        }
+        //if (countdownTimer && elapsedTime <=20f){
+        //    StartCoroutine(BlinkingBackground());
+        //}
 
 
 
