@@ -72,6 +72,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private int currIcePlatforms=0;
     public GameObject[] powerVfx;
     private bool bananaCollision;
+    private bool knifeCollision;
     public PowerProgressBar powerProgressBar;
     public GameObject powerProgressMask;
     public GameObject ingredientList; 
@@ -269,10 +270,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             }
         }
 
-        if (bananaCollision)
+        if (bananaCollision || knifeCollision)
         {
             this.gameObject.transform.Rotate(0.0f, 0.0f, 1.0f, Space.World);
         }
+
+
     }
 
     private bool IsCommandKey()
@@ -417,6 +420,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             this.gameObject.transform.rotation = Quaternion.identity;
             bananaCollision = false;
         }
+
+        if ((isGround || isBreakableLayer) && knifeCollision)
+        {
+            this.gameObject.transform.rotation = Quaternion.identity;
+            knifeCollision = false;
+        }
         
         // move the player back in the x and y direction like they are slipping back
         if (other.gameObject.CompareTag("Banana"))
@@ -432,6 +441,22 @@ public class PlayerMovementDevelopment : MonoBehaviour
                 rb.AddForce(new Vector2(10.0f, 15.0f), ForceMode2D.Impulse);
             }
         }
+
+        if (other.gameObject.CompareTag("knife"))
+        {
+            Debug.Log("Knife collision");
+            knifeCollision = true;
+            if (isFacingRight)
+            {
+                rb.AddForce(new Vector2(-10.0f, 15.0f), ForceMode2D.Impulse);
+            }
+            else 
+            {
+                rb.AddForce(new Vector2(10.0f, 15.0f), ForceMode2D.Impulse);
+            }
+        }
+
+
         
         isJumping = false;
         returnToGroundAfterFlying = false;
