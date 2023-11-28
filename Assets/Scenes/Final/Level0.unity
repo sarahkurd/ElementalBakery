@@ -1978,6 +1978,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1239573931}
     - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: initialTime
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: timeUpScreen
       value: 
       objectReference: {fileID: 1239573932}
