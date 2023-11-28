@@ -27,6 +27,21 @@ public class FallCountCatch : MonoBehaviour
             countNumTimesFallen++; 
 
         }
+
+         if(other.gameObject.CompareTag("Ingredient")){
+
+            
+            Transform parentTransform = other.transform.parent;
+            IngredientController ingredientController = parentTransform.GetComponent<IngredientController>();
+
+           
+            other.transform.position = ingredientController.initialPosition;
+            
+
+            StartCoroutine(FallCoroutine()); 
+            countNumTimesFallen++; 
+
+        }
         
     }
 

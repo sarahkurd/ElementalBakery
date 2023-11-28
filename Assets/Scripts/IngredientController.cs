@@ -22,7 +22,7 @@ public class IngredientController : MonoBehaviour
     private GameObject progressBarUiCanvas;
 
     public bool isIngredientBurned;
-    private Vector3 initialPosition; 
+    public Vector3 initialPosition; 
     
     // Start is called before the first frame update
     void Start()
@@ -40,6 +40,7 @@ public class IngredientController : MonoBehaviour
         progressBarScript = progressBarUiCanvas.transform.GetChild(0).gameObject.GetComponent<ProgressBar>();
         progressBarScript.SetTimer(ingredient.timeToCook);
         //Debug.Log(ingredient.name);
+
     }
 
     // Update is called once per frame

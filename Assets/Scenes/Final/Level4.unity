@@ -33282,7 +33282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &609733443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35836,7 +35836,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 10
-      m_TileSpriteIndex: 10
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -35897,12 +35897,12 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 884926425, guid: 810bd44e2622441179334a8ba257a068, type: 3}
-  - m_RefCount: 2
-    m_Data: {fileID: -458742703, guid: 810bd44e2622441179334a8ba257a068, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 2
+    m_Data: {fileID: -458742703, guid: 810bd44e2622441179334a8ba257a068, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 884926425, guid: 810bd44e2622441179334a8ba257a068, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: -777394786, guid: 810bd44e2622441179334a8ba257a068, type: 3}
   - m_RefCount: 4

@@ -28,10 +28,10 @@ public class LevelCompletion : MonoBehaviour
 
     public void OnLevelComplete()
     {
-        Debug.Log("Level complete. Stopping timer and showing rank.");
+        //Debug.Log("Level complete. Stopping timer and showing rank.");
         gameTimer.StopTimer();
         playerRanking.DisplayRank();
-        Debug.Log("Starting coroutine to wait 3 seconds before loading the next scene.");
+        //Debug.Log("Starting coroutine to wait 3 seconds before loading the next scene.");
         StartCoroutine(WaitAndLoadNextScene());
     }
 
