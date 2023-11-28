@@ -26,13 +26,14 @@ public class Timer : MonoBehaviour
     private Color originalColor;
 
     private float initialTime;
+    private int levelNumber; 
 
     void Start()
     {   levelManager = GameObject.FindWithTag("LevelManager"); 
         LevelManager levelManagerScript = levelManager.GetComponent<LevelManager>();
         background = GameObject.FindWithTag("background");
 
-        int levelNumber = levelManagerScript.levelNumber;
+        levelNumber = levelManagerScript.levelNumber;
 
         if(levelManagerScript.levelNumber< 0){
         // Implies these are tutorial levels. 
@@ -80,7 +81,7 @@ public class Timer : MonoBehaviour
         // Add a Debug statement to log every frame
         // Debug.Log("Timer Update: elapsedTime = " + elapsedTime + ", timeUsed = " + timeUsed);
 
-        if (countdownTimer)
+        if (countdownTimer &&  levelNumber > 0)
         {
             if (elapsedTime <= 0)
             {
@@ -110,16 +111,11 @@ public class Timer : MonoBehaviour
 
 
         }
-        else
-        {
-            elapsedTime += Time.deltaTime;
-            // In a stopwatch scenario, time used is just the elapsed time
-            timeUsed = elapsedTime;
-        }
+        
 
         
         // Ensure the timer display is updated only when timerText is not null.
-        if (timerText != null)
+        if (timerText != null && levelNumber > 0)
         {
             UpdateTimerDisplay(elapsedTime);
         }

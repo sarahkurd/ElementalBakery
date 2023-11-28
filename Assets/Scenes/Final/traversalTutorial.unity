@@ -2151,6 +2151,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 443945808}
   m_CullTransparentMesh: 1
+--- !u!114 &446291336 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1132511733819588050, guid: 64c87ce115e93468bbae10ff03e75de4, type: 3}
+  m_PrefabInstance: {fileID: 1588740709}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &481530944 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4373081003950335471, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
@@ -29421,6 +29432,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timerText
+      value: 
+      objectReference: {fileID: 446291336}
+    - target: {fileID: 3796357347991692534, guid: 03d81162b195341cda024506e035db24, type: 3}
+      propertyPath: timeUpScreen
+      value: 
+      objectReference: {fileID: 1588740711}
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: headerText
       value: 
