@@ -3556,7 +3556,7 @@ PrefabInstance:
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: totalTimeText
       value: 
-      objectReference: {fileID: 470828992}
+      objectReference: {fileID: 1478365968}
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: PlayerRankingUiCanvas
       value: 
@@ -3564,11 +3564,11 @@ PrefabInstance:
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: incorrectPlatesDeliveredText
       value: 
-      objectReference: {fileID: 988048887}
+      objectReference: {fileID: 771765415}
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: incorrectlyCookedIngredientsText
       value: 
-      objectReference: {fileID: 1058527600}
+      objectReference: {fileID: 1099711761}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
 --- !u!4 &1394143990 stripped

@@ -893,7 +893,7 @@ PrefabInstance:
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: totalTimeText
       value: 
-      objectReference: {fileID: 373021370}
+      objectReference: {fileID: 828933336}
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: PlayerRankingUiCanvas
       value: 
@@ -901,11 +901,11 @@ PrefabInstance:
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: incorrectPlatesDeliveredText
       value: 
-      objectReference: {fileID: 543233273}
+      objectReference: {fileID: 170163649}
     - target: {fileID: 5079291309965148163, guid: 03d81162b195341cda024506e035db24, type: 3}
       propertyPath: incorrectlyCookedIngredientsText
       value: 
-      objectReference: {fileID: 947794849}
+      objectReference: {fileID: 419884463}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d81162b195341cda024506e035db24, type: 3}
 --- !u!1 &419884461
@@ -21274,7 +21274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &609733443
 MonoBehaviour:
   m_ObjectHideFlags: 0
