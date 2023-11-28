@@ -18,6 +18,7 @@ TagManager:
   - playerCatcher
   - Banana
   - background
+  - knife
   layers:
   - Default
   - TransparentFX

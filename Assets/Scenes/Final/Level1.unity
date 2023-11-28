@@ -321,6 +321,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knife (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4496049550405582126, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
+      propertyPath: m_TagString
+      value: knife
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
 --- !u!4 &200821855 stripped
@@ -663,6 +667,10 @@ PrefabInstance:
     - target: {fileID: 4496049550405582126, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
       propertyPath: m_Name
       value: Knife (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496049550405582126, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
+      propertyPath: m_TagString
+      value: knife
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
@@ -4491,6 +4499,10 @@ PrefabInstance:
     - target: {fileID: 4496049550405582126, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
       propertyPath: m_Name
       value: Knife (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496049550405582126, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
+      propertyPath: m_TagString
+      value: knife
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fc2477a792a94856bab0aaa8607b9fb, type: 3}
