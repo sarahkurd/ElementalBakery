@@ -37,7 +37,7 @@ public class Timer : MonoBehaviour
             initialTime = 300f; 
         }
         else if(levelManagerScript.levelNumber == 0){
-            initialTime = 90f; 
+            initialTime = 150f; 
         }
         else if(levelManagerScript.levelNumber == 1){
             initialTime = 210f;  //150f
