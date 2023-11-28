@@ -465,15 +465,6 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Customer") && hasPlate)
-        {
-            Debug.Log("OnTrigger with customer");
-            if (levelManager.CheckIfLevelComplete())
-            {    
-                OnLevelCompletion();
-            }
-        }
-        
         // mark that player collided with ingredient
         if (other.gameObject.CompareTag("Ingredient"))
         {
@@ -504,7 +495,14 @@ public class PlayerMovementDevelopment : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {   
-        
+        if (other.gameObject.CompareTag("Customer") && hasPlate)
+        {
+            Debug.Log("OnTrigger Enter with customer");
+            if (levelManager.CheckIfLevelComplete())
+            {    
+                OnLevelCompletion();
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
