@@ -40,17 +40,17 @@ public class Timer : MonoBehaviour
             initialTime = 300f; 
         }
         else if(levelManagerScript.levelNumber == 0){
-            initialTime = 90f; 
+            initialTime = 150f; 
         }
         else if(levelManagerScript.levelNumber == 1){
             initialTime = 210f;  //150f
         }
         else if(levelManagerScript.levelNumber == 2){
-            initialTime = 360f; 
+            initialTime = 240f; 
 
         }
         else if(levelManagerScript.levelNumber== 3){
-            initialTime = 360f; 
+            initialTime = 210f; 
         }
         else if(levelManagerScript.levelNumber== 4){
             initialTime = 360f; 
@@ -126,6 +126,11 @@ public class Timer : MonoBehaviour
             StartCoroutine(BlinkingBackground());
         }
         */ 
+
+        //if (countdownTimer && elapsedTime <=20f){
+        //    StartCoroutine(BlinkingBackground());
+        //}
+
 
 
     }

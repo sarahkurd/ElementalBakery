@@ -30,10 +30,10 @@ public class LevelManager : MonoBehaviour
     public bool tookToLong = false;
     
     //variables for ranking player performance 
-    private float masterTimeThreshold = 60.0f; 
-    private float greatChefTimeThreshold = 90.0f; 
-    private float noviceChefTimeThreshold = 150.0f;
-    private float unrankedChefTimeThreshold = 180.0f;
+    private float masterTimeThreshold = 80.0f; 
+    private float greatChefTimeThreshold = 120.0f; 
+    private float noviceChefTimeThreshold = 200.0f;
+    private float unrankedChefTimeThreshold = 240.0f;
 
     private const int MaxScore = 100;
     private int playerScore = MaxScore; // reduce this score as they make mistakes or if they take too long
@@ -64,18 +64,10 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
         if (isLevelComplete){
-            if (tookToLong)
-            {
-                PlayerRankingController.SetYouTookToLong();
-            }
-            else
-            {
-                UpdateLevelTimer(); 
-                CalculatePlayerRank(); 
-                CallAnalyticsManager();
-            }
+            UpdateLevelTimer(); 
+            CalculatePlayerRank(); 
+            CallAnalyticsManager();
             isLevelComplete = false;
-            tookToLong = false;
         }
         
         if (playerCollected.Count == 1 && !firstIngredientTimeCalculated){ 
@@ -83,11 +75,9 @@ public class LevelManager : MonoBehaviour
             firstIngredientTimeCalculated = true;
         }
 
-        //Debug.Log(countFallenScript.countNumTimesFallen); 
     }
 
     // should be called when player puts an ingredient on the plate
-    
     public void PlateIngredient(string ingredientName, IngredientCookingState state)
     {
         playerCollected.Add(ingredientName, state);
@@ -114,7 +104,7 @@ public class LevelManager : MonoBehaviour
                 if (item.Value != IngredientCookingState.COMPLETE)
                 {
                     Debug.Log("incorrect state: " + item.Value);
-                    DecreasePlayerScore(20);
+                    DecreasePlayerScore(25);
                     incorrectIngredientStateCount++;
                 }
                 // whether the item is cooked/burned/uncooked, we still count it but if the
@@ -134,7 +124,7 @@ public class LevelManager : MonoBehaviour
             else
             {
                 Debug.Log("incorrect ingredient collected");
-                DecreasePlayerScore(25);
+                DecreasePlayerScore(50);
                 incorrectIngredientCollectedCount++;
             }
         }
@@ -163,7 +153,6 @@ public class LevelManager : MonoBehaviour
         if (playerScore != 0)
         {
             playerScore -= decrease;
-
         }
     }
 
@@ -199,43 +188,41 @@ public class LevelManager : MonoBehaviour
     private void CalculatePlayerRank(){
         //One player per level 
         if(timeToFinishLevel <= masterTimeThreshold){
+            Debug.Log("less than Master threshold");
             DecreasePlayerScore(0);
         }
         else if(timeToFinishLevel > masterTimeThreshold && timeToFinishLevel <= greatChefTimeThreshold){
+            Debug.Log("less than great threshold");
             DecreasePlayerScore(20);
         }
         else if (timeToFinishLevel > greatChefTimeThreshold && timeToFinishLevel <= noviceChefTimeThreshold){
+            Debug.Log("less than novice threshold");
             DecreasePlayerScore(25);
         } else if (timeToFinishLevel > noviceChefTimeThreshold && timeToFinishLevel <= unrankedChefTimeThreshold)
         {
+            Debug.Log("less than unranked threshold");
             DecreasePlayerScore(30);
+        }
+        
+        Debug.Log("Player Score: " + playerScore);
+        if (playerScore >= 80)
+        {
+            playerRank = PlayerRank.Master;
+        }
+        else if (playerScore >= 60)
+        {
+            playerRank = PlayerRank.Great;
+        }
+        else if (playerScore >= 40)
+        {
+            playerRank = PlayerRank.Novice;
         }
         else
         {
-            tookToLong = true;
+            playerRank = PlayerRank.Unranked;
         }
-
-        if (!tookToLong)
-        {
-            if (playerScore >= 80)
-            {
-                playerRank = PlayerRank.Master;
-            }
-            else if (playerScore >= 60)
-            {
-                playerRank = PlayerRank.Great;
-            }
-            else if (playerScore >= 40)
-            {
-                playerRank = PlayerRank.Novice;
-            }
-            else
-            {
-                playerRank = PlayerRank.Unranked;
-            }
-            
-            PlayerRankingController.SetRankingText(playerRank);
-        }
+        
+        PlayerRankingController.SetRankingText(playerRank);
         PlayerRankingController.SetHeaderText(playerRank);
         PlayerRankingController.SetIncorrectIngredientsText(incorrectIngredientStateCount);
         PlayerRankingController.SetIncorrectPlatesDelivered(incorrectOrderCount);
