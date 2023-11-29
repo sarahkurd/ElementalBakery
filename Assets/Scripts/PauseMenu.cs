@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     public void Pause()
     {
+        Debug.Log("pause button is pressed");
         pauseMenu.SetActive(true);
         Time.timeScale = 0;//when the pause button is clicked
     }
