@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 public enum PlayerPowerState
 {
-    FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, NEUTRAL
+    FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, ELECTRIC_ACTIVE
 }
 
 public class PlayerMovementDevelopment : MonoBehaviour
@@ -43,7 +43,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private List<Sprite> spriteOrder;
     private bool isJumping = false;
     private bool isFacingRight = true;
-    private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
+    public PlayerPowerState currentPlayerState = PlayerPowerState.ELECTRIC_ACTIVE;
 
     public GameObject collectAnalyticsObject;
 
@@ -75,7 +75,9 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private bool knifeCollision;
     public PowerProgressBar powerProgressBar;
     public GameObject powerProgressMask;
-    public GameObject ingredientList; 
+    public GameObject ingredientList;
+    public float bananaDetectionRadius = 2.0f;
+    public GameObject radiusVisualization;
 
 
     // Start is called before the first frame update
@@ -88,10 +90,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
         playerRanking = GetComponent<PlayerRanking>();
         levelCompletion = GetComponent<LevelCompletion>();
         levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
-        
+        radiusVisualization.SetActive(false);
         //starting the timer for the level 
         //levelZeroStartTime = Time.time; 
-       
+
         //timing = true;
     }
 
@@ -118,6 +120,10 @@ public class PlayerMovementDevelopment : MonoBehaviour
         else
         {
             powerProgressMask.SetActive(false);
+        }
+        if (currentPlayerState == PlayerPowerState.ELECTRIC_ACTIVE)
+        {
+            FaintNearbyBananas();
         }
         // horizontal mechanics
         float horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -180,7 +186,12 @@ public class PlayerMovementDevelopment : MonoBehaviour
             GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
             Destroy(steam, 2f);
         }
-        
+        //else if (currentPlayerState == PlayerPowerState.NEUTRAL && IsCommandKey())
+        //{
+        //    GameObject steam = Instantiate(powerVfx[3], transform.position, Quaternion.identity);
+        //    Destroy(dirt, 2f);
+        //}
+
         // logic for breakable grounds
         if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && IsCommandKey())
         {
@@ -301,7 +312,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
         {
             switch (currentPlayerState)
             {
-                case PlayerPowerState.NEUTRAL:
+                case PlayerPowerState.ELECTRIC_ACTIVE:
                     if (isFacingRight)
                     {
                         animator.SetBool("isFireActive", true);
@@ -336,7 +347,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireRight", false);
                         animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.NEUTRAL;
+                        currentPlayerState = PlayerPowerState.ELECTRIC_ACTIVE;
                         break; 
                     }
                 case PlayerPowerState.WATER_ACTIVE:
@@ -365,7 +376,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
                         animator.SetBool("isFireActive", false);
                         animator.SetBool("isFireLeft", false);
                         animator.SetBool("isFireTop", false);
-                        currentPlayerState = PlayerPowerState.NEUTRAL;
+                        currentPlayerState = PlayerPowerState.ELECTRIC_ACTIVE;
                         break;
                     }
                     else
@@ -379,6 +390,45 @@ public class PlayerMovementDevelopment : MonoBehaviour
                     }
             }
         }
+    }
+
+    // Coroutine to disable and then re-enable the evil banana movement
+    private IEnumerator DisableBananaMovement(GameObject banana)
+    {
+        BananaController bananaController = banana.GetComponent<BananaController>();
+        if (bananaController != null)
+        {
+            bananaController.enabled = false;
+            yield return new WaitForSeconds(2); // Wait for 2 seconds
+            bananaController.enabled = true;
+        }
+    }
+
+    // Method to weak nearby bananas
+    private void FaintNearbyBananas()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // Show the radius visualization
+            radiusVisualization.SetActive(true);
+
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, bananaDetectionRadius);
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.gameObject.CompareTag("Banana"))
+                {
+                    // Start the coroutine to disable and re-enable the evil banana movement
+                    StartCoroutine(DisableBananaMovement(hitCollider.gameObject));
+                }
+            }
+
+            Invoke("HideRadiusVisualization", 1.0f); // Hide after 1 second
+        }
+    }
+
+    private void HideRadiusVisualization()
+    {
+        radiusVisualization.SetActive(false);
     }
 
     private bool IsGrounded()
@@ -578,6 +628,7 @@ public class PlayerMovementDevelopment : MonoBehaviour
             float scaleDirection = isFacingRight ? 1f : -1f;
             Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.0f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
+
             currIcePlatforms++;
             StartCoroutine(ScaleEffectX(effect, 10f, scaleDirection));            
             StartCoroutine(DestroyPrefabAfterDelay(effect, 7f)); // Destroy after 5 seconds

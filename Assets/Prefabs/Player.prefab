@@ -165,6 +165,11 @@ MonoBehaviour:
   - {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
   - {fileID: 1763180707548296989, guid: d35b80c750946f142a778ec4d4ed5516, type: 3}
   - {fileID: 4729546934675383613, guid: a540ec1f15200634499ce708844f28bb, type: 3}
+  powerProgressBar: {fileID: 0}
+  powerProgressMask: {fileID: 0}
+  ingredientList: {fileID: 0}
+  bananaDetectionRadius: 2
+  radiusVisualization: {fileID: 0}
 --- !u!95 &6867408002736625533
 Animator:
   serializedVersion: 5
@@ -211,7 +216,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerRankingUiCanvas: {fileID: 0}
-  IncorrectOrderCanvas: {fileID: 0}
   totalTimeText: {fileID: 0}
   headerText: {fileID: 0}
   incorrectlyCookedIngredientsText: {fileID: 0}
@@ -232,3 +236,5 @@ MonoBehaviour:
   timerText: {fileID: 0}
   timeUpScreen: {fileID: 0}
   countdownTimer: 1
+  blinkSpeed: 1
+  blinkColor: {r: 0, g: 0, b: 0, a: 0}
