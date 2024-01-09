@@ -8,6 +8,17 @@ TagManager:
   - ProgressBar
   - Customer
   - meat
+  - Plates
+  - plate
+  - IngredientList
+  - LevelManager
+  - Stove
+  - Sink
+  - Ground
+  - playerCatcher
+  - Banana
+  - background
+  - knife
   layers:
   - Default
   - TransparentFX
@@ -17,7 +28,7 @@ TagManager:
   - UI
   - Ground
   - Breakable
-  - 
+  - Halo
   - 
   - 
   - 
@@ -44,4 +55,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ingredients
+    uniqueID: 3979794679
+    locked: 0
+  - name: Chef
+    uniqueID: 3720146521
     locked: 0

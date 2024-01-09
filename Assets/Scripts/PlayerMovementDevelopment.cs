@@ -2,13 +2,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using System.Numerics;
 using DefaultNamespace;
+using models;
 using UnityEngine.SceneManagement;
-using UnityEngine.Analytics; 
+using UnityEngine.Analytics;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
+using UnityEngine.UI;
 
-enum PlayerPowerState
+public enum PlayerPowerState
 {
-    FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, NEUTRAL
+    FIRE_ACTIVE, WATER_ACTIVE, AIR_ACTIVE, ELECTRIC_ACTIVE
 }
 
 public class PlayerMovementDevelopment : MonoBehaviour
@@ -19,36 +25,60 @@ public class PlayerMovementDevelopment : MonoBehaviour
     private Animator animator;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private LayerMask breakableGround;
+    public Sprite plateSprite;
     
     private float jumpForce = 15f;
     private float moveSpeed = 10f;
     private bool isOnIngredient = false;
-    public GameObject uiObjectToShow;
-    private int breakableGroundJumpCount = 0;
-    private bool isOnBreakableGround = false;
+    private GameObject currentCollidedIngredient;
+    private bool isHoldingIngredient = false;
+    private GameObject currentlyHoldingIngredient;
+    
+    //private int breakableGroundJumpCount = 0;
     private GameObject halfBrokenGround;
+    private GameObject breakableLayer;
+    private bool isBreakableLayer;
 
     private bool isFirstIngredientCollected = false; 
     private List<Sprite> spriteOrder;
-    private float timer = 0f;
     private bool isJumping = false;
-    private const int MAX_JUMPS = 1;
-    private int jumpsLeft = MAX_JUMPS;
     private bool isFacingRight = true;
-    private float airForce = 20f;
-    private PlayerPowerState currentPlayerState = PlayerPowerState.NEUTRAL;
+    public PlayerPowerState currentPlayerState = PlayerPowerState.ELECTRIC_ACTIVE;
 
-    public GameObject collectAnalyticsObject; 
-    
+    public GameObject collectAnalyticsObject;
 
     // Parameters for tracking the time for level 0 
     public float timeToGetIngredient; 
     private float levelZeroStartTime; 
-    private bool timing = false; 
+    //private bool timing = false; 
     private bool activate;
     public GameObject tree, ice;
     private PlayerRanking playerRanking;
     private LevelCompletion levelCompletion;
+    private bool isAtPlateStation = false;
+    private bool hasPlate = false;
+    private LevelManager levelManager;
+    private bool isCollidedWithPlate;
+    private GameObject currentCollidedPlate;
+    private float flyTime = 1.0f;
+    private float flyStartTime;
+    private bool returnToGroundAfterFlying = false;
+    private bool isAirJump = false;
+    private float airForceUp = 45.0f;
+    private bool isApplyingPowerToCook = false;
+    private bool isAtStove;
+    private bool isAtSink;
+    private int maxIcePlatforms=2;
+    private int currIcePlatforms=0;
+    public GameObject[] powerVfx;
+    private bool bananaCollision;
+    private bool knifeCollision;
+    public PowerProgressBar powerProgressBar;
+    public GameObject powerProgressMask;
+    public GameObject ingredientList;
+    public float bananaDetectionRadius = 2.0f;
+    public GameObject radiusVisualization;
+
 
     // Start is called before the first frame update
     void Start()
@@ -56,39 +86,59 @@ public class PlayerMovementDevelopment : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
-        //spriteOrder = new List<Sprite>() { powerRight, powerBottom, powerLeft, powerTop };
-        halfBrokenGround = GameObject.Find("Half-Broken");
-        halfBrokenGround.SetActive(false);
 
         playerRanking = GetComponent<PlayerRanking>();
         levelCompletion = GetComponent<LevelCompletion>();
-
+        levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
+        radiusVisualization.SetActive(false);
         //starting the timer for the level 
-        levelZeroStartTime = Time.time; 
-       
-        timing = true;
+        //levelZeroStartTime = Time.time; 
+
+        //timing = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool currentlyGrounded = IsGrounded();
-        // horizontal mechanics
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (isJumping) // slow down horizontal movement wheN player is in the air
+        if(currentPlayerState == PlayerPowerState.WATER_ACTIVE || currentPlayerState == PlayerPowerState.AIR_ACTIVE)
         {
-            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
-
+            powerProgressMask.SetActive(true);
+            if(currentPlayerState == PlayerPowerState.WATER_ACTIVE)
+            {
+                powerProgressBar.SetPowerValue(maxIcePlatforms - currIcePlatforms, maxIcePlatforms);
+            }
+            else
+            {
+                powerProgressBar.SetPowerValue(flyTime - (Time.time - flyStartTime), flyTime);
+                //Debug.Log("Fly time: " + (flyTime - (Time.time - flyStartTime)));
+                if(flyTime - (Time.time - flyStartTime)<0)
+                {
+                    powerProgressMask.SetActive(false);
+                }
+            }
         }
         else
         {
-            transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+            powerProgressMask.SetActive(false);
         }
-        
-        // vertical jump mechanics
-        if (CanJump())
+        if (currentPlayerState == PlayerPowerState.ELECTRIC_ACTIVE)
         {
-            Jump();
+            FaintNearbyBananas();
+        }
+        // horizontal mechanics
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        if (!isAirJump)
+        {
+            if (isJumping) // slow down horizontal movement wheN player is in the air
+            {
+                transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed/1.3f * Time.deltaTime;
+
+            }
+            else
+            {
+                transform.position += new Vector3(horizontalInput, 0, 0) * moveSpeed * Time.deltaTime;
+            }  
         }
 
         // animations for moving left/right and jumping
@@ -111,198 +161,274 @@ public class PlayerMovementDevelopment : MonoBehaviour
             animator.SetBool("isMovingLeft", false);
             animator.SetBool("isIdle", true);
         }
+        
+        // vertical jump mechanics
+        if (CanJump())
+        {
+            Jump();
+        }
 
         // rotate player mechanics
         SetCurrentSpriteOnRotation();
 
-        if (timing){
-            float elapsedTime = Time.time - levelZeroStartTime; 
+        if(currentPlayerState == PlayerPowerState.FIRE_ACTIVE && IsCommandKey())
+        {
+            GameObject fire = Instantiate(powerVfx[0], transform.position, Quaternion.identity);
+            Destroy(fire, 2f);
+        }
+        else if(currentPlayerState == PlayerPowerState.WATER_ACTIVE && IsCommandKey())
+        {
+            GameObject mist = Instantiate(powerVfx[1], transform.position, Quaternion.identity);
+            Destroy(mist, 2f);
+        }
+        else if(currentPlayerState == PlayerPowerState.AIR_ACTIVE && IsCommandKey())
+        {
+            GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
+            Destroy(steam, 2f);
+        }
+        //else if (currentPlayerState == PlayerPowerState.NEUTRAL && IsCommandKey())
+        //{
+        //    GameObject steam = Instantiate(powerVfx[3], transform.position, Quaternion.identity);
+        //    Destroy(dirt, 2f);
+        //}
+
+        // logic for breakable grounds
+        if (isBreakableLayer && IsGrounded() && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && IsCommandKey())
+        {
+            Destroy(breakableLayer);
+        }
+        
+
+        // Use S to cook ingredients when you collide with them
+        if (IsCommandKey() && isOnIngredient)
+        {
+            IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
+            if (ic.CanApplyPower(currentPlayerState)) // need to collide with correct power enabled
+            {
+                isApplyingPowerToCook = true;
+                if(isFirstIngredientCollected == false) {
+                    //timeToGetIngredient =  Time.time - levelZeroStartTime; 
+                    isFirstIngredientCollected = true; 
+                }
+
+                if (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING)
+                {
+                    //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
+                    ic.EnableProgressBar();
+                }
+            }
+        } 
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isAtStove)
+        {
+            PlaceItemOnStove();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isAtSink)
+        {
+            PlaceItemOnSink();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isAtStove)
+        {
+            PickUpItemFromStove();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isAtSink)
+        {
+            PickUpItemFromSink();
+        }
+        // logic for pick up an ingredient or plate or drop items
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient && isCollidedWithPlate)
+        {
+            PutIngredientOnPlate();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isHoldingIngredient) // logic for drop ingredient
+        {
+            PlayerDropIngredientOrPlate();
+        } else if (Input.GetKeyDown(KeyCode.Return) && isCollidedWithPlate)
+        {
+            PlayerPickUpPlate();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && isOnIngredient && !hasPlate && !isHoldingIngredient)
+        {
+            PlayerPickUpIngredient(currentCollidedIngredient);
+        }
+        // logic for grabbing plate from plate station and placing plate on floor
+        else if (Input.GetKeyDown(KeyCode.Return) && isAtPlateStation)
+        {
+            if (!isHoldingIngredient && !hasPlate)
+            {
+                GrabPlateFromPlateStation();
+            }
+        } 
+        else if (Input.GetKeyDown(KeyCode.Return) && hasPlate)
+        {
+            PlayerDropIngredientOrPlate();
+        }
+        
+        // logic for air and water power activation
+        if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && !isApplyingPowerToCook)
+        {
+            if(IsCommandKey())
+            {
+                GameObject steam = Instantiate(powerVfx[2], transform.position, Quaternion.identity);
+                Destroy(steam, 2f);
+            }
+            OnLandedAir();
+        }
+        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded() && !isApplyingPowerToCook)
+        {
+            if(Input.GetKeyDown(KeyCode.E) && currIcePlatforms < maxIcePlatforms )
+            {
+                OnLandedIce();
+            }
         }
 
+        if (bananaCollision || knifeCollision)
+        {
+            this.gameObject.transform.Rotate(0.0f, 0.0f, 1.0f, Space.World);
+        }
+
+
+    }
+
+    private bool IsCommandKey()
+    {   return Input.GetKey(KeyCode.E); 
+        //return Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand);
     }
 
     private bool CanJump()
     {
-        return Input.GetKeyDown(KeyCode.W) && IsGrounded();
+        return (Input.GetKeyDown(KeyCode.Space) ||Input.GetKeyDown(KeyCode.W))  && IsGrounded();
     }
 
     void Jump()
     {
         isJumping = true;
-        //animator.SetBool("isIdle", true);
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
     }
 
     private void SetCurrentSpriteOnRotation()
-    {   
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+    {
+        // rotate powers clockwise on space bar press
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            switch (currentPlayerState)
             {
-                switch (currentPlayerState)
+                case PlayerPowerState.ELECTRIC_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireActive", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                        break;
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", true);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                        break;
+                    }
+                case PlayerPowerState.FIRE_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireLeft", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                        break; 
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireLeft", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.ELECTRIC_ACTIVE;
+                        break; 
+                    }
+                case PlayerPowerState.WATER_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireTop", true);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.AIR_ACTIVE;
+                        break;
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireTop", false);
+                        animator.SetBool("isFireRight", false);
+                        animator.SetBool("isFireActive", true);
+                        animator.SetBool("isFireLeft", false);
+                        currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
+                        break;
+                    }
+                case PlayerPowerState.AIR_ACTIVE:
+                    if (isFacingRight)
+                    {
+                        animator.SetBool("isFireRight", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.ELECTRIC_ACTIVE;
+                        break;
+                    }
+                    else
+                    {
+                        animator.SetBool("isFireRight", true);
+                        animator.SetBool("isFireActive", false);
+                        animator.SetBool("isFireLeft", false);
+                        animator.SetBool("isFireTop", false);
+                        currentPlayerState = PlayerPowerState.WATER_ACTIVE;
+                        break;
+                    }
+            }
+        }
+    }
+
+    // Coroutine to disable and then re-enable the evil banana movement
+    private IEnumerator DisableBananaMovement(GameObject banana)
+    {
+        BananaController bananaController = banana.GetComponent<BananaController>();
+        if (bananaController != null)
+        {
+            bananaController.enabled = false;
+            yield return new WaitForSeconds(2); // Wait for 2 seconds
+            bananaController.enabled = true;
+        }
+    }
+
+    // Method to weak nearby bananas
+    private void FaintNearbyBananas()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // Show the radius visualization
+            radiusVisualization.SetActive(true);
+
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, bananaDetectionRadius);
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.gameObject.CompareTag("Banana"))
                 {
-                    case PlayerPowerState.NEUTRAL:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break; 
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                    case PlayerPowerState.FIRE_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break;
-                        }
-                        
-                    case PlayerPowerState.WATER_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break;
-                        }
-                    
-                    case PlayerPowerState.AIR_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break;
-                        }
-                    
+                    // Start the coroutine to disable and re-enable the evil banana movement
+                    StartCoroutine(DisableBananaMovement(hitCollider.gameObject));
                 }
             }
-            
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                switch (currentPlayerState)
-                {
-                    case PlayerPowerState.NEUTRAL:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break;
-                        }
-                    case PlayerPowerState.FIRE_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break; 
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireLeft", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break; 
-                        }
-                    case PlayerPowerState.WATER_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireTop", true);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.AIR_ACTIVE;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireTop", false);
-                            animator.SetBool("isFireRight", false);
-                            animator.SetBool("isFireActive", true);
-                            animator.SetBool("isFireLeft", false);
-                            currentPlayerState = PlayerPowerState.FIRE_ACTIVE;
-                            break;
-                        }
-                    case PlayerPowerState.AIR_ACTIVE:
-                        if (isFacingRight)
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.NEUTRAL;
-                            break;
-                        }
-                        else
-                        {
-                            animator.SetBool("isFireRight", true);
-                            animator.SetBool("isFireActive", false);
-                            animator.SetBool("isFireLeft", false);
-                            animator.SetBool("isFireTop", false);
-                            currentPlayerState = PlayerPowerState.WATER_ACTIVE;
-                            break;
-                        }
-                }
-            }
+
+            Invoke("HideRadiusVisualization", 1.0f); // Hide after 1 second
+        }
+    }
+
+    private void HideRadiusVisualization()
+    {
+        radiusVisualization.SetActive(false);
     }
 
     private bool IsGrounded()
@@ -324,112 +450,139 @@ public class PlayerMovementDevelopment : MonoBehaviour
                );
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         // Logic to break the breakable ground with fire side 
-        bool isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
-        if (isBreakableLayer && isJumping && currentPlayerState == PlayerPowerState.FIRE_ACTIVE && Input.GetKey(KeyCode.S))
+        isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
+        if (isBreakableLayer)
         {
-            breakableGroundJumpCount++;
-            isOnBreakableGround = true;
-            if (breakableGroundJumpCount == 1)
-            {
-                if (halfBrokenGround.activeSelf)
-                {
-                    Destroy(halfBrokenGround);
-                }
-                else
-                {
-                    // update the layer to show a half broken ground
-                    Destroy(other.gameObject);
-                    halfBrokenGround.SetActive(true);
-                    breakableGroundJumpCount = 0; 
-                }
-            }
+            breakableLayer = other.gameObject;
         }
-        else
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        isBreakableLayer = other.gameObject.layer == LayerMask.NameToLayer("Breakable");
+        bool isGround = other.gameObject.layer == LayerMask.NameToLayer("Ground");
+
+        if ((isGround || isBreakableLayer) && bananaCollision)
         {
-            isOnBreakableGround = false;
-            breakableGroundJumpCount = 0;
+            this.gameObject.transform.rotation = Quaternion.identity;
+            bananaCollision = false;
         }
 
-        //destroying the ingredient 
+        if ((isGround || isBreakableLayer) && knifeCollision)
+        {
+            this.gameObject.transform.rotation = Quaternion.identity;
+            knifeCollision = false;
+        }
+        
+        // move the player back in the x and y direction like they are slipping back
+        if (other.gameObject.CompareTag("Banana"))
+        {
+            Debug.Log("Banana collision");
+            bananaCollision = true;
+            if (isFacingRight)
+            {
+                rb.AddForce(new Vector2(-10.0f, 15.0f), ForceMode2D.Impulse);
+            }
+            else 
+            {
+                rb.AddForce(new Vector2(10.0f, 15.0f), ForceMode2D.Impulse);
+            }
+        }
+
+        if (other.gameObject.CompareTag("knife"))
+        {
+            Debug.Log("Knife collision");
+            knifeCollision = true;
+            if (isFacingRight)
+            {
+                rb.AddForce(new Vector2(-10.0f, 15.0f), ForceMode2D.Impulse);
+            }
+            else 
+            {
+                rb.AddForce(new Vector2(10.0f, 15.0f), ForceMode2D.Impulse);
+            }
+        }
+
+
+        
+        isJumping = false;
+        returnToGroundAfterFlying = false;
+        isAirJump = false;
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        // mark that player collided with ingredient
         if (other.gameObject.CompareTag("Ingredient"))
         {
             isOnIngredient = true;
-            if (currentPlayerState == PlayerPowerState.FIRE_ACTIVE)
-            {   
-                if(isFirstIngredientCollected == false) {
-                     timeToGetIngredient =  Time.time - levelZeroStartTime; 
-                     isFirstIngredientCollected = true; 
-                }
-
-                IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-                if (ic.currentIngredientState == IngredientCookingState.COMPLETE)
-                {
-                    PlayerItems.collected.Add(other.gameObject.name);
-                    ic.DestroyIngredientAndProgressBar();
-                } else if (ic.currentIngredientState == IngredientCookingState.UNCOOKED)
-                {
-                    //Debug.Log("Time to get Ingredient: " + timeToGetIngredient+ " seconds");  
-                    EnableProgressBar(other); 
-                }
-            }
-        }
-        else if(PlayerPowerState.AIR_ACTIVE == currentPlayerState && IsGrounded())
+            //Debug.Log("On Ingredient!");
+            currentCollidedIngredient = other.gameObject;
+        } 
+        else if (other.gameObject.CompareTag("Plates"))
         {
-            OnLandedTree();
-        }
-        else if(PlayerPowerState.WATER_ACTIVE == currentPlayerState && IsGrounded())
+            Debug.Log("Collided with plate station");
+            isAtPlateStation = true;
+        } 
+        else if (other.gameObject.CompareTag("plate"))
         {
-            OnLandedIce();
-        }
-        
-        isJumping = false;
-    }
-
-    private void EnableProgressBar(Collision2D other)
-    {
-         IngredientController ic = other.gameObject.GetComponentInParent<IngredientController>();
-         ic.EnableProgressBar();
-    }
-    
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Ingredient")) 
-        {   
-            isOnIngredient = false;
-            timer = 0f; 
+            Debug.Log("Collided with plate");
+            isCollidedWithPlate = true;
+            currentCollidedPlate = other.gameObject;
+        } 
+        else if (other.gameObject.CompareTag("Stove"))
+        {
+            isAtStove = true;
+        } 
+        else if (other.gameObject.CompareTag("Sink"))
+        {
+            isAtSink = true;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {   
-        if (other.gameObject.CompareTag("Customer"))
+        if (other.gameObject.CompareTag("Customer") && hasPlate)
         {
-            //foreach (var x in collected)
-            //{
-            //    Debug.Log(x.ToString());
-            //}
-            if (PlayerItems.collected.Contains("lowerBread") && PlayerItems.collected.Contains("upperBread") && PlayerItems.collected.Contains("meat"))
-            {
-                // exit scene to be added
-                //Debug.Log("Exit Game");
-                OnLevelCompletion(); 
-                PlayManagerGame.isGameOver = true;
-
-
-            }
-            if (PlayerItems.collected.Contains("chicken"))
-            {   //float timeToFinish =  Time.time - levelZeroStartTime;  
-                OnLevelCompletion(); 
-                //Debug.Log("Time to finish level: "+ timeToFinish+ " seconds");  
-
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Debug.Log("OnTrigger Enter with customer");
+            if (levelManager.CheckIfLevelComplete())
+            {    
+                OnLevelCompletion();
             }
         }
+    }
 
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Ingredient")) 
+        {   
+            isOnIngredient = false;
+            IngredientController ic = currentCollidedIngredient.GetComponentInParent<IngredientController>();
+            isApplyingPowerToCook = false;
+            ic.DisableProgressBar(); //stop cooking when player leaves contact with the ingredient
+            //timer = 0f; 
+        }
         
+        else if (other.gameObject.CompareTag("Plates"))
+        {
+            isAtPlateStation = false;
+        }
+        
+        else if (other.gameObject.CompareTag("plate"))
+        {
+            isCollidedWithPlate = false;
+        }
+        else if (other.gameObject.CompareTag("Stove"))
+        {
+            isAtStove = false;
+        } 
+        else if (other.gameObject.CompareTag("Sink"))
+        {
+            isAtSink = false;
+        }
     }
 
     public void OnLevelCompletion(){
@@ -438,51 +591,55 @@ public class PlayerMovementDevelopment : MonoBehaviour
         } else {
             Debug.LogError("LevelCompletion component not found!");
         }
+    }
 
-        float timeToFinish =  Time.time - levelZeroStartTime;  
-        CollectAnalytics analyticsScript = collectAnalyticsObject.GetComponent<CollectAnalytics>(); 
+    private void OnLandedAir()
+    {
+        if (IsGrounded())
+        {
+            returnToGroundAfterFlying = false;
+        }
         
-        analyticsScript.putAnalytics(timeToFinish, timeToGetIngredient); 
-
-        int activeSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
-         
-    }
-
-    private void OnLandedTree()
-    {
-        if (Input.GetKey(KeyCode.S))
+        if ((Input.GetKeyDown(KeyCode.E)) && !returnToGroundAfterFlying)
         {
-            rb.AddForce(Vector3.up * airForce, ForceMode2D.Impulse);
-        }
-    }
-
-    private IEnumerator ScaleEffectY(GameObject obj, float targetScaleY)
-    {
-        float duration = 0.4f; // Time to scale over
-        float elapsedTime = 0f;
-        Vector3 initialScale = obj.transform.localScale;
-        Vector3 targetScale = new Vector3(initialScale.x, targetScaleY, initialScale.z);
-
-        while (elapsedTime < duration)
-        {
-            obj.transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            flyStartTime = Time.time;
+            isAirJump = true;
+            returnToGroundAfterFlying = true;
         }
 
-        obj.transform.localScale = targetScale; // Ensure the object reaches the target scale at the end
+        if (IsCommandKey())
+        {
+            if (flyStartTime + flyTime >= Time.time)
+            {
+                rb.AddForce(Vector3.up * airForceUp * Time.deltaTime, ForceMode2D.Impulse);
+            }
+        }
+
+        if ((Input.GetKeyDown(KeyCode.E)))
+        {
+            isAirJump = false;
+        }
     }
 
     private void OnLandedIce()
     {
-        if (Input.GetKey(KeyCode.S))
+        if (IsCommandKey())
         {
             float scaleDirection = isFacingRight ? 1f : -1f;
-            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.1f, 0); // Adjust based on your needs
+            Vector3 effectPosition = transform.position + new Vector3(1.5f * scaleDirection, -1.0f, 0); // Adjust based on your needs
             GameObject effect = Instantiate(ice, effectPosition, Quaternion.identity);
-            StartCoroutine(ScaleEffectX(effect, 7f, scaleDirection));
-            Destroy(effect, 5f);
+
+            currIcePlatforms++;
+            StartCoroutine(ScaleEffectX(effect, 10f, scaleDirection));            
+            StartCoroutine(DestroyPrefabAfterDelay(effect, 7f)); // Destroy after 5 seconds
         }
+    }
+
+    System.Collections.IEnumerator DestroyPrefabAfterDelay(GameObject prefab, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(prefab);
+        currIcePlatforms--; // Decrement the counter
     }
 
     private IEnumerator ScaleEffectX(GameObject obj, float targetScaleX, float scaleDirection)
@@ -503,6 +660,187 @@ public class PlayerMovementDevelopment : MonoBehaviour
         }
 
         obj.transform.localScale = targetScale;
+    }
+
+    private void PlayerPickUpIngredient(GameObject ingredientGameObject)
+    {
+        // get parent game object of the ingredient
+        //Debug.Log("Pick up ingredient with name: " + ingredientGameObject.name);
+        Rigidbody2D rb = ingredientGameObject.GetComponent<Rigidbody2D>();
+        BoxCollider2D bc = ingredientGameObject.GetComponent<BoxCollider2D>();
+        bc.isTrigger = false;
+        rb.bodyType = RigidbodyType2D.Static; // so player can jump with ingredient
+        rb.simulated = false;
+        float yOffset =0.5f;
+        BoxCollider2D playerCollider = this.GetComponent<BoxCollider2D>();
+        GameObject wholeGameObject = ingredientGameObject.transform.parent.gameObject;
+        IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
+        ic.DisableProgressBar();
+        wholeGameObject.transform.SetParent(this.gameObject.transform); // set the player game object as the parent of the ingredient
+        if (!isFacingRight)
+        {
+            ingredientGameObject.transform.position = new Vector2(playerCollider.bounds.min.x - 0.75f,
+                playerCollider.bounds.center.y + yOffset);
+        }
+        else
+        {
+            ingredientGameObject.transform.position = new Vector2(playerCollider.bounds.max.x+0.75f,
+                playerCollider.bounds.center.y + yOffset);
+        }
+        ingredientGameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        isHoldingIngredient = true;
+        currentlyHoldingIngredient = ingredientGameObject;
+    }
+
+    private void PlayerDropIngredientOrPlate()
+    {
+        // the player no longer has a nested ingredient game object. Move the game object back to the 
+        // root of the scene.
+        if (hasPlate)
+        {
+            Debug.Log("Drop plate");
+            GameObject plate = this.gameObject.transform.GetChild(1).gameObject;
+            Rigidbody2D rb = plate.GetComponent<Rigidbody2D>();
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.simulated = true;
+            hasPlate = false;
+            plate.transform.SetParent(null);
+        } 
+        else if (isHoldingIngredient)
+        {
+            Debug.Log("Drop ingredient");
+            Rigidbody2D rb = currentlyHoldingIngredient.GetComponent<Rigidbody2D>();
+            currentlyHoldingIngredient.transform.localScale = new Vector3(1f, 1f, 1f);
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.simulated = true;
+            
+            rb.constraints = RigidbodyConstraints2D.None;
+            currentlyHoldingIngredient.transform.parent.transform.SetParent(ingredientList.transform);
+
+            isHoldingIngredient = false;
+        }
+
+       
+    }
+
+    private void GrabPlateFromPlateStation()
+    {
+        GameObject plateGameObject = new GameObject();
+        plateGameObject.tag = "plate";
+        plateGameObject.AddComponent<SpriteRenderer>();
+        SpriteRenderer sr = plateGameObject.GetComponent<SpriteRenderer>();
+        plateGameObject.AddComponent<BoxCollider2D>();
+        plateGameObject.AddComponent<Rigidbody2D>();
+        plateGameObject.AddComponent<PlateController>();
+        Rigidbody2D rb = plateGameObject.GetComponent<Rigidbody2D>();
+        BoxCollider2D bc = plateGameObject.GetComponent<BoxCollider2D>();
+        bc.size = new Vector2(2.5f, 1.0f);
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.simulated = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        sr.sprite = plateSprite;
+        sr.sortingLayerName = "ingredients";
+        
+        plateGameObject.transform.SetParent(this.gameObject.transform);
+        Vector3 playerPostion = gameObject.transform.position;
+        plateGameObject.transform.position = new Vector3(playerPostion.x + 2.0f, playerPostion.y, playerPostion.z);
+        hasPlate = true;
+    }
+
+    private void PutIngredientOnPlate()
+    {
+        Debug.Log("Put ingredient on plate");
+        currentlyHoldingIngredient.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        Destroy(currentlyHoldingIngredient.GetComponent<BoxCollider2D>());
+        currentlyHoldingIngredient.transform.position =
+            new Vector2(currentCollidedPlate.transform.position.x, currentCollidedPlate.transform.position.y + 1.0f);
+        currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+        wholeGameObject.transform.SetParent(currentCollidedPlate.transform);
+        isHoldingIngredient = false;
+        
+        // add this ingredient to the players list of collected items/ ingredients that are on the plate
+        IngredientController ic = currentlyHoldingIngredient.GetComponentInParent<IngredientController>();
+        levelManager.PlateIngredient(currentlyHoldingIngredient.name, ic.currentIngredientState);
+    }
+
+    private void PlayerPickUpPlate()
+    {
+        Debug.Log("Player pick up plate");
+        Rigidbody2D rb = currentCollidedPlate.GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Static;
+        rb.simulated = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        BoxCollider2D bc = currentCollidedPlate.GetComponent<BoxCollider2D>();
+        bc.isTrigger = false;
+        currentCollidedPlate.transform.SetParent(this.gameObject.transform);
+        Vector3 playerPostion = gameObject.transform.position;
+        currentCollidedPlate.transform.position = new Vector3(playerPostion.x + 2.0f, playerPostion.y, playerPostion.z);
+        hasPlate = true;
+    }
+
+    private void PlaceItemOnStove()
+    {
+        GameObject stoveGameObject = GameObject.FindGameObjectWithTag("Stove");
+        BoxCollider2D stoveCollider = stoveGameObject.GetComponent<BoxCollider2D>();
+        if (stoveGameObject.transform.childCount == 0 && isHoldingIngredient) // if there is nothing else on the stove
+        {
+            GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+            wholeGameObject.transform.SetParent(stoveGameObject.transform);
+            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
+                wholeGameObject.transform.position.y + 5.0f); // move the item up a bit so it sits on the stove
+            currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
+            CookType cookType = ic.GetIngredientCookType();
+            //Debug.Log("From Stove! "+ ic.currentIngredientState); 
+            if (cookType == CookType.FIRE && (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING) )
+            {
+                ic.EnableProgressBar();
+            }
+            isHoldingIngredient = false;
+        }
+    }
+    
+    private void PlaceItemOnSink()
+    {
+        GameObject sinkGameObject = GameObject.FindGameObjectWithTag("Sink");
+        if (sinkGameObject.transform.childCount == 0 && isHoldingIngredient)
+        {
+            GameObject wholeGameObject = currentlyHoldingIngredient.transform.parent.gameObject;
+            wholeGameObject.transform.SetParent(sinkGameObject.transform);
+            currentlyHoldingIngredient.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            wholeGameObject.transform.position = new Vector2(wholeGameObject.transform.position.x,
+                wholeGameObject.transform.position.y + 5.0f);
+            IngredientController ic = wholeGameObject.GetComponent<IngredientController>();
+            CookType cookType = ic.GetIngredientCookType();
+            if (cookType == CookType.WATER  && (ic.currentIngredientState == IngredientCookingState.UNCOOKED || ic.currentIngredientState == IngredientCookingState.COOKING))
+            {
+                ic.EnableProgressBar();
+            }
+            isHoldingIngredient = false;
+        }
+    }
+
+    private void PickUpItemFromStove()
+    {
+        GameObject stoveGameObject = GameObject.FindGameObjectWithTag("Stove");
+        if (stoveGameObject.transform.childCount == 1) // there is something on the stove so pick it up
+        {
+            GameObject wholeObject = stoveGameObject.transform.GetChild(0).gameObject;
+            PlayerPickUpIngredient(wholeObject.transform.GetChild(0).gameObject);
+        }
+        isHoldingIngredient = true; 
+    }
+
+    private void PickUpItemFromSink()
+    {
+        GameObject sinkGameobject = GameObject.FindGameObjectWithTag("Sink");
+        if (sinkGameobject.transform.childCount == 1) // there is something on the stove so pick it up
+        {
+            GameObject wholeObject = sinkGameobject.transform.GetChild(0).gameObject;
+            PlayerPickUpIngredient(wholeObject.transform.GetChild(0).gameObject);
+        }
+        isHoldingIngredient = true;
     }
 
 }

@@ -5,7 +5,7 @@ using TMPro;
 public class HintOverlayController : MonoBehaviour
 {
     public GameObject[] hintPanels; // References to the hint panels in the Unity Inspector
-    public GameObject riddle;
+    //public GameObject riddle;
     public TMP_Text[] hintTexts; // References to the TextMeshPro Text components of the hint panels
     public GameObject halfBroken, chicken; // Reference to the halfBroken
     private bool[] hintsShown; // Track whether the hints have been shown
@@ -33,13 +33,13 @@ public class HintOverlayController : MonoBehaviour
             ShowHint(0);
             hintsShown[0] = true;
         }
-
-        if (hintsShown[0] && hintsShown[1] && !chicken && !hintsShown[2])
+    
+        if (hintsShown[0] && hintsShown[1] && !hintsShown[2])
         {
             HideHint(1);
             ShowHint(2);
             hintsShown[2] = true;
-        }
+        } 
 
         if (!hintsShown[1] && hintsShown[0] && halfBroken == null)
         {
@@ -61,11 +61,12 @@ public class HintOverlayController : MonoBehaviour
         hintPanels[hintIndex].SetActive(false);
     }
 
+    /*
     private IEnumerator HideRiddleAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
 
         // Hide the riddle panel for the specified index after the specified delay
         riddle.SetActive(false);
-    }
+    }*/
 }

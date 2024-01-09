@@ -1,21 +1,46 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelCompletion : MonoBehaviour
 {
-    [SerializeField] private PlayerRanking playerRanking;
-    [SerializeField] private Timer gameTimer;
+    private LevelManager levelManager;
+    private Timer gameTimer;
+    private PlayerRanking playerRanking;
 
     private void Start()
     {
-        if (!gameTimer) gameTimer = GetComponent<Timer>();
-        if (!playerRanking) playerRanking = GetComponent<PlayerRanking>();
+        levelManager = FindObjectOfType<LevelManager>();
+        playerRanking = FindObjectOfType<PlayerRanking>();
+        gameTimer = GetComponent<Timer>();
+
+        if (levelManager == null) Debug.LogError("LevelManager not found in the scene.");
+        if (gameTimer == null) Debug.LogError("Timer component not found on the GameObject.");
+    }
+
+    private void Update()
+    {
+        if (levelManager.IsLevelComplete)
+        {
+            OnLevelComplete();
+        }
     }
 
     public void OnLevelComplete()
     {
+        //Debug.Log("Level complete. Stopping timer and showing rank.");
         gameTimer.StopTimer();
-        playerRanking.CalculateRank();
+        playerRanking.DisplayRank();
+        //Debug.Log("Starting coroutine to wait 3 seconds before loading the next scene.");
+        StartCoroutine(WaitAndLoadNextScene());
+    }
+
+    private IEnumerator WaitAndLoadNextScene()
+    {
+        Debug.Log("Entered coroutine, waiting for 8 seconds.");
+        yield return new WaitForSeconds(7f);
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        Debug.Log("3 seconds passed, now loading next scene index: " + nextSceneIndex);
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }

@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 6867408002736625520}
   - component: {fileID: 6867408002736625532}
   - component: {fileID: 6867408002736625533}
+  - component: {fileID: 5707995471708373003}
+  - component: {fileID: 4352188683094538926}
+  - component: {fileID: 5671174193469562459}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -30,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 6867408002736625527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.09, y: 4.67, z: 0}
-  m_LocalScale: {x: 2.186992, y: 2.3262622, z: 1.2121}
+  m_LocalScale: {x: 2.6739073, y: 2.8441849, z: 1.4819639}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,8 +79,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 781985aedadb047c9b36186e89390b47, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: 64fad79f3dbfb4c09ab17b344ad0aab2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -153,9 +156,20 @@ MonoBehaviour:
   breakableGround:
     serializedVersion: 2
     m_Bits: 128
-  uiObjectToShow: {fileID: 0}
+  plateSprite: {fileID: 21300000, guid: 080ebb42dd6044dd482c014384a10b70, type: 3}
+  collectAnalyticsObject: {fileID: 9055739098889636189, guid: 9e4dbb0f0975c493881d20b24545c901, type: 3}
+  timeToGetIngredient: 0
   tree: {fileID: 3217876077566229026, guid: 9260983d48dcb4cb09752d8dc8ae5d34, type: 3}
   ice: {fileID: 315072361894213870, guid: e533ce217b5dd48c5adfaf4a8cba3bb8, type: 3}
+  powerVfx:
+  - {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
+  - {fileID: 1763180707548296989, guid: d35b80c750946f142a778ec4d4ed5516, type: 3}
+  - {fileID: 4729546934675383613, guid: a540ec1f15200634499ce708844f28bb, type: 3}
+  powerProgressBar: {fileID: 0}
+  powerProgressMask: {fileID: 0}
+  ingredientList: {fileID: 0}
+  bananaDetectionRadius: 2
+  radiusVisualization: {fileID: 0}
 --- !u!95 &6867408002736625533
 Animator:
   serializedVersion: 5
@@ -177,3 +191,50 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5707995471708373003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867408002736625527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952e3dca4a440488bbd6e7fb229ab5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4352188683094538926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867408002736625527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b6ff204bfd448ff8f2463e1beceae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerRankingUiCanvas: {fileID: 0}
+  totalTimeText: {fileID: 0}
+  headerText: {fileID: 0}
+  incorrectlyCookedIngredientsText: {fileID: 0}
+  rankingText: {fileID: 0}
+  incorrectPlatesDeliveredText: {fileID: 0}
+--- !u!114 &5671174193469562459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867408002736625527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e6c5795b66944eba87ee18ac4a1cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerText: {fileID: 0}
+  timeUpScreen: {fileID: 0}
+  countdownTimer: 1
+  blinkSpeed: 1
+  blinkColor: {r: 0, g: 0, b: 0, a: 0}
