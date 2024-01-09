@@ -68529,6 +68529,14 @@ PrefabInstance:
       propertyPath: playerMovementDevelopment
       value: 
       objectReference: {fileID: 2135753987}
+    - target: {fileID: 959792856100744588, guid: eea0b23343fcb491d9d0ce06f299b773, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -337.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 959792856100744588, guid: eea0b23343fcb491d9d0ce06f299b773, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -222.72
+      objectReference: {fileID: 0}
     - target: {fileID: 959792856198721778, guid: eea0b23343fcb491d9d0ce06f299b773, type: 3}
       propertyPath: m_SizeDelta.x
       value: 3761.623
@@ -68539,7 +68547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 959792856198721778, guid: eea0b23343fcb491d9d0ce06f299b773, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 8.979
+      value: 8.979004
       objectReference: {fileID: 0}
     - target: {fileID: 959792856198721778, guid: eea0b23343fcb491d9d0ce06f299b773, type: 3}
       propertyPath: m_AnchoredPosition.y
